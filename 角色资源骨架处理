@@ -1,0 +1,97 @@
+1. 角色资源骨架处理
+
+  游戏基础里 做好5个文件
+  1 UE4骨架
+  2 UE4骨架 IKRig
+  3 UE5骨架
+  4 UE5骨架 IKRig
+  5 UE4资源到UE5骨架上用的 IK Retarget
+
+2.模型接入基础模版
+
+2.1 UE5骨架的模型
+	Gemini 说
+这种情况在开发中非常典型。为什么“预览正常”但“指定（Assign）后变形”？
+
+因为预览使用的是模型自带的 Ref Pose（参考姿势），而 Assign 之后，引擎会强制模型去匹配主骨架资产里存储的 Bind Pose（绑定姿势）。如果两者的初始比例（比如手臂长短、肩膀宽窄）有微小差异，模型就会为了“够到”骨骼节点而产生拉伸。
+
+要解决这个问题并保留主骨架上的所有 Socket，请按以下步骤操作：
+
+1. 修改平移重定向规则（最核心步骤）
+
+这是解决“Assign 后变形”的工业标准做法。Assign 之后，请立即进入 SK_Master_UE5 骨架编辑器：
+
+在 Skeleton Tree（骨架树）面板中。
+
+点击右上角齿轮或右键列标题，勾选 Show Retargeting Options。
+
+批量修改：
+
+选中 Root 骨骼：设为 Animation。
+
+选中 Pelvis 骨骼：设为 Animation Relative（或者 Animation）。
+
+关键点： 选中剩下的所有骨骼（从脊柱到手指到脚尖），右键选择 Recursively Set Translation Retargeting Skeleton。
+
+原理： 设置为 Skeleton 意味着模型只从动画中获取“旋转”信息，而保持自己模型原本的“骨骼长度”（平移）。这样，即便 AssassinGirl 的手比官方 Manny 短一点，她也不会为了匹配 Manny 的长度而把手臂拉长。
+
+2. 匹配并更新 Retarget Pose
+
+如果修改了重定向规则后依然有微小错位（比如肩膀塌陷），通常是 A-Pose 和 T-Pose 的细微差异造成的。
+
+打开 SK_Master_UE5 骨架编辑器。
+
+在工具栏找到 Retarget Manager（或者 UE5 中的 Modify Pose 按钮）。
+
+点击 View Pose。
+
+如果你发现主骨架的姿势和 AssassinGirl 的原始姿势不完全重合，你需要手动旋转骨骼使其匹配。
+
+匹配后，点击 Import / Update -> Use Current Pose。
+
+
+
+关于IK
+IK 骨骼（如 ik_foot_root, ik_hand_root 等）
+
+设置： Animation
+
+原因： IK 骨骼通常是逻辑驱动的位移标杆。它们必须完全跟随动画定义的坐标走，否则你的脚部贴地（IK Foot Placement）或手部交互逻辑会因为偏移而失效。
+
+
+2.2 UE4骨架的模型
+
+
+对于 UE4 商店动画，最稳健、最符合工程化的做法是：先指定（Assign）到 SK_Master_UE4，然后通过 RTG（重定向器）在运行时使用，或批量烘焙（Export）成针对 SK_Master_UE5 的新资源。
+
+绝对不要直接把 UE4 原始动画文件 Assign 到你的 SK_Master_UE5 上，因为这会导致严重的骨骼错位和逻辑报错。
+
+1. 标准操作流程
+
+第一步：归化（Assign）
+
+将买来的 UE4 动画全部右键 Assign Skeleton 到你的 SK_Master_UE4。
+
+目的： 确保这些动画在一个“受控”的 UE4 环境下，方便统一管理。
+
+第二步：桥接（The Bridge）
+
+利用官方或你准备好的 RTG_UE4_to_UE5。
+
+第三步：选择使用方式（二选一）
+
+方案 A：运行时重定向 (Runtime Retargeting) —— 推荐开发期使用
+在你的 UE5 动画蓝图 (ABP) 里，使用 Retarget Pose from Mesh 节点。
+
+优点： 节省磁盘空间，不需要生成重复的动作文件。你改了 UE4 原始动画，UE5 角色会实时生效。
+
+适用： 动作量极大，或还在频繁调整动作的阶段。
+
+方案 B：导出/烘焙 (Export/Bake) —— 推荐性能优化期使用
+在 RTG 编辑器里，选中所有 UE4 动作，点击 Export Selected Animations。
+
+目标骨架： 选择你的 SK_Master_UE5。
+
+优点： 性能最高（去掉了运行时的计算开销），且可以对导出的 UE5 动画进行二次手动微调（比如修手感）。
+
+适用： 核心动作（如跑跳砍），以及项目接近后期需要压榨性能时。
