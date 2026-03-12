@@ -35,3 +35,6 @@ FileOpenOrder/
 /Content/Hypernova
 /Content/Medieval
 *.csv#
+/Plugins/RiderLink
+/Plugins/RLPlugin
+/.idea
