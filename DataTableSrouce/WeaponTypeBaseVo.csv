@@ -1,0 +1,10 @@
+fname,ID,name,anmController1,attackDistance
+1,0,空手,sword,240
+2,1,斧,sword,240
+3,2,锤,sword,240
+4,3,刀,sword,240
+5,4,剑,sword,240
+6,5,--,sword,
+7,6,棒,sword,260
+8,7,矛,spear,260
+9,8,法杖,staff,240

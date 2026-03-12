@@ -1,0 +1,4 @@
+Fname,ID,animalname,skills,initBagProps,initPocketProps,initEquipProps,initSkills
+1,1,战士,"(102,101,103,104)",,,,(102)
+2,2,法师,"(201,202,203)",,,,(201)
+3,3,弓箭手,,,,,

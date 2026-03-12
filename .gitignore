@@ -32,3 +32,6 @@ FileOpenOrder/
 
 # --- Logs & Crash Reports ---
 *.log
+/Content/Hypernova
+/Content/Medieval
+*.csv#
