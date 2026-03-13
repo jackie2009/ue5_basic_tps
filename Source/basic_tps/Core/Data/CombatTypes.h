@@ -60,13 +60,7 @@ namespace SkillGroupTargetsEnum {
 
 }
 
-namespace SkillTargetTypeEnum {
-	constexpr int8 Enemy = 0;
-	constexpr int8 Self = 1;
-	constexpr int8 Friend = 2;
-
-}
-
+ 
 namespace UserDataEnum {
 	constexpr int8 SEX = 0;
 	constexpr int8 JOB = 1;
@@ -77,3 +71,20 @@ namespace UserDataEnum {
 	constexpr int8 MAX = 9;
 
 }
+
+UENUM(BlueprintType)
+enum class ECombatFaction : uint8
+{
+	Neutral = 0,
+	Hero = 1,
+	Monster = 2,
+	Pet = 3
+};
+
+UENUM(BlueprintType)
+enum class ESkillTargetType : uint8
+{
+	Self = 0,
+	Friendly = 1,
+	Enemy = 2
+};

@@ -4,12 +4,13 @@
 #include "TestActorComponent.h"
 
 #include "../Core/TableData/SkillBaseVo.h"
-#include "basic_tps/Core/CombatTypes.h"
+#include "basic_tps/Core/Data//CombatTypes.h"
 #include "basic_tps/Core/TableData/MonsterBaseVo.h"
 #include "basic_tps/Core/TableData/RoleBaseVo.h"
 #include "basic_tps/Core/TableData/RoleLevelBaseVo.h"
 #include "basic_tps/Core/TableData/TableDataManagerSubsystem.h"
 #include "basic_tps/Core/TableData/WeaponTypeBaseVo.h"
+#include "eventtest/EventBusSubsystem.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
@@ -27,6 +28,19 @@ const FString TableFolder=TEXT("/Game/TableData");
 void UTestActorComponent::BeginPlay()
 {
 	Super::BeginPlay();
+	if (UGameInstance* GI =  UGameplayStatics::GetGameInstance(GetWorld()))
+	{
+		if (UEventBusSubsystem* Bus = GI->GetSubsystem<UEventBusSubsystem>())
+		{
+			OnToastHandle=  Bus->Subscribe("UI.ShowToast",
+				[this](const FEventBusMessage& Msg)
+				{
+					UE_LOG(LogTemp, Log, TEXT("Toast: %s"), *Msg.StringValue);
+				});
+		}
+	}
+
+	
 	auto filePath= FPaths::Combine(TableFolder, "SkillBaseVo");
 	auto tdmss= UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UTableDataManagerSubsystem>();
 	if (TArray<FSkillBaseVo*>* SkillGroupPtr = tdmss->SkillBaseMap.Find(201))
@@ -56,12 +70,29 @@ void UTestActorComponent::BeginPlay()
 	GEngine->AddOnScreenDebugMessage(-1,4,FColor::Green,FString::Printf( TEXT("testD:%d"), 	testData[AttributeEnum::MP]));
 }
 
+void UTestActorComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	if (UGameInstance* GI = UGameplayStatics::GetGameInstance(GetWorld()))
+	{
+		if (UEventBusSubsystem* Bus = GI->GetSubsystem<UEventBusSubsystem>())
+		{
+			Bus->Unsubscribe("UI.ShowToast", OnToastHandle);
+		}
+	}
+
+ 
+}
+
 
 // Called every frame
 void UTestActorComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+ 
+
+ 
 }
 
