@@ -12,7 +12,7 @@ ACombatCharacter::ACombatCharacter()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	CharacterDataComp=CreateDefaultSubobject<UCharacterDataComponent>(TEXT("NewCombatData_02"));
- 
+	
 	 
 }
 
@@ -20,7 +20,7 @@ ACombatCharacter::ACombatCharacter()
 void ACombatCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	  
 }
 
 // Called every frame
@@ -36,5 +36,5 @@ void ACombatCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 }
 bool ACombatCharacter::IsAlive() const
 {
-	return   (CharacterDataComp!=nullptr)&& ((CharacterDataComp->Hp)>0);
+	return    CharacterDataComp!=nullptr && ( CharacterDataComp->GetCurrentHP()>0);
 }
