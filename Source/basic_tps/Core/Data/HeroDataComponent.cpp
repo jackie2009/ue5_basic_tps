@@ -23,7 +23,14 @@ void UHeroDataComponent::BeginPlay()
 {
 	Super::BeginPlay();
     UpdateLevel(1);
+	auto* BaseDataComp = GetOwner() ? GetOwner()->FindComponentByClass<UCharacterDataComponent>() : nullptr;
+    
 	 
+	if ( BaseDataComp)
+	{
+		BaseDataComp->SetCurrentHP(BaseDataComp->Attributes[AttributeEnum::HP]);
+	}
+	
  }
 
 void UHeroDataComponent::UpdateLevel(int32 level)
