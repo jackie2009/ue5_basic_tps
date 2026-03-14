@@ -14,6 +14,7 @@
 
 // 声明固定路径常量
  
+
 static const FString RoleBasePath = TEXT("/Game/TableData/RoleBaseVo.RoleBaseVo");
 static const FString RoleLevelBasePath = TEXT("/Game/TableData/RoleLevelBaseVo.RoleLevelBaseVo");
 static const FString MonsterBasePath = TEXT("/Game/TableData/MonsterBaseVo.MonsterBaseVo");
@@ -25,6 +26,7 @@ static const FString SkillBasePath = TEXT("/Game/TableData/SkillBaseVo.SkillBase
 void UTableDataManagerSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
     Super::Initialize(Collection);
+ 
     GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red, TEXT("UTableDataManagerSubsystem"));
     // 同步加载所有表格
 
@@ -41,7 +43,6 @@ void UTableDataManagerSubsystem::Initialize(FSubsystemCollectionBase& Collection
 
  
 
- 
 template<typename TVo>
 void UTableDataManagerSubsystem::LoadTableToMap(const FString& Path, TMap<int32, TVo*>& OutMap)
 {

@@ -4,37 +4,35 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "CombatCharacter.generated.h"
 
+#include "CombatCharacter.h"
+
+#include "HeroCharacter.generated.h"
+class UHeroDataComponent;
  
-class UCharacterDataComponent;
 
 UCLASS()
-class BASIC_TPS_API ACombatCharacter : public ACharacter
+class BASIC_TPS_API AHeroCharacter : public ACombatCharacter
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
-	ACombatCharacter();
-
-	
+	AHeroCharacter();
+ 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void PreInitializeComponents() override;
 	virtual void PostInitializeComponents() override;
-	
+ 
 	UPROPERTY( BlueprintReadOnly, Category = "Combat")
-	TObjectPtr<UCharacterDataComponent> CharacterDataComp = nullptr;
-	
-
+	TObjectPtr<UHeroDataComponent> HeroDataComp = nullptr;
+ 
 public:
-	UFUNCTION(BlueprintCallable, Category = "Combat")
-	bool IsAlive() const;
+	 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+ 
 };

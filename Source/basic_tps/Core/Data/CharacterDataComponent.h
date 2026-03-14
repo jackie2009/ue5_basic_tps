@@ -21,7 +21,8 @@ public:
     void AddCurrentHP(int value);
     UFUNCTION(BlueprintCallable, Category = "CharacterData")
     void CostCurrentHP(int value);
-	 
+    UFUNCTION(BlueprintCallable,BlueprintPure, Category = "CharacterData")
+    int32 GetAttribute(int32 AttributeID);
 private:
     int32 Hp = 100;
     

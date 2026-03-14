@@ -10,7 +10,7 @@ UCharacterDataComponent::UCharacterDataComponent()
 {
  
 	PrimaryComponentTick.bCanEverTick = false;
-	Attributes[AttributeEnum::HP]=100;
+	Attributes[AttributeEnum::HP]=1;
 	SetCurrentHP(Attributes[AttributeEnum::HP]);
  
 }
@@ -38,6 +38,19 @@ void UCharacterDataComponent::AddCurrentHP(int value)
 void UCharacterDataComponent::CostCurrentHP(int value) 
 {
 	Hp = FMath::Clamp(Hp - value, 0, GetMaxHP());
+	 
+}
+
+int32 UCharacterDataComponent::GetAttribute(int32 AttributeID)
+{
+	 
+	// 检查：不能小于0，且必须小于枚举的最大值
+	if (AttributeID >= 0 && AttributeID <  AttributeEnum::MAX)
+	{
+		 
+		 return Attributes[AttributeID];
+	}
+	return 0;
 }
   
 

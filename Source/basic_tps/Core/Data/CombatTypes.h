@@ -61,17 +61,7 @@ namespace SkillGroupTargetsEnum {
 }
 
  
-namespace UserDataEnum {
-	constexpr int8 SEX = 0;
-	constexpr int8 JOB = 1;
-	constexpr int8 LEVEL = 2;
-	constexpr int8 EXP = 3;
-	constexpr int8 MONEY = 4;
-	constexpr int8 BAG_WEIGHT = 6;
-	constexpr int8 MAX = 9;
-
-}
-
+ 
 UENUM(BlueprintType)
 enum class ECombatFaction : uint8
 {

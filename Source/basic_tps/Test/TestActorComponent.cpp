@@ -48,26 +48,13 @@ void UTestActorComponent::BeginPlay()
 		for (FSkillBaseVo* SkillVo : *SkillGroupPtr)
 		{
 
-			GEngine->AddOnScreenDebugMessage(-1,5,FColor::Green,FString::Printf( TEXT("ddd,%s,%d"),*SkillVo->MagName,	SkillVo->ID));
+		//	GEngine->AddOnScreenDebugMessage(-1,5,FColor::Green,FString::Printf( TEXT("ddd,%s,%d"),*SkillVo->MagName,	SkillVo->ID));
 		}
 		
 	}
 
-	if (auto baseVoPtr=tdmss->MonsterBaseMap.Find(5))
-	{
-		GEngine->AddOnScreenDebugMessage(-1,4,FColor::Green,FString::Printf( TEXT("roleBaseVo:%s,%d"),*(*baseVoPtr)->Name,	(*baseVoPtr)->skillIDs[1]));
-	}
-	int8 testData[32];
-	testData[0] = 1;
-	testData[1] = 2;
-	testData[2] = 3;
-	testData[3] = 4;
-	testData[4] = 5;
-	testData[5] = 6;
-
-	testData[6] = 7;
-	testData[7] = 8;
-	GEngine->AddOnScreenDebugMessage(-1,4,FColor::Green,FString::Printf( TEXT("testD:%d"), 	testData[AttributeEnum::MP]));
+ 
+	 
 }
 
 void UTestActorComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)

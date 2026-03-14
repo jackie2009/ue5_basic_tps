@@ -4,6 +4,7 @@
 #include "CombatCharacter.h"
 
 #include "basic_tps/Core/Data/CharacterDataComponent.h"
+ 
 
 
 // Sets default values
@@ -11,8 +12,7 @@ ACombatCharacter::ACombatCharacter()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	CharacterDataComp=CreateDefaultSubobject<UCharacterDataComponent>(TEXT("NewCombatData_02"));
-	
+
 	 
 }
 
@@ -20,7 +20,22 @@ ACombatCharacter::ACombatCharacter()
 void ACombatCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	  
+ 
+}
+
+void ACombatCharacter::PreInitializeComponents()
+{
+	Super::PreInitializeComponents();
+	CharacterDataComp = NewObject<UCharacterDataComponent>(this);
+	CharacterDataComp->RegisterComponent();
+ 
+}
+
+void ACombatCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+ 
+ 
 }
 
 // Called every frame

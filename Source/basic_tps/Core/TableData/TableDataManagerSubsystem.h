@@ -23,7 +23,8 @@ class BASIC_TPS_API UTableDataManagerSubsystem : public UGameInstanceSubsystem
 
 public:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
-
+ 
+	 
 	// 数据字典缓存
 	 
 	 TMap<int32, FRoleBaseVo*> RoleBaseMap;
@@ -48,7 +49,24 @@ public:
 		return Result;
 	}
 
+	static UTableDataManagerSubsystem* Get(const UObject* WorldContextObject)
+	{
+		if (WorldContextObject)
+		{
+			if (UWorld* World = WorldContextObject->GetWorld())
+			{
+				if (UGameInstance* GI = World->GetGameInstance())
+				{
+					return GI->GetSubsystem<UTableDataManagerSubsystem>();
+				}
+			}
+		}
+		return nullptr;
+	}
+
 private:
+	
+	static UTableDataManagerSubsystem* Instance;
 	// 保持 DataTable 的强引用，防止被 GC 导致 Map 里的指针悬空
 	UPROPERTY()
 	TArray<UDataTable*> LoadedTables;
