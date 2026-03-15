@@ -6,7 +6,8 @@
 #include "GameFramework/Character.h"
 #include "CombatCharacter.generated.h"
 
- 
+
+class UCombatComponent;
 class UCharacterDataComponent;
 
 UCLASS()
@@ -27,6 +28,8 @@ protected:
 	
 	UPROPERTY( BlueprintReadOnly, Category = "Combat")
 	TObjectPtr<UCharacterDataComponent> CharacterDataComp = nullptr;
+	UPROPERTY( BlueprintReadOnly, Category = "Combat")
+	TObjectPtr<UCombatComponent> CombatComp = nullptr;
 	
 
 public:

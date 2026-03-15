@@ -1,4 +1,8 @@
 #pragma once
+#include "CoreMinimal.h"
+ 
+#include "CombatTypes.generated.h"
+
 namespace AttributeEnum
 {
 	constexpr int8 Luck = 4;
@@ -77,4 +81,28 @@ enum class ESkillTargetType : uint8
 	Self = 0,
 	Friendly = 1,
 	Enemy = 2
+};
+
+USTRUCT(BlueprintType)
+struct FCombatResult
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadOnly)
+	int32 Damage = 0;
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsMiss = false;
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsCritical = false;
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsBlock = false;
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsDeathBlow = false; // 是否触发了斩杀
+
+ 
+ 
 };

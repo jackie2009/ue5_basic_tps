@@ -3,6 +3,7 @@
 
 #include "CombatCharacter.h"
 
+#include "CombatComponent.h"
 #include "basic_tps/Core/Data/CharacterDataComponent.h"
  
 
@@ -28,6 +29,9 @@ void ACombatCharacter::PreInitializeComponents()
 	Super::PreInitializeComponents();
 	CharacterDataComp = NewObject<UCharacterDataComponent>(this);
 	CharacterDataComp->RegisterComponent();
+	
+	CombatComp = NewObject<UCombatComponent>(this);
+	CombatComp->RegisterComponent();
  
 }
 
