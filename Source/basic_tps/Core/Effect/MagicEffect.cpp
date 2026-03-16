@@ -6,6 +6,8 @@
 #include "Kismet/GameplayStatics.h"
 
 #include "basic_tps/Core/Character/CombatCharacter.h"
+#include "Components/SphereComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 
 AMagicEffect::AMagicEffect()
@@ -13,7 +15,19 @@ AMagicEffect::AMagicEffect()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// 创建默认根组件和挂点
-	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	// 1. 创建球体碰撞并设为根
+	CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionSphere"));
+	// 1. 设置半径
+	CollisionSphere->InitSphereRadius(16.0f);
+
+	// 2. 勾选 Simulation Generates Hit Events (对应蓝图里的同名选项)
+	CollisionSphere->SetNotifyRigidBodyCollision(true);
+
+	// 3. 设置 Collision Presets
+	// 方案 A: 使用预设名称（最简洁，推荐在 Project Settings 里定义好你的 Projectile 频道）
+	CollisionSphere->SetCollisionProfileName(TEXT("Projectile"));
+	CollisionSphere->SetCanEverAffectNavigation(false); // 弹丸不需要影响寻路
+	RootComponent = CollisionSphere;
 	EffectAnchor = CreateDefaultSubobject<USceneComponent>(TEXT("EffectAnchor"));
 	EffectAnchor->SetupAttachment(RootComponent);
 }
@@ -40,7 +54,7 @@ AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject, 
 		AttachToComp = InContext.TargetActor ? InContext.TargetActor->GetMesh() : nullptr;
 	}
 
-	if (!AttachToComp) return nullptr;
+	if (!AttachToComp&&Config->SpawnSpace != EVfxSpawnSpace::WorldSpace ) return nullptr;
 
 
 	// 1. 自动选择容器类（如果是 Niagara 且没配容器，可以用默认类）
@@ -79,8 +93,15 @@ void AMagicEffect::InitializeEffect(FEffectContext InContext, USceneComponent* I
 		AttachToComponent(InAttachComp, FAttachmentTransformRules::SnapToTargetIncludingScale,
 		                  MyContext.VfxConfig->SocketName);
 	}
-
+	CollisionSphere->IgnoreActorWhenMoving(InContext.Instigator,true);
 	Internal_SetupVisuals();
+	
+	if (CollisionSphere)
+	{
+		GEngine->AddOnScreenDebugMessage(-1,5,FColor::Green,FString::Printf( TEXT("Bind by c++")));
+		// AddDynamic 是一个宏，用于绑定函数
+		CollisionSphere->OnComponentHit.AddDynamic(this, &AMagicEffect::OnFlySphereHit);
+	}
 }
 
 void AMagicEffect::Internal_SetupVisuals()
@@ -108,4 +129,26 @@ AMagicEffect* AMagicEffect::SpawnNextMagicEffect()
 	if (MyContext.VfxConfig->ChildMode!=ECreateChildMode::Notify) return nullptr;
 	MyContext.VfxConfig=MyContext.VfxConfig->NextEffect.LoadSynchronous();
 	return SpawnMagicEffect(this,MyContext);
+}
+
+
+void AMagicEffect::OnFlySphereHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+		if (MyContext.VfxConfig->ChildMode!=ECreateChildMode::Hit) return;
+	 
+	GEngine->AddOnScreenDebugMessage(-1,5,FColor::Green,FString::Printf( TEXT("hit by c++,%s"),*OtherActor->GetName()));
+		// 2. 获取碰撞点
+		FVector HitLocation = Hit.ImpactPoint;
+	SetLifeSpan(0.3f);
+
+	MyContext.VfxConfig=MyContext.VfxConfig->NextEffect.LoadSynchronous();
+    auto effect=SpawnMagicEffect(this,MyContext);
+	if (effect!=nullptr&&MyContext.VfxConfig->SpawnSpace==EVfxSpawnSpace::WorldSpace)
+	{
+		effect->SetActorLocation( Hit.ImpactPoint);
+		effect->SetActorRotation( UKismetMathLibrary::MakeRotFromX(Hit.ImpactNormal));
+		//子弹需要考虑 normal
+		
+	}
+	 
 }

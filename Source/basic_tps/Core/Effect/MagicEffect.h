@@ -28,14 +28,17 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "MagicEffect")
 	AMagicEffect* SpawnNextMagicEffect();
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MagicEffect")
+	class USphereComponent* CollisionSphere;
 	// 特效挂点（在蓝图子类里可以调整位置）
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MagicEffect")
 	USceneComponent* EffectAnchor;
 
 	// 存储锦囊快照
 	UPROPERTY(BlueprintReadOnly, Category = "MagicEffect")
 	FEffectContext MyContext;
-
+	UFUNCTION()
+	void OnFlySphereHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 	
 	 
 private:
