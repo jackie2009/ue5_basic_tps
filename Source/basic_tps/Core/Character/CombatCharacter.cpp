@@ -4,6 +4,7 @@
 #include "CombatCharacter.h"
 
 #include "CombatComponent.h"
+#include "SkillComponent.h"
 #include "basic_tps/Core/Data/CharacterDataComponent.h"
  
 
@@ -32,6 +33,10 @@ void ACombatCharacter::PreInitializeComponents()
 	
 	CombatComp = NewObject<UCombatComponent>(this);
 	CombatComp->RegisterComponent();
+
+	SkillComp = NewObject<USkillComponent>(this);
+	SkillComp->RegisterComponent();
+	
  
 }
 

@@ -7,7 +7,9 @@
  
 #include "CombatCalculator.generated.h"
 
+struct FCombatResult;
 class ACombatCharacter;
+class USkillVfxDataAsset;
 struct FSkillBaseVo;
 /**
  * 
@@ -22,6 +24,7 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	static FCombatResult CalHurtPoint(ACombatCharacter* Attacker, ACombatCharacter* Defencer, const FSkillBaseVo& SkillVo);
+
 
 private:
 	/** 内部逻辑函数也改用 Result 传递状态 */

@@ -4,7 +4,12 @@
 #include "basic_tps/Core/Character/CombatCharacter.h"
 #include "basic_tps/Core/Data/CharacterDataComponent.h"
 #include "basic_tps/Core/Data/CombatTypes.h"
+#include "basic_tps/Core/Data/FVfxSpawnConfig.h"
 #include "basic_tps/Core/TableData/SkillBaseVo.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
+#include "basic_tps/Core/Character/SkillComponent.h"
+
 FCombatResult UCombatCalculator::CalHurtPoint(ACombatCharacter* Attacker, ACombatCharacter* Defencer, const FSkillBaseVo& SkillVo)
 {
     FCombatResult Result; // 创建结果对象
@@ -65,7 +70,7 @@ FCombatResult UCombatCalculator::CalHurtPoint(ACombatCharacter* Attacker, AComba
     return Result;
 }
 
- 
+
 
 void UCombatCalculator::InternalCalMultiHurt(FCombatResult& OutResult, ACombatCharacter* Attacker, ACombatCharacter* Defencer, const FSkillBaseVo& SkillVo, int32 SkillAttack)
 {
@@ -79,6 +84,7 @@ void UCombatCalculator::InternalCalMultiHurt(FCombatResult& OutResult, ACombatCh
     int32 HarmTypeOffset = (int32)SkillVo.EffectType - (int32)SkillEffectTypeEnum::DC;
     int32 BaseDamageAttrIndex = (int32)AttributeEnum::Damage1 + HarmTypeOffset;
     int32 Attack = AttackerAttr->GetAttribute(BaseDamageAttrIndex);
+    GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red,   FString::Printf(TEXT("--------------Attack:%d---%d---------------"),Attack,BaseDamageAttrIndex));
 
     // 2. 累加技能基础伤害
     Attack += SkillAttack;
@@ -131,3 +137,5 @@ void UCombatCalculator::InternalCalMultiHurt(FCombatResult& OutResult, ACombatCh
     // 10. 填充结果
     OutResult.Damage = Attack;
 }
+
+

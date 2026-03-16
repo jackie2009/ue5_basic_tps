@@ -18,9 +18,8 @@ public:
 	UPROPERTY(EditAnywhere)
 	int32 aiPriority;          // ai选择优先级
 	UPROPERTY(EditAnywhere)
-	TArray<int32> needWeapon;  // 武器需求
-	UPROPERTY(EditAnywhere)
-	int32 needWeaponEffect;    // 武器需求影响
+	FString VfxName;  //特效资源
+ 
 	UPROPERTY(EditAnywhere)
 	int32 level;               // 技能等级
 	UPROPERTY(EditAnywhere)

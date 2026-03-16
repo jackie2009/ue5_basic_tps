@@ -7,6 +7,7 @@
 #include "CombatCharacter.generated.h"
 
 
+class USkillComponent;
 class UCombatComponent;
 class UCharacterDataComponent;
 
@@ -26,13 +27,19 @@ protected:
 	virtual void PreInitializeComponents() override;
 	virtual void PostInitializeComponents() override;
 	
+
+	
+
+public:
+
 	UPROPERTY( BlueprintReadOnly, Category = "Combat")
 	TObjectPtr<UCharacterDataComponent> CharacterDataComp = nullptr;
 	UPROPERTY( BlueprintReadOnly, Category = "Combat")
 	TObjectPtr<UCombatComponent> CombatComp = nullptr;
 	
-
-public:
+	UPROPERTY( BlueprintReadOnly, Category = "Combat")
+	TObjectPtr<USkillComponent> SkillComp = nullptr;
+	
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	bool IsAlive() const;
 	// Called every frame
