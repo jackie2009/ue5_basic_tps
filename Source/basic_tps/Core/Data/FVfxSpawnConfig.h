@@ -65,6 +65,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Visual", meta = (EditCondition = "ObjectType == EVfxObjectType::Actor", EditConditionHides))
 	TSubclassOf<AActor> ActorClass;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
+	USoundBase* Sound;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Visual")
 	TSubclassOf<AMagicEffect>  ContainerClass;
@@ -123,22 +125,25 @@ public:
 };
 
 //特效传递的数据快照
-USTRUCT(BlueprintType)
+ 
 struct FEffectContext
 {
-	GENERATED_BODY()
+	 
 
 	// 1. 核心资源配置（你的 DataAsset）
  
 	USkillVfxDataAsset * VfxConfig;
 
 	// 2. 溯源信息
-	 
+ 
 	ACombatCharacter * Instigator;
+ 
 	ACombatCharacter * TargetActor;
 
 	// 3. 战斗快照（防止飞行过程中属性变了）
-	 
+ 
 	FSkillBaseVo * SkillBaseVo;
+ 
+	
      
 };

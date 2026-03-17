@@ -5,8 +5,9 @@
  
 
 #include "basic_tps/Core/Data/FVfxSpawnConfig.h"
+ 
 #include "MagicEffect.generated.h"
-struct FEffectContext;
+ 
 
 UCLASS()
 class BASIC_TPS_API AMagicEffect : public AActor
@@ -17,13 +18,12 @@ public:
 	AMagicEffect();
 
 	// 核心初始化接口（值传递）
-	UFUNCTION(BlueprintCallable, Category = "MagicEffect")
+ 
 	virtual void InitializeEffect(FEffectContext InContext,USceneComponent* InAttachComp);
-	// 静态工厂函数：替代原 UCombatCalculator::SpawnVfxUniversal
-	UFUNCTION(BlueprintCallable, Category = "MagicEffect")
+ 
 	static AMagicEffect* SpawnMagicEffect(
 		const UObject* WorldContextObject, 
-		const FEffectContext& InContext);
+		const FEffectContext& InContext,const FVector& location=FVector::ZeroVector,const FQuat& rotation=FQuat::Identity);
 
 	UFUNCTION(BlueprintCallable, Category = "MagicEffect")
 	AMagicEffect* SpawnNextMagicEffect();
@@ -33,9 +33,9 @@ protected:
 	// 特效挂点（在蓝图子类里可以调整位置）
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MagicEffect")
 	USceneComponent* EffectAnchor;
-
-	// 存储锦囊快照
-	UPROPERTY(BlueprintReadOnly, Category = "MagicEffect")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MagicEffect")
+	UAudioComponent* AudioComp;
+	 
 	FEffectContext MyContext;
 	UFUNCTION()
 	void OnFlySphereHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);

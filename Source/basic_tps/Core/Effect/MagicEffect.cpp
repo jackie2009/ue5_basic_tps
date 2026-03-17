@@ -8,6 +8,7 @@
 #include "basic_tps/Core/Character/CombatCharacter.h"
 #include "basic_tps/Core/Character/CombatComponent.h"
 #include "basic_tps/Core/TableData/SkillBaseVo.h"
+#include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -32,9 +33,17 @@ AMagicEffect::AMagicEffect()
 	RootComponent = CollisionSphere;
 	EffectAnchor = CreateDefaultSubobject<USceneComponent>(TEXT("EffectAnchor"));
 	EffectAnchor->SetupAttachment(RootComponent);
+
+
+	// 创建音效组件并附加到根组件
+	AudioComp = CreateDefaultSubobject<UAudioComponent>(TEXT("EffectAudioComponent"));
+	AudioComp->SetupAttachment(RootComponent);
+	// 默认设置为不自动播放，由我们逻辑控制
+	AudioComp->bAutoActivate = false;
+	
 }
 
-AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject, const FEffectContext& InContext)
+AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject, const FEffectContext& InContext,const FVector& location,const FQuat& rotation)
 {
 	if (!WorldContextObject || !InContext.VfxConfig) return nullptr;
 
@@ -65,6 +74,14 @@ AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject, 
 
 	// 2. 计算生成位置 (如果没传 AttachComp，默认在 Instigator 位置)
 	FTransform SpawnTransform = FTransform::Identity;
+	//没有初始化挂点 需要指定坐标与朝向
+	if (InContext.VfxConfig->SpawnSpace==EVfxSpawnSpace::WorldSpace)
+	{
+		SpawnTransform.SetLocation(location);
+		SpawnTransform.SetRotation(rotation);
+	}
+	
+	
 	if (InContext.VfxConfig->SpawnSpace == EVfxSpawnSpace::WorldSpaceInstigator || InContext.VfxConfig->SpawnSpace ==
 		EVfxSpawnSpace::WorldSpaceVictim)
 	{
@@ -80,7 +97,9 @@ AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject, 
 	if (NewEffect)
 	{
 		NewEffect->InitializeEffect(InContext, AttachToComp);
+	
 	}
+
 	return NewEffect;
 }
 
@@ -88,7 +107,7 @@ AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject, 
 void AMagicEffect::InitializeEffect(FEffectContext InContext, USceneComponent* InAttachComp)
 {
 	MyContext = InContext;
-
+if (InContext.VfxConfig->LifeSpan>0) SetLifeSpan(InContext.VfxConfig->LifeSpan);
 	// 如果需要吸附，则将容器本身挂载过去
 	if (InAttachComp && (MyContext.VfxConfig->SpawnSpace == EVfxSpawnSpace::AttachToInstigator || MyContext.VfxConfig->
 		SpawnSpace == EVfxSpawnSpace::AttachToVictim))
@@ -104,6 +123,17 @@ void AMagicEffect::InitializeEffect(FEffectContext InContext, USceneComponent* I
 		//GEngine->AddOnScreenDebugMessage(-1,5,FColor::Green,FString::Printf( TEXT("Bind by c++")));
 		// AddDynamic 是一个宏，用于绑定函数
 		CollisionSphere->OnComponentHit.AddDynamic(this, &AMagicEffect::OnFlySphereHit);
+	}
+
+	if (IsValid( InContext.VfxConfig->Sound))
+	{
+		AudioComp->SetSound(InContext.VfxConfig->Sound);
+        
+		// 关键设置：当绑定的 Actor 销毁时，音效是否停止
+		AudioComp->bStopWhenOwnerDestroyed = true;
+        
+		AudioComp->Play();
+		 
 	}
 }
 
@@ -150,13 +180,9 @@ if (IsValid(targetActor)&&IsValid(MyContext.Instigator))
 	MyContext.Instigator->CombatComp->TryHurtTarget(targetActor,MyContext.SkillBaseVo->ID);
 }
 	MyContext.VfxConfig=MyContext.VfxConfig->NextEffect;
-    auto effect=SpawnMagicEffect(this,MyContext);
-	if (effect!=nullptr&&MyContext.VfxConfig->SpawnSpace==EVfxSpawnSpace::WorldSpace)
-	{
-		effect->SetActorLocation( Hit.ImpactPoint);
-		effect->SetActorRotation( UKismetMathLibrary::MakeRotFromX(Hit.ImpactNormal));
-		//子弹需要考虑 normal
-		
-	}
+	FVector initLocation=FVector::ZeroVector;
+	
+    auto effect=SpawnMagicEffect(this,MyContext, Hit.ImpactPoint,UKismetMathLibrary::MakeRotFromX(Hit.ImpactNormal).Quaternion());
+	 
 	 
 }
