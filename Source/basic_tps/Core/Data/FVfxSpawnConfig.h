@@ -6,14 +6,14 @@
 class AMagicEffect;
 struct  FSkillBaseVo;
 class ACombatCharacter;
-inline TSoftObjectPtr<USkillVfxDataAsset> GetVfxDataById(FString VfxResID)
+inline TObjectPtr<USkillVisualDataAsset> GetSkillVisualDataById(FString DataID)
 {
 	 
 	// 这里的路径必须是绝对路径
-	FString AssetPath = FString::Printf(TEXT("/Game/VFX/Skills/DA_%s.DA_%s"), *VfxResID, *VfxResID);
+	FString AssetPath = FString::Printf(TEXT("/Game/TableDataExtra/Skills/DA_%s.DA_%s"), *DataID, *DataID);
     
-	// 2. 返回软引用
-	return TSoftObjectPtr<USkillVfxDataAsset>(FSoftObjectPath(AssetPath));
+	return LoadObject<USkillVisualDataAsset>(nullptr, *AssetPath);
+ 
 }
 // 定义特效生成的空间规则
 UENUM(BlueprintType)
@@ -41,6 +41,7 @@ enum class ECreateChildMode : uint8
 	Notify       UMETA(DisplayName = "SpawnFlyVfxNotify时创建新特效")
 };
 
+//技能创建的特效配置类型
 UCLASS(BlueprintType)
 class BASIC_TPS_API USkillVfxDataAsset : public UDataAsset
 {
@@ -76,6 +77,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX Config")
 	FName SocketName = NAME_None;
 
+	//  初始化朝向与跟随者一致
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX Config")
+	bool InitRotationWithSpaceActor = true;
+
 	//   相对偏移 (相对于 Socket 或 Actor 中心)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX Config")
 	FVector RelativeLocation = FVector::ZeroVector;
@@ -97,8 +102,23 @@ public:
 	ECreateChildMode ChildMode = ECreateChildMode::None;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX Config|Chain" ,meta = (EditCondition = "ChildMode != ECreateChildMode::None", EditConditionHides))
-	TSoftObjectPtr<USkillVfxDataAsset> NextEffect;
+	TObjectPtr<USkillVfxDataAsset> NextEffect;
 	 
+	
+};
+//技能表视觉字段的配置类型
+UCLASS(BlueprintType)
+class BASIC_TPS_API USkillVisualDataAsset : public UDataAsset
+{
+	GENERATED_BODY()
+
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Visual")
+	TObjectPtr<UAnimMontage> SkillMontage;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Visual")
+	TObjectPtr<USkillVfxDataAsset> VfxDataAsset;
 	
 };
 

@@ -18,7 +18,7 @@ USkillComponent::USkillComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
-	MagicEffect=nullptr;
+	FirstSkillMagicEffect=nullptr;
 	// ...
 }
 
@@ -41,20 +41,47 @@ void USkillComponent::UseSkill(int32 SkillID, int32 SkillLevel)
 	auto skillVo=(*skillBaseVoPtr)[SkillLevel];
 	Cast<ACombatCharacter>(GetOwner())->CombatComp;
 	auto attacker=Cast<ACombatCharacter>(GetOwner());
-	if (!skillVo->VfxName.IsEmpty())
+
+
+	
+	//float Duration = AnimInst->Montage_Play(SkillData->SkillMontage);
+	if (!skillVo->skillVisualDataID.IsEmpty())
 	{
 
-		auto vfxSoftPtr=  GetVfxDataById(skillVo->VfxName);
-		USkillVfxDataAsset* vfxAsset = vfxSoftPtr.LoadSynchronous();
-		FEffectContext   vfxContext;
-		vfxContext.Instigator=attacker;
-		vfxContext.TargetActor=nullptr;
-		vfxContext.SkillBaseVo=skillVo;
-		vfxContext.VfxConfig=vfxAsset;
-		MagicEffect=AMagicEffect::SpawnMagicEffect(this,vfxContext);
+		auto visualData=  GetSkillVisualDataById(skillVo->skillVisualDataID);
+		if (!IsValid(visualData))
+		{
+			UE_LOG(LogTemp, Error, TEXT("SkillVisualDataID [%s] 加载失败或无效！"), *skillVo->skillVisualDataID);
+		    return;
+		}
+		UAnimInstance* AnimInst = attacker->GetMesh()->GetAnimInstance();
+		AnimInst->Montage_Play(visualData->SkillMontage);
+		 
+		 
+		FirstSkillVfxContext.Instigator=attacker;
+		FirstSkillVfxContext.TargetActor=nullptr;
+		FirstSkillVfxContext.SkillBaseVo=skillVo;
+		FirstSkillVfxContext.VfxConfig=visualData->VfxDataAsset;
+	
 	 
 	}
  
 	
+}
+
+void USkillComponent::SpawnFirstMagicEffect()
+{
+	FirstSkillMagicEffect=nullptr;
+	if (FirstSkillVfxContext.SkillBaseVo==nullptr)return;
+	 
+	FirstSkillMagicEffect=AMagicEffect::SpawnMagicEffect(this,FirstSkillVfxContext);
+	FirstSkillVfxContext.SkillBaseVo=nullptr;
+}
+
+void USkillComponent::SpawnFlyMagicEffect()
+{
+	if (FirstSkillMagicEffect==nullptr)return;
+	FirstSkillMagicEffect->SpawnNextMagicEffect();
+	FirstSkillMagicEffect=nullptr;
 }
   

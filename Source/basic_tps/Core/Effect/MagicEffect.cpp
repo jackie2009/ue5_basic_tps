@@ -67,6 +67,7 @@ AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject, 
 		EVfxSpawnSpace::WorldSpaceVictim)
 	{
 		SpawnTransform.SetLocation(AttachToComp->GetSocketLocation(InContext.VfxConfig->SocketName));
+		if (InContext.VfxConfig->InitRotationWithSpaceActor)
 		SpawnTransform.SetRotation(AttachToComp->GetOwner()->GetActorRotation().Quaternion());
 	}
 
@@ -127,7 +128,7 @@ void AMagicEffect::Internal_SetupVisuals()
 AMagicEffect* AMagicEffect::SpawnNextMagicEffect()
 {
 	if (MyContext.VfxConfig->ChildMode!=ECreateChildMode::Notify) return nullptr;
-	MyContext.VfxConfig=MyContext.VfxConfig->NextEffect.LoadSynchronous();
+	MyContext.VfxConfig=MyContext.VfxConfig->NextEffect;
 	return SpawnMagicEffect(this,MyContext);
 }
 
@@ -141,7 +142,7 @@ void AMagicEffect::OnFlySphereHit(UPrimitiveComponent* HitComponent, AActor* Oth
 		FVector HitLocation = Hit.ImpactPoint;
 	SetLifeSpan(0.3f);
 
-	MyContext.VfxConfig=MyContext.VfxConfig->NextEffect.LoadSynchronous();
+	MyContext.VfxConfig=MyContext.VfxConfig->NextEffect;
     auto effect=SpawnMagicEffect(this,MyContext);
 	if (effect!=nullptr&&MyContext.VfxConfig->SpawnSpace==EVfxSpawnSpace::WorldSpace)
 	{

@@ -106,3 +106,13 @@ struct FCombatResult
  
  
 };
+
+
+
+namespace GameProjectTags
+{
+ 
+	const FName State_Busy = FName("State.Busy");
+	const FName State_ActionLock = FName("State.Busy.ActionLock");
+	const FName State_Casting = FName("State.Busy.Casting");
+}

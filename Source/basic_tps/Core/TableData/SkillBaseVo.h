@@ -18,7 +18,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	int32 aiPriority;          // ai选择优先级
 	UPROPERTY(EditAnywhere)
-	FString VfxName;  //特效资源
+	FString skillVisualDataID;  //技能视觉部分配置ID
  
 	UPROPERTY(EditAnywhere)
 	int32 level;               // 技能等级

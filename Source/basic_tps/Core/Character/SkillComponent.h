@@ -3,7 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
- 
+#include "basic_tps/Core/Data/FVfxSpawnConfig.h"
+
 #include "Components/ActorComponent.h"
 #include "SkillComponent.generated.h"
 
@@ -28,12 +29,16 @@ protected:
 
 	
 public:
-	UPROPERTY(BlueprintReadOnly, Category = "Combat")
-	 AMagicEffect*   MagicEffect;
+	 
+	AMagicEffect*   FirstSkillMagicEffect;
+	FEffectContext   FirstSkillVfxContext;
 	UFUNCTION(BlueprintCallable, Category = "Combat")
     void  UseSkill(   int32 SkillID,int32 SkillLevel=1);
  
-
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void  SpawnFirstMagicEffect();
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void  SpawnFlyMagicEffect();
 private:
  	 
 };
