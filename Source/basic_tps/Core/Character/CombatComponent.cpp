@@ -43,14 +43,21 @@ void UCombatComponent::TryHurtTarget(ACombatCharacter* Target, int32 SkillID)
 
 void UCombatComponent::HandleHurt(const FCombatResult& Result, ACombatCharacter* Attacker)
 {
+	auto character=Cast<ACombatCharacter>(GetOwner());
+	if (character->IsAlive()==false)return;
 	if (Result.bIsMiss)
 	{
 		
 		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Green,   TEXT("--------------Miss------------------"));
 		return;
 		
-	} 
-
+	}
+	if (Result.Damage>0)
+	{
+	   character->OnHurt(Result.Damage, FVector::Zero());
+	}
+	// 通知蓝图显示伤害数字、播受击动画
+	
 	
 
 	//   增加仇恨
@@ -62,7 +69,13 @@ void UCombatComponent::HandleHurt(const FCombatResult& Result, ACombatCharacter*
 	if (auto* AttrComp = GetOwner()->FindComponentByClass<UCharacterDataComponent>())
 	{
 		AttrComp->CostCurrentHP(Result.Damage);
+		
 	}
+	if (character->IsAlive()==false)
+	{
+		character->OnDead();
+	}
+	 
 	// 3. 触发受击反馈 (声音、特效、动画)
 	// 这里建议通过派发事件或调用接口处理，保持组件纯粹
 }

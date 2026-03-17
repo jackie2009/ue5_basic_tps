@@ -47,4 +47,13 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+
+	// 定义一个给蓝图用的事件：受伤
+	UFUNCTION(BlueprintImplementableEvent, Category = "Combat")
+	void OnHurt(float Damage, FVector HitLocation);
+
+	// 定义一个给蓝图用的事件：死亡
+	UFUNCTION(BlueprintImplementableEvent, Category = "Combat")
+	void OnDead();
 };

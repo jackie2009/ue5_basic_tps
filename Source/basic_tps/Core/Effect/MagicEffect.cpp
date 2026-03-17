@@ -6,6 +6,8 @@
 #include "Kismet/GameplayStatics.h"
 
 #include "basic_tps/Core/Character/CombatCharacter.h"
+#include "basic_tps/Core/Character/CombatComponent.h"
+#include "basic_tps/Core/TableData/SkillBaseVo.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -99,7 +101,7 @@ void AMagicEffect::InitializeEffect(FEffectContext InContext, USceneComponent* I
 	
 	if (CollisionSphere)
 	{
-		GEngine->AddOnScreenDebugMessage(-1,5,FColor::Green,FString::Printf( TEXT("Bind by c++")));
+		//GEngine->AddOnScreenDebugMessage(-1,5,FColor::Green,FString::Printf( TEXT("Bind by c++")));
 		// AddDynamic 是一个宏，用于绑定函数
 		CollisionSphere->OnComponentHit.AddDynamic(this, &AMagicEffect::OnFlySphereHit);
 	}
@@ -136,12 +138,17 @@ AMagicEffect* AMagicEffect::SpawnNextMagicEffect()
 void AMagicEffect::OnFlySphereHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 		if (MyContext.VfxConfig->ChildMode!=ECreateChildMode::Hit) return;
-	 
-	GEngine->AddOnScreenDebugMessage(-1,5,FColor::Green,FString::Printf( TEXT("hit by c++,%s"),*OtherActor->GetName()));
+	 CollisionSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	//GEngine->AddOnScreenDebugMessage(-1,5,FColor::Green,FString::Printf( TEXT("hit by c++,%s"),*OtherActor->GetName()));
 		// 2. 获取碰撞点
 		FVector HitLocation = Hit.ImpactPoint;
 	SetLifeSpan(0.3f);
-
+	auto targetActor=Cast<ACombatCharacter>( Hit.GetActor());
+if (IsValid(targetActor)&&IsValid(MyContext.Instigator))
+{
+	MyContext.TargetActor=targetActor;
+	MyContext.Instigator->CombatComp->TryHurtTarget(targetActor,MyContext.SkillBaseVo->ID);
+}
 	MyContext.VfxConfig=MyContext.VfxConfig->NextEffect;
     auto effect=SpawnMagicEffect(this,MyContext);
 	if (effect!=nullptr&&MyContext.VfxConfig->SpawnSpace==EVfxSpawnSpace::WorldSpace)
