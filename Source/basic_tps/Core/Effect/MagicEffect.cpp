@@ -22,13 +22,11 @@ void AMagicEffect::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
   
-	// 1. 获取 Root 并尝试转换为 PrimitiveComponent (所有碰撞体的基类)
-	if (UPrimitiveComponent* RootPrim = Cast<UPrimitiveComponent>(GetRootComponent()))
-	{
+	 
  
  
 
-		EffectAnchor = RootPrim;
+		EffectAnchor = GetRootComponent();
 	
 		AudioComp = Cast<UAudioComponent>(GetComponentByClass(UAudioComponent::StaticClass()));
 
@@ -37,42 +35,39 @@ void AMagicEffect::PostInitializeComponents()
 		if (AudioComp)
 		{
 			AudioComp->bAutoActivate = false;
-			AudioComp->SetupAttachment(RootPrim);
+			AudioComp->SetupAttachment(EffectAnchor);
 		}
-		// 2. 尝试转换
-		MainCollision = Cast<UPrimitiveComponent>(RootPrim);
+	
+	MainCollision=nullptr;
+	// 获取所有带 Tag 的组件（通常我们只需要第一个）
+	TArray<UActorComponent*> Components = GetComponentsByTag(UPrimitiveComponent::StaticClass(), FName("MainCollision"));
+
+	if (Components.Num() > 0)
+	{
+		MainCollision = Cast<UPrimitiveComponent>(Components[0]);
+        
+		 
+	}
 	 
 		if (MainCollision)
 		{
 			// 3. 执行逻辑配置
 			MainCollision->SetNotifyRigidBodyCollision(true);
 			MainCollision->SetCanEverAffectNavigation(false); // 弹丸不需要影响寻路
-			MainCollision->OnComponentHit.AddDynamic(this, &AMagicEffect::OnFlySphereHit);
-		}else
-		{
-			// 如果转换失败，在屏幕左上角显示红字，持续 10 秒
-			if (GEngine)
-			{
-				GEngine->AddOnScreenDebugMessage(
-					-1,                 // Key: -1 表示每次都新增一行，不覆盖旧的
-					10.0f,              // 持续时间（秒）
-					FColor::Red,        // 颜色
-					FString::Printf(TEXT("错误: [%s] 的 Root 不是碰撞体！当前是: %s"), 
-						*GetName(), 
-						GetRootComponent() ? *GetRootComponent()->GetClass()->GetName() : TEXT("NULL"))
-				);
-			}
 			
-		}
+			// 1. 核心设置：开启重叠事件产生
+			MainCollision->SetGenerateOverlapEvents(true);
+
+			// 2. 物理模式：建议设为 QueryOnly（仅查询，不物理碰撞）
+//			MainCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+			
+			MainCollision->OnComponentBeginOverlap.AddDynamic(this, &AMagicEffect::OnEffectOverlap);
+			
+		} 
 		// 4. 挂载其他 C++ 创建的组件
 		 
 	      
-	}
-	else 
-	{
-		// 健壮性检查：如果 Root 只是个 SceneComponent 而不是碰撞体，这里会报错或记录日志
-		UE_LOG(LogTemp, Warning, TEXT("AMagicEffect: RootComponent is not a PrimitiveComponent!"));
-	}
+	 
 }
 
 
@@ -127,11 +122,22 @@ AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject,T
 	FActorSpawnParameters Params;
 	Params.Instigator = InContext.Instigator;
 
-	AMagicEffect* NewEffect = World->SpawnActor<AMagicEffect>(ClassToSpawn, SpawnTransform, Params);
+	// 1. 开启延迟生成
+	AMagicEffect* NewEffect = World->SpawnActorDeferred<AMagicEffect>(
+		ClassToSpawn, 
+		SpawnTransform, 
+		nullptr, 
+		nullptr, 
+		ESpawnActorCollisionHandlingMethod::AlwaysSpawn
+	);
+
 	if (NewEffect)
 	{
-		NewEffect->InitializeEffect(InContext, AttachToComp,Config);
-	
+		// 2. 先填充你的 Context 和 Config（此时 Overlap 绝对不会触发）
+		NewEffect->InitializeEffect(InContext, AttachToComp, Config);
+
+		// 3. 最后完成生成（此时才会跑 OnConstruction -> PostInitializeComponents -> 触发 Overlap）
+		NewEffect->FinishSpawning(SpawnTransform);
 	}
 
 	return NewEffect;
@@ -178,15 +184,27 @@ AMagicEffect* AMagicEffect::SpawnNextMagicEffect()
 }
 
 
-void AMagicEffect::OnFlySphereHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+void AMagicEffect::OnEffectOverlap(UPrimitiveComponent* OverlappedComponent, 
+						 AActor* OtherActor, 
+						 UPrimitiveComponent* OtherComp, 
+						 int32 OtherBodyIndex, 
+						 bool bFromSweep, 
+						 const FHitResult& SweepResult)
 {
 	if (EffectConfig.ChildMode != ECreateChildMode::Hit) return;
+	if (OtherActor==MyContext.Instigator)return;
+	
 	if (IsValid(MainCollision)) MainCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	//GEngine->AddOnScreenDebugMessage(-1,5,FColor::Green,FString::Printf( TEXT("hit by c++,%s"),*OtherActor->GetName()));
-	// 2. 获取碰撞点
-	FVector HitLocation = Hit.ImpactPoint;
-	SetLifeSpan(0.3f);
-	auto targetActor = Cast<ACombatCharacter>(Hit.GetActor());
+//	GEngine->AddOnScreenDebugMessage(-1,5,FColor::Green,FString::Printf( TEXT("hit by c++,%s"),*OtherActor->GetName()));
+ 
+ 
+	//没有设置生命的 都算碰撞消失
+	if (EffectConfig.LifeSpan<=0)
+	{
+		SetLifeSpan(0.3f);
+	}
+	
+	auto targetActor = Cast<ACombatCharacter>(OtherActor);
 	if (IsValid(targetActor) && IsValid(MyContext.Instigator))
 	{
 		MyContext.TargetActor = targetActor;
@@ -194,7 +212,8 @@ void AMagicEffect::OnFlySphereHit(UPrimitiveComponent* HitComponent, AActor* Oth
 	}
  
 	
-    auto effect=SpawnMagicEffect(this,EffectConfig.NextEffect,MyContext, Hit.ImpactPoint,UKismetMathLibrary::MakeRotFromX(Hit.ImpactNormal).Quaternion());
+    auto effect=SpawnMagicEffect(this,EffectConfig.NextEffect,MyContext, SweepResult.ImpactPoint,UKismetMathLibrary::MakeRotFromX(SweepResult.ImpactNormal).Quaternion());
 	 
 	 
 }
+

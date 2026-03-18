@@ -44,7 +44,7 @@ void USkillComponent::UseSkill(int32 SkillID, int32 SkillLevel)
 	// cd mp check
 	auto skillBaseVoPtr=UTableDataManagerSubsystem::Get(this)->SkillBaseMap.Find(SkillID);
 	if (skillBaseVoPtr==nullptr)return;
-	auto skillVo=(*skillBaseVoPtr)[SkillLevel];
+	auto skillVo=(*skillBaseVoPtr)[SkillLevel-1];
 	 
 
 

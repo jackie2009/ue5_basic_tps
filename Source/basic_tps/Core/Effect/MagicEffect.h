@@ -34,7 +34,7 @@ public:
 protected:
   
 	virtual void PostInitializeComponents() override;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MagicEffect")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MagicEffect")
 	UPrimitiveComponent* MainCollision;
 	// 特效挂点（在蓝图子类里可以调整位置）
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MagicEffect")
@@ -43,10 +43,16 @@ protected:
 	UAudioComponent* AudioComp;
 	 
 	FEffectContext MyContext;
-	UFUNCTION()
-	void OnFlySphereHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	//UFUNCTION()
+	//void OnFlySphereHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 	
-	 
+	UFUNCTION()
+	void OnEffectOverlap(UPrimitiveComponent* OverlappedComponent, 
+						 AActor* OtherActor, 
+						 UPrimitiveComponent* OtherComp, 
+						 int32 OtherBodyIndex, 
+						 bool bFromSweep, 
+						 const FHitResult& SweepResult);
 private:
  
 };
