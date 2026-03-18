@@ -49,27 +49,16 @@ class BASIC_TPS_API USkillVfxDataAsset : public UDataAsset
 
 public:
 
-	// 1. 选择生成类型
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Visual")
-	EVfxObjectType ObjectType = EVfxObjectType::Niagara;
-
-	// 2. Niagara 系统：仅在选择 Niagara 时显示
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Visual", meta = (EditCondition = "ObjectType == EVfxObjectType::Niagara", EditConditionHides))
-	class UNiagaraSystem* NiagaraSystem;
-
-	// 3. Cascade 粒子：仅在选择 Emitter 时显示
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Visual", meta = (EditCondition = "ObjectType == EVfxObjectType::Emitter", EditConditionHides))
-	class UParticleSystem* CascadeParticle;
+ 
 
 	// 4. Actor 蓝图：仅在选择 Actor 时显示
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Visual", meta = (EditCondition = "ObjectType == EVfxObjectType::Actor", EditConditionHides))
-	TSubclassOf<AActor> ActorClass;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Visual")
+	TSubclassOf<AMagicEffect> ActorClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
 	USoundBase* Sound;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Visual")
-	TSubclassOf<AMagicEffect>  ContainerClass;
+ 
 	
 	//   生成的空间规则
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX Config")

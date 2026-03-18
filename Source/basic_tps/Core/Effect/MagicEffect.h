@@ -28,8 +28,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "MagicEffect")
 	AMagicEffect* SpawnNextMagicEffect();
 protected:
+  
+	virtual void PostInitializeComponents() override;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MagicEffect")
-	class USphereComponent* CollisionSphere;
+	UPrimitiveComponent* MainCollision;
 	// 特效挂点（在蓝图子类里可以调整位置）
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MagicEffect")
 	USceneComponent* EffectAnchor;
@@ -42,6 +44,5 @@ protected:
 	
 	 
 private:
-	// 内部创建特效组件的逻辑
-	void Internal_SetupVisuals();
+ 
 };

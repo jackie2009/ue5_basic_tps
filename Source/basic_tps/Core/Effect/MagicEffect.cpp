@@ -11,37 +11,70 @@
 #include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/KismetMathLibrary.h"
-
+#include "Components/PrimitiveComponent.h"
 
 AMagicEffect::AMagicEffect()
 {
 	PrimaryActorTick.bCanEverTick = true;
-
-	// 创建默认根组件和挂点
-	// 1. 创建球体碰撞并设为根
-	CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionSphere"));
-	// 1. 设置半径
-	CollisionSphere->InitSphereRadius(16.0f);
-
-	// 2. 勾选 Simulation Generates Hit Events (对应蓝图里的同名选项)
-	CollisionSphere->SetNotifyRigidBodyCollision(true);
-
-	// 3. 设置 Collision Presets
-	// 方案 A: 使用预设名称（最简洁，推荐在 Project Settings 里定义好你的 Projectile 频道）
-	CollisionSphere->SetCollisionProfileName(TEXT("Projectile"));
-	CollisionSphere->SetCanEverAffectNavigation(false); // 弹丸不需要影响寻路
-	RootComponent = CollisionSphere;
-	EffectAnchor = CreateDefaultSubobject<USceneComponent>(TEXT("EffectAnchor"));
-	EffectAnchor->SetupAttachment(RootComponent);
-
-
-	// 创建音效组件并附加到根组件
-	AudioComp = CreateDefaultSubobject<UAudioComponent>(TEXT("EffectAudioComponent"));
-	AudioComp->SetupAttachment(RootComponent);
-	// 默认设置为不自动播放，由我们逻辑控制
-	AudioComp->bAutoActivate = false;
-	
+  
 }
+void AMagicEffect::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+  
+	// 1. 获取 Root 并尝试转换为 PrimitiveComponent (所有碰撞体的基类)
+	if (UPrimitiveComponent* RootPrim = Cast<UPrimitiveComponent>(GetRootComponent()))
+	{
+ 
+ 
+
+		EffectAnchor = RootPrim;
+	
+		AudioComp = Cast<UAudioComponent>(GetComponentByClass(UAudioComponent::StaticClass()));
+
+	 
+		// 默认设置为不自动播放，由我们逻辑控制
+		if (AudioComp)
+		{
+			AudioComp->bAutoActivate = false;
+			AudioComp->SetupAttachment(RootPrim);
+		}
+		// 2. 尝试转换
+		MainCollision = Cast<UPrimitiveComponent>(RootPrim);
+	 
+		if (MainCollision)
+		{
+			// 3. 执行逻辑配置
+			MainCollision->SetNotifyRigidBodyCollision(true);
+			MainCollision->SetCanEverAffectNavigation(false); // 弹丸不需要影响寻路
+			MainCollision->OnComponentHit.AddDynamic(this, &AMagicEffect::OnFlySphereHit);
+		}else
+		{
+			// 如果转换失败，在屏幕左上角显示红字，持续 10 秒
+			if (GEngine)
+			{
+				GEngine->AddOnScreenDebugMessage(
+					-1,                 // Key: -1 表示每次都新增一行，不覆盖旧的
+					10.0f,              // 持续时间（秒）
+					FColor::Red,        // 颜色
+					FString::Printf(TEXT("错误: [%s] 的 Root 不是碰撞体！当前是: %s"), 
+						*GetName(), 
+						GetRootComponent() ? *GetRootComponent()->GetClass()->GetName() : TEXT("NULL"))
+				);
+			}
+			
+		}
+		// 4. 挂载其他 C++ 创建的组件
+		 
+	      
+	}
+	else 
+	{
+		// 健壮性检查：如果 Root 只是个 SceneComponent 而不是碰撞体，这里会报错或记录日志
+		UE_LOG(LogTemp, Warning, TEXT("AMagicEffect: RootComponent is not a PrimitiveComponent!"));
+	}
+}
+
 
 AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject, const FEffectContext& InContext,const FVector& location,const FQuat& rotation)
 {
@@ -69,8 +102,8 @@ AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject, 
 
 
 	// 1. 自动选择容器类（如果是 Niagara 且没配容器，可以用默认类）
-	TSubclassOf<AMagicEffect> ClassToSpawn = Config->ContainerClass;
-	if (!ClassToSpawn) ClassToSpawn = AMagicEffect::StaticClass();
+	TSubclassOf<AMagicEffect> ClassToSpawn = Config->ActorClass;
+	if (!ClassToSpawn)  return nullptr;
 
 	// 2. 计算生成位置 (如果没传 AttachComp，默认在 Instigator 位置)
 	FTransform SpawnTransform = FTransform::Identity;
@@ -115,17 +148,14 @@ if (InContext.VfxConfig->LifeSpan>0) SetLifeSpan(InContext.VfxConfig->LifeSpan);
 		AttachToComponent(InAttachComp, FAttachmentTransformRules::SnapToTargetIncludingScale,
 		                  MyContext.VfxConfig->SocketName);
 	}
-	CollisionSphere->IgnoreActorWhenMoving(InContext.Instigator,true);
-	Internal_SetupVisuals();
-	
-	if (CollisionSphere)
+	if (IsValid(MainCollision))
 	{
-		//GEngine->AddOnScreenDebugMessage(-1,5,FColor::Green,FString::Printf( TEXT("Bind by c++")));
-		// AddDynamic 是一个宏，用于绑定函数
-		CollisionSphere->OnComponentHit.AddDynamic(this, &AMagicEffect::OnFlySphereHit);
+		MainCollision->IgnoreActorWhenMoving(InContext.Instigator,true);
 	}
+	
 
-	if (IsValid( InContext.VfxConfig->Sound))
+
+	if (IsValid( InContext.VfxConfig->Sound)&&IsValid(AudioComp))
 	{
 		AudioComp->SetSound(InContext.VfxConfig->Sound);
         
@@ -137,26 +167,7 @@ if (InContext.VfxConfig->LifeSpan>0) SetLifeSpan(InContext.VfxConfig->LifeSpan);
 	}
 }
 
-void AMagicEffect::Internal_SetupVisuals()
-{
-	USkillVfxDataAsset* Config = MyContext.VfxConfig;
-	if (!Config) return;
-
-	// 这一段替代了你原来的 switch(ObjectType)
-	if (Config->ObjectType == EVfxObjectType::Niagara && Config->NiagaraSystem)
-	{
-		UNiagaraFunctionLibrary::SpawnSystemAttached(
-			Config->NiagaraSystem,
-			EffectAnchor, // 挂在容器的锚点上，而不是直接挂在 Mesh 上
-			NAME_None,
-			FVector::ZeroVector,
-			FRotator::ZeroRotator,
-			EAttachLocation::SnapToTarget,
-			true
-		);
-	}
-	// 如果是 Actor 类型，ContainerClass 本身已经生成了，这里可以处理额外的子物体挂载
-}
+ 
 AMagicEffect* AMagicEffect::SpawnNextMagicEffect()
 {
 	if (MyContext.VfxConfig->ChildMode!=ECreateChildMode::Notify) return nullptr;
@@ -168,7 +179,7 @@ AMagicEffect* AMagicEffect::SpawnNextMagicEffect()
 void AMagicEffect::OnFlySphereHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 		if (MyContext.VfxConfig->ChildMode!=ECreateChildMode::Hit) return;
-	 CollisionSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	if (IsValid(MainCollision)) MainCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	//GEngine->AddOnScreenDebugMessage(-1,5,FColor::Green,FString::Printf( TEXT("hit by c++,%s"),*OtherActor->GetName()));
 		// 2. 获取碰撞点
 		FVector HitLocation = Hit.ImpactPoint;
