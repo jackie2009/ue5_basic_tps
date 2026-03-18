@@ -7,6 +7,7 @@
 #include "CombatComponent.h"
 #include "basic_tps/Core/Data/CharacterDataComponent.h"
 #include "basic_tps/Core/Effect/MagicEffect.h"
+#include "basic_tps/Core/NotifyState/CombatGameplayTags.h"
 #include "basic_tps/Core/TableData/SkillBaseVo.h"
 #include "basic_tps/Core/TableData/TableDataManagerSubsystem.h"
 #include "basic_tps/Core/Utils/CombatCalculator.h"
@@ -34,13 +35,18 @@ void USkillComponent::BeginPlay()
 
 void USkillComponent::UseSkill(int32 SkillID, int32 SkillLevel)
 {
-
+	auto attacker=Cast<ACombatCharacter>(GetOwner());
+	
+	//动作限制状态检测
+	if (attacker==nullptr)return;
+	if (attacker->CharacterDataComp->ActionTags.HasTag(FCombatTags::State_LockSkill))return;
+	
 	// cd mp check
 	auto skillBaseVoPtr=UTableDataManagerSubsystem::Get(this)->SkillBaseMap.Find(SkillID);
 	if (skillBaseVoPtr==nullptr)return;
 	auto skillVo=(*skillBaseVoPtr)[SkillLevel];
-	Cast<ACombatCharacter>(GetOwner())->CombatComp;
-	auto attacker=Cast<ACombatCharacter>(GetOwner());
+	 
+
 
 
 	

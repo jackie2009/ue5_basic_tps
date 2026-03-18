@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
  
 #include "CombatTypes.h"
+#include "GameplayTagContainer.h"
 #include "CharacterDataComponent.generated.h"
 
 UCLASS()
@@ -23,14 +24,18 @@ public:
     void CostCurrentHP(int value);
     UFUNCTION(BlueprintCallable,BlueprintPure, Category = "CharacterData")
     int32 GetAttribute(int32 AttributeID);
+
+   
+   
 private:
+   
     int32 Hp = 100;
     
 public:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat")
     ECombatFaction Faction = ECombatFaction::Neutral;
-    
-   
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat")
+    FGameplayTagContainer ActionTags;
     int32 Attributes[AttributeEnum::MAX];
       
     UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "Combat")
