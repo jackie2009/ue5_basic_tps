@@ -67,7 +67,8 @@ void USkillComponent::UseSkill(int32 SkillID, int32 SkillLevel)
 		FirstSkillVfxContext.Instigator=attacker;
 		FirstSkillVfxContext.TargetActor=nullptr;
 		FirstSkillVfxContext.SkillBaseVo=skillVo;
-		FirstSkillVfxContext.VfxConfig=visualData->VfxDataAsset;
+		FirstSkillMagicEffectClass=visualData->MagicEffectClass;
+	 
 	
 	 
 	}
@@ -77,10 +78,11 @@ void USkillComponent::UseSkill(int32 SkillID, int32 SkillLevel)
 
 void USkillComponent::SpawnFirstMagicEffect()
 {
+	GEngine->AddOnScreenDebugMessage(-1,10,FColor::Yellow,FString::Printf( TEXT("SpawnFirstMagicEffect")));
 	FirstSkillMagicEffect=nullptr;
 	if (FirstSkillVfxContext.SkillBaseVo==nullptr)return;
 	 
-	FirstSkillMagicEffect=AMagicEffect::SpawnMagicEffect(this,FirstSkillVfxContext);
+	FirstSkillMagicEffect=AMagicEffect::SpawnMagicEffect(this,FirstSkillMagicEffectClass,FirstSkillVfxContext);
 	FirstSkillVfxContext.SkillBaseVo=nullptr;
 }
 

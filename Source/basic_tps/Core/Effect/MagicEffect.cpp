@@ -76,14 +76,17 @@ void AMagicEffect::PostInitializeComponents()
 }
 
 
-AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject, const FEffectContext& InContext,const FVector& location,const FQuat& rotation)
+AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject,TSubclassOf<AMagicEffect> ClassToSpawn, const FEffectContext& InContext,const FVector& location,const FQuat& rotation)
 {
-	if (!WorldContextObject || !InContext.VfxConfig) return nullptr;
+	if (!WorldContextObject || ClassToSpawn==nullptr) return nullptr;
+  
+	GEngine->AddOnScreenDebugMessage(-1,10,FColor::Yellow,FString::Printf( TEXT("SpawnMagicEffect")));
 
+	
 	UWorld* World = WorldContextObject->GetWorld();
 
-
-	USkillVfxDataAsset* Config = InContext.VfxConfig;
+	UClass* EffectClass = ClassToSpawn;
+	FSkillVfxConfig* Config=&EffectClass->GetDefaultObject<AMagicEffect>()->EffectConfig;
 
 	// 计算初始化位置的参考对象
 	USceneComponent* AttachToComp = nullptr;
@@ -101,25 +104,23 @@ AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject, 
 	if (!AttachToComp&&Config->SpawnSpace != EVfxSpawnSpace::WorldSpace ) return nullptr;
 
 
-	// 1. 自动选择容器类（如果是 Niagara 且没配容器，可以用默认类）
-	TSubclassOf<AMagicEffect> ClassToSpawn = Config->ActorClass;
-	if (!ClassToSpawn)  return nullptr;
+
 
 	// 2. 计算生成位置 (如果没传 AttachComp，默认在 Instigator 位置)
 	FTransform SpawnTransform = FTransform::Identity;
 	//没有初始化挂点 需要指定坐标与朝向
-	if (InContext.VfxConfig->SpawnSpace==EVfxSpawnSpace::WorldSpace)
+	if (Config->SpawnSpace==EVfxSpawnSpace::WorldSpace)
 	{
 		SpawnTransform.SetLocation(location);
 		SpawnTransform.SetRotation(rotation);
 	}
 	
 	
-	if (InContext.VfxConfig->SpawnSpace == EVfxSpawnSpace::WorldSpaceInstigator || InContext.VfxConfig->SpawnSpace ==
+	if (Config->SpawnSpace == EVfxSpawnSpace::WorldSpaceInstigator ||Config->SpawnSpace ==
 		EVfxSpawnSpace::WorldSpaceVictim)
 	{
-		SpawnTransform.SetLocation(AttachToComp->GetSocketLocation(InContext.VfxConfig->SocketName));
-		if (InContext.VfxConfig->InitRotationWithSpaceActor)
+		SpawnTransform.SetLocation(AttachToComp->GetSocketLocation(Config->SocketName));
+		if (Config->InitRotationWithSpaceActor)
 		SpawnTransform.SetRotation(AttachToComp->GetOwner()->GetActorRotation().Quaternion());
 	}
 
@@ -129,7 +130,7 @@ AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject, 
 	AMagicEffect* NewEffect = World->SpawnActor<AMagicEffect>(ClassToSpawn, SpawnTransform, Params);
 	if (NewEffect)
 	{
-		NewEffect->InitializeEffect(InContext, AttachToComp);
+		NewEffect->InitializeEffect(InContext, AttachToComp,Config);
 	
 	}
 
@@ -137,16 +138,16 @@ AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject, 
 }
 
 
-void AMagicEffect::InitializeEffect(FEffectContext InContext, USceneComponent* InAttachComp)
+void AMagicEffect::InitializeEffect(FEffectContext InContext, USceneComponent* InAttachComp,FSkillVfxConfig* Config)
 {
 	MyContext = InContext;
-if (InContext.VfxConfig->LifeSpan>0) SetLifeSpan(InContext.VfxConfig->LifeSpan);
+if (Config->LifeSpan>0) SetLifeSpan(Config->LifeSpan);
 	// 如果需要吸附，则将容器本身挂载过去
-	if (InAttachComp && (MyContext.VfxConfig->SpawnSpace == EVfxSpawnSpace::AttachToInstigator || MyContext.VfxConfig->
+	if (InAttachComp && (Config->SpawnSpace == EVfxSpawnSpace::AttachToInstigator || Config->
 		SpawnSpace == EVfxSpawnSpace::AttachToVictim))
 	{
 		AttachToComponent(InAttachComp, FAttachmentTransformRules::SnapToTargetIncludingScale,
-		                  MyContext.VfxConfig->SocketName);
+		                 Config->SocketName);
 	}
 	if (IsValid(MainCollision))
 	{
@@ -155,9 +156,9 @@ if (InContext.VfxConfig->LifeSpan>0) SetLifeSpan(InContext.VfxConfig->LifeSpan);
 	
 
 
-	if (IsValid( InContext.VfxConfig->Sound)&&IsValid(AudioComp))
+	if (IsValid( Config->Sound)&&IsValid(AudioComp))
 	{
-		AudioComp->SetSound(InContext.VfxConfig->Sound);
+		AudioComp->SetSound(Config->Sound);
         
 		// 关键设置：当绑定的 Actor 销毁时，音效是否停止
 		AudioComp->bStopWhenOwnerDestroyed = true;
@@ -170,30 +171,30 @@ if (InContext.VfxConfig->LifeSpan>0) SetLifeSpan(InContext.VfxConfig->LifeSpan);
  
 AMagicEffect* AMagicEffect::SpawnNextMagicEffect()
 {
-	if (MyContext.VfxConfig->ChildMode!=ECreateChildMode::Notify) return nullptr;
-	MyContext.VfxConfig=MyContext.VfxConfig->NextEffect;
-	return SpawnMagicEffect(this,MyContext);
+ 
+	if (EffectConfig.ChildMode!=ECreateChildMode::Notify) return nullptr;
+	 
+	return SpawnMagicEffect(this,EffectConfig.NextEffect,MyContext);
 }
 
 
 void AMagicEffect::OnFlySphereHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-		if (MyContext.VfxConfig->ChildMode!=ECreateChildMode::Hit) return;
+	if (EffectConfig.ChildMode != ECreateChildMode::Hit) return;
 	if (IsValid(MainCollision)) MainCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	//GEngine->AddOnScreenDebugMessage(-1,5,FColor::Green,FString::Printf( TEXT("hit by c++,%s"),*OtherActor->GetName()));
-		// 2. 获取碰撞点
-		FVector HitLocation = Hit.ImpactPoint;
+	// 2. 获取碰撞点
+	FVector HitLocation = Hit.ImpactPoint;
 	SetLifeSpan(0.3f);
-	auto targetActor=Cast<ACombatCharacter>( Hit.GetActor());
-if (IsValid(targetActor)&&IsValid(MyContext.Instigator))
-{
-	MyContext.TargetActor=targetActor;
-	MyContext.Instigator->CombatComp->TryHurtTarget(targetActor,MyContext.SkillBaseVo->ID);
-}
-	MyContext.VfxConfig=MyContext.VfxConfig->NextEffect;
-	FVector initLocation=FVector::ZeroVector;
+	auto targetActor = Cast<ACombatCharacter>(Hit.GetActor());
+	if (IsValid(targetActor) && IsValid(MyContext.Instigator))
+	{
+		MyContext.TargetActor = targetActor;
+		MyContext.Instigator->CombatComp->TryHurtTarget(targetActor, MyContext.SkillBaseVo->ID);
+	}
+ 
 	
-    auto effect=SpawnMagicEffect(this,MyContext, Hit.ImpactPoint,UKismetMathLibrary::MakeRotFromX(Hit.ImpactNormal).Quaternion());
+    auto effect=SpawnMagicEffect(this,EffectConfig.NextEffect,MyContext, Hit.ImpactPoint,UKismetMathLibrary::MakeRotFromX(Hit.ImpactNormal).Quaternion());
 	 
 	 
 }

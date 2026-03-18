@@ -19,14 +19,18 @@ public:
 
 	// 核心初始化接口（值传递）
  
-	virtual void InitializeEffect(FEffectContext InContext,USceneComponent* InAttachComp);
+	virtual void InitializeEffect(FEffectContext InContext,USceneComponent* InAttachComp,FSkillVfxConfig* Config);
  
 	static AMagicEffect* SpawnMagicEffect(
-		const UObject* WorldContextObject, 
+		const UObject* WorldContextObject, const TSubclassOf<AMagicEffect> ClassToSpawn,
 		const FEffectContext& InContext,const FVector& location=FVector::ZeroVector,const FQuat& rotation=FQuat::Identity);
 
 	UFUNCTION(BlueprintCallable, Category = "MagicEffect")
 	AMagicEffect* SpawnNextMagicEffect();
+
+	// 在 Actor 类内部
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config", meta = (ShowOnlyInnerProperties))
+	FSkillVfxConfig EffectConfig;
 protected:
   
 	virtual void PostInitializeComponents() override;

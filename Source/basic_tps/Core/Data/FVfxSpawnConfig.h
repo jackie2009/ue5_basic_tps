@@ -41,21 +41,18 @@ enum class ECreateChildMode : uint8
 	Notify       UMETA(DisplayName = "SpawnFlyVfxNotify时创建新特效")
 };
 
+
 //技能创建的特效配置类型
-UCLASS(BlueprintType)
-class BASIC_TPS_API USkillVfxDataAsset : public UDataAsset
+USTRUCT(BlueprintType)
+struct  FSkillVfxConfig
 {
 	GENERATED_BODY()
 
 public:
 
- 
+  
 
-	// 4. Actor 蓝图：仅在选择 Actor 时显示
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Visual")
-	TSubclassOf<AMagicEffect> ActorClass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX Config")
 	USoundBase* Sound;
 
  
@@ -93,7 +90,7 @@ public:
 	ECreateChildMode ChildMode = ECreateChildMode::None;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX Config|Chain" ,meta = (EditCondition = "ChildMode != ECreateChildMode::None", EditConditionHides))
-	TObjectPtr<USkillVfxDataAsset> NextEffect;
+	TSubclassOf<AMagicEffect>  NextEffect;
 	 
 	
 };
@@ -108,9 +105,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Visual")
 	TObjectPtr<UAnimMontage> SkillMontage;
 	
+ 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Visual")
-	TObjectPtr<USkillVfxDataAsset> VfxDataAsset;
-	
+	TSubclassOf<AMagicEffect> MagicEffectClass;
 };
 
 //特效传递的数据快照
@@ -119,9 +116,7 @@ struct FEffectContext
 {
 	 
 
-	// 1. 核心资源配置（你的 DataAsset）
  
-	USkillVfxDataAsset * VfxConfig;
 
 	// 2. 溯源信息
  

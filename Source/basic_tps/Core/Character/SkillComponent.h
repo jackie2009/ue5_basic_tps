@@ -33,6 +33,7 @@ public:
 	AMagicEffect*   FirstSkillMagicEffect;
 	 
 	FEffectContext   FirstSkillVfxContext;
+	TSubclassOf<AMagicEffect>  FirstSkillMagicEffectClass;
 	UFUNCTION(BlueprintCallable, Category = "Combat")
     void  UseSkill(   int32 SkillID,int32 SkillLevel=1);
  
