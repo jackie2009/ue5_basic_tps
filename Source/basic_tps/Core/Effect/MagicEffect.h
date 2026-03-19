@@ -43,8 +43,8 @@ protected:
 	UAudioComponent* AudioComp;
 	 
 	FEffectContext MyContext;
-	//UFUNCTION()
-	//void OnFlySphereHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	UFUNCTION()
+	void OnFlySphereHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 	
 	UFUNCTION()
 	void OnEffectOverlap(UPrimitiveComponent* OverlappedComponent, 

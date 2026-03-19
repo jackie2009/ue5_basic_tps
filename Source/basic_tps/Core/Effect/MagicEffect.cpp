@@ -58,9 +58,8 @@ void AMagicEffect::PostInitializeComponents()
 			// 1. 核心设置：开启重叠事件产生
 			MainCollision->SetGenerateOverlapEvents(true);
 
-			// 2. 物理模式：建议设为 QueryOnly（仅查询，不物理碰撞）
-//			MainCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-			
+		 
+			MainCollision->OnComponentHit.AddDynamic(this, &AMagicEffect::OnFlySphereHit);
 			MainCollision->OnComponentBeginOverlap.AddDynamic(this, &AMagicEffect::OnEffectOverlap);
 			
 		} 
@@ -217,3 +216,13 @@ void AMagicEffect::OnEffectOverlap(UPrimitiveComponent* OverlappedComponent,
 	 
 }
 
+void AMagicEffect::OnFlySphereHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	//没有设置生命的 都算碰撞消失
+	if (EffectConfig.LifeSpan<=0)
+	{
+		SetLifeSpan(0.3f);
+	}
+	auto effect=SpawnMagicEffect(this,EffectConfig.NextEffect,MyContext, Hit.ImpactPoint,UKismetMathLibrary::MakeRotFromX(Hit.ImpactNormal).Quaternion());
+	
+}
