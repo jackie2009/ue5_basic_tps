@@ -68,6 +68,10 @@ public:
 	//  初始化朝向与跟随者一致
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX Config")
 	bool InitRotationWithSpaceActor = true;
+	//  朝向永远与跟随者一致
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX Config")
+	bool AlwaysRotationWithSpaceActor = false;
+	
 
 	//   相对偏移 (相对于 Socket 或 Actor 中心)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX Config")

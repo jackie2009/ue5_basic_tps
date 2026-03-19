@@ -19,7 +19,7 @@ public:
 
 	// 核心初始化接口（值传递）
  
-	virtual void InitializeEffect(FEffectContext InContext,USceneComponent* InAttachComp);
+	virtual void InitializeEffect(FEffectContext InContext,USceneComponent* InAttachComp,FTransform & SpawnTransform);
  
 	static AMagicEffect* SpawnMagicEffect(
 		const UObject* WorldContextObject, const TSubclassOf<AMagicEffect> ClassToSpawn,
@@ -34,6 +34,7 @@ public:
 protected:
   
 	virtual void PostInitializeComponents() override;
+	virtual void Tick(float DeltaTime) override;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MagicEffect")
 	UPrimitiveComponent* MainCollision;
 	// 特效挂点（在蓝图子类里可以调整位置）

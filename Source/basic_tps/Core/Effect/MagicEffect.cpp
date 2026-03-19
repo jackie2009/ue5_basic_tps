@@ -73,6 +73,11 @@ void AMagicEffect::PostInitializeComponents()
 		 
 		MainCollision->OnComponentHit.AddDynamic(this, &AMagicEffect::OnFlySphereHit);
 		MainCollision->OnComponentBeginOverlap.AddDynamic(this, &AMagicEffect::OnEffectOverlap);
+
+		if (Config->AlwaysRotationWithSpaceActor)
+		{
+			EffectAnchor->SetUsingAbsoluteRotation(true);
+		}
 			
 	} 
 		 
@@ -80,7 +85,21 @@ void AMagicEffect::PostInitializeComponents()
 	      
 	 
 }
+void AMagicEffect::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
 
+	// 关键点 2：实时同步 Owner（角色）的旋转
+	if (EffectConfig.AlwaysRotationWithSpaceActor)
+	{
+		if(AActor* MyOwner = GetOwner())
+		{
+			// 直接让特效的世界旋转等于角色的世界旋转
+			// 这样角色转身，特效就跟着转；角色摆手，特效方向不动
+			SetActorRotation(MyOwner->GetActorRotation());
+		}
+	}
+}
 
 AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject,TSubclassOf<AMagicEffect> ClassToSpawn, const FEffectContext& InContext,const FVector& location,const FQuat& rotation)
 {
@@ -123,7 +142,8 @@ AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject,T
 	
 	
 	if (Config->SpawnSpace == EVfxSpawnSpace::WorldSpaceInstigator ||Config->SpawnSpace ==
-		EVfxSpawnSpace::WorldSpaceVictim)
+		EVfxSpawnSpace::WorldSpaceVictim
+		||Config->SpawnSpace == EVfxSpawnSpace::AttachToInstigator ||Config->SpawnSpace == EVfxSpawnSpace::AttachToVictim)
 	{
 		SpawnTransform.SetLocation(AttachToComp->GetSocketLocation(Config->SocketName));
 		if (Config->InitRotationWithSpaceActor)
@@ -138,10 +158,9 @@ AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject,T
 
 	if (NewEffect)
 	{
-		// 2. 先填做数据初始化传递 
-		NewEffect->InitializeEffect(InContext, AttachToComp);
-		//3 .再做 依赖初始化数据的组件初始化处理
-		NewEffect->FinishSpawning(SpawnTransform);
+	 
+		NewEffect->InitializeEffect(InContext, AttachToComp,SpawnTransform);
+	
 		 
 	}
 
@@ -149,22 +168,26 @@ AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject,T
 }
 
 //不用依赖组件 这时候还没准备好组件 
-void AMagicEffect::InitializeEffect(FEffectContext InContext, USceneComponent* InAttachComp)
+void AMagicEffect::InitializeEffect(FEffectContext InContext, USceneComponent* InAttachComp,FTransform & SpawnTransform)
 {
 	MyContext = InContext;
- auto Config = &EffectConfig;
-if (Config->LifeSpan>0) SetLifeSpan(Config->LifeSpan);
+	// 先做组件初始化处理 在做 依赖组件的逻辑
+	 FinishSpawning(SpawnTransform);
+	auto Config = &EffectConfig;
+	
+   if (Config->LifeSpan>0) SetLifeSpan(Config->LifeSpan);
+	
 	// 如果需要吸附，则将容器本身挂载过去
 	if (InAttachComp && (Config->SpawnSpace == EVfxSpawnSpace::AttachToInstigator || Config->
 		SpawnSpace == EVfxSpawnSpace::AttachToVictim))
 	{
 		AttachToComponent(InAttachComp, FAttachmentTransformRules::SnapToTargetIncludingScale,
 		                 Config->SocketName);
+		SetOwner(InAttachComp->GetOwner());
+ 
 	}
 	 
-	
-
-
+	 
 
 }
 
