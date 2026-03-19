@@ -193,7 +193,6 @@ void AMagicEffect::OnEffectOverlap(UPrimitiveComponent* OverlappedComponent,
 	if (EffectConfig.ChildMode != ECreateChildMode::Hit) return;
 	if (OtherActor==MyContext.Instigator)return;
 	
-	if (IsValid(MainCollision)) MainCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 //	GEngine->AddOnScreenDebugMessage(-1,5,FColor::Green,FString::Printf( TEXT("hit by c++,%s"),*OtherActor->GetName()));
  
  
@@ -201,6 +200,8 @@ void AMagicEffect::OnEffectOverlap(UPrimitiveComponent* OverlappedComponent,
 	if (EffectConfig.LifeSpan<=0)
 	{
 		SetLifeSpan(0.3f);
+		if (IsValid(MainCollision)) MainCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
 	}
 	
 	auto targetActor = Cast<ACombatCharacter>(OtherActor);
@@ -209,9 +210,14 @@ void AMagicEffect::OnEffectOverlap(UPrimitiveComponent* OverlappedComponent,
 		MyContext.TargetActor = targetActor;
 		MyContext.Instigator->CombatComp->TryHurtTarget(targetActor, MyContext.SkillBaseVo->ID);
 	}
- 
+
+	FVector ImpactPoint=SweepResult.ImpactPoint;
+	 
+	// 获取敌人碰撞体上距离我（子弹/火球）中心最近的点
+	OtherComp->GetClosestPointOnCollision(GetActorLocation(), ImpactPoint, SweepResult.BoneName);
 	
-    auto effect=SpawnMagicEffect(this,EffectConfig.NextEffect,MyContext, SweepResult.ImpactPoint,UKismetMathLibrary::MakeRotFromX(SweepResult.ImpactNormal).Quaternion());
+	
+    auto effect=SpawnMagicEffect(this,EffectConfig.NextEffect,MyContext, ImpactPoint,UKismetMathLibrary::MakeRotFromX(SweepResult.ImpactNormal).Quaternion());
 	 
 	 
 }

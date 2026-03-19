@@ -83,7 +83,7 @@ public:
 
 	//   生命周期 (如果为 0 则由蓝图内部逻辑销毁)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX Config")
-	float LifeSpan = 0.0f;
+	float LifeSpan = 0.5f;
 
 	 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX Config|Chain")

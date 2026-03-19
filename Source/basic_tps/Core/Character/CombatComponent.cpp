@@ -54,7 +54,7 @@ void UCombatComponent::HandleHurt(const FCombatResult& Result, ACombatCharacter*
 	}
 	if (Result.Damage>0)
 	{
-	   character->OnHurt(Result.Damage, FVector::Zero());
+	   character->SelfOnHurt(Result.Damage, FVector::Zero());
 	}
 	// 通知蓝图显示伤害数字、播受击动画
 	
@@ -73,7 +73,7 @@ void UCombatComponent::HandleHurt(const FCombatResult& Result, ACombatCharacter*
 	}
 	if (character->IsAlive()==false)
 	{
-		character->OnDead();
+		character->SelfOnDead();
 	}
 	 
 	// 3. 触发受击反馈 (声音、特效、动画)

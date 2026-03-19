@@ -26,12 +26,14 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void PreInitializeComponents() override;
 	virtual void PostInitializeComponents() override;
-	
-
-	
+	virtual void ExecutePhysicsDisabled();
 
 public:
 
+
+		
+
+	
 	UPROPERTY( BlueprintReadOnly, Category = "Combat")
 	TObjectPtr<UCharacterDataComponent> CharacterDataComp = nullptr;
 	UPROPERTY( BlueprintReadOnly, Category = "Combat")
@@ -49,6 +51,11 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 
+	virtual void SelfOnHurt(float Damage, FVector HitLocation)  ;
+	virtual void SelfOnDead()  ;
+	
+	
+	
 	// 定义一个给蓝图用的事件：受伤
 	UFUNCTION(BlueprintImplementableEvent, Category = "Combat")
 	void OnHurt(float Damage, FVector HitLocation);
