@@ -48,22 +48,34 @@ void AMagicEffect::PostInitializeComponents()
         
 		 
 	}
-	 
-		if (MainCollision)
-		{
-			// 3. 执行逻辑配置
-			MainCollision->SetNotifyRigidBodyCollision(true);
-			MainCollision->SetCanEverAffectNavigation(false); // 弹丸不需要影响寻路
+	 auto Config=&EffectConfig;
+	if (IsValid( Config->Sound)&&IsValid(AudioComp))
+	{
+		AudioComp->SetSound(Config->Sound);
+        
+		// 关键设置：当绑定的 Actor 销毁时，音效是否停止
+		AudioComp->bStopWhenOwnerDestroyed = true;
+        
+		AudioComp->Play();
+		 
+	}
+
+	if (MainCollision)
+	{
+		MainCollision->IgnoreActorWhenMoving(MyContext.Instigator,true);
+		// 3. 执行逻辑配置
+		MainCollision->SetNotifyRigidBodyCollision(true);
+		MainCollision->SetCanEverAffectNavigation(false); // 弹丸不需要影响寻路
 			
-			// 1. 核心设置：开启重叠事件产生
-			MainCollision->SetGenerateOverlapEvents(true);
+		// 1. 核心设置：开启重叠事件产生
+		MainCollision->SetGenerateOverlapEvents(true);
 
 		 
-			MainCollision->OnComponentHit.AddDynamic(this, &AMagicEffect::OnFlySphereHit);
-			MainCollision->OnComponentBeginOverlap.AddDynamic(this, &AMagicEffect::OnEffectOverlap);
+		MainCollision->OnComponentHit.AddDynamic(this, &AMagicEffect::OnFlySphereHit);
+		MainCollision->OnComponentBeginOverlap.AddDynamic(this, &AMagicEffect::OnEffectOverlap);
 			
-		} 
-		// 4. 挂载其他 C++ 创建的组件
+	} 
+		 
 		 
 	      
 	 
@@ -122,30 +134,25 @@ AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject,T
 	Params.Instigator = InContext.Instigator;
 
 	// 1. 开启延迟生成
-	AMagicEffect* NewEffect = World->SpawnActorDeferred<AMagicEffect>(
-		ClassToSpawn, 
-		SpawnTransform, 
-		nullptr, 
-		nullptr, 
-		ESpawnActorCollisionHandlingMethod::AlwaysSpawn
-	);
+	AMagicEffect* NewEffect = World->SpawnActorDeferred<AMagicEffect>(ClassToSpawn, SpawnTransform);
 
 	if (NewEffect)
 	{
-		// 2. 先填充你的 Context 和 Config（此时 Overlap 绝对不会触发）
-		NewEffect->InitializeEffect(InContext, AttachToComp, Config);
-
-		// 3. 最后完成生成（此时才会跑 OnConstruction -> PostInitializeComponents -> 触发 Overlap）
+		// 2. 先填做数据初始化传递 
+		NewEffect->InitializeEffect(InContext, AttachToComp);
+		//3 .再做 依赖初始化数据的组件初始化处理
 		NewEffect->FinishSpawning(SpawnTransform);
+		 
 	}
 
 	return NewEffect;
 }
 
-
-void AMagicEffect::InitializeEffect(FEffectContext InContext, USceneComponent* InAttachComp,FSkillVfxConfig* Config)
+//不用依赖组件 这时候还没准备好组件 
+void AMagicEffect::InitializeEffect(FEffectContext InContext, USceneComponent* InAttachComp)
 {
 	MyContext = InContext;
+ auto Config = &EffectConfig;
 if (Config->LifeSpan>0) SetLifeSpan(Config->LifeSpan);
 	// 如果需要吸附，则将容器本身挂载过去
 	if (InAttachComp && (Config->SpawnSpace == EVfxSpawnSpace::AttachToInstigator || Config->
@@ -154,23 +161,11 @@ if (Config->LifeSpan>0) SetLifeSpan(Config->LifeSpan);
 		AttachToComponent(InAttachComp, FAttachmentTransformRules::SnapToTargetIncludingScale,
 		                 Config->SocketName);
 	}
-	if (IsValid(MainCollision))
-	{
-		MainCollision->IgnoreActorWhenMoving(InContext.Instigator,true);
-	}
+	 
 	
 
 
-	if (IsValid( Config->Sound)&&IsValid(AudioComp))
-	{
-		AudioComp->SetSound(Config->Sound);
-        
-		// 关键设置：当绑定的 Actor 销毁时，音效是否停止
-		AudioComp->bStopWhenOwnerDestroyed = true;
-        
-		AudioComp->Play();
-		 
-	}
+
 }
 
  
@@ -190,6 +185,7 @@ void AMagicEffect::OnEffectOverlap(UPrimitiveComponent* OverlappedComponent,
 						 bool bFromSweep, 
 						 const FHitResult& SweepResult)
 {
+	if (MyContext.Instigator==nullptr)return;
 	if (EffectConfig.ChildMode != ECreateChildMode::Hit) return;
 	if (OtherActor==MyContext.Instigator)return;
 	
@@ -224,6 +220,7 @@ void AMagicEffect::OnEffectOverlap(UPrimitiveComponent* OverlappedComponent,
 
 void AMagicEffect::OnFlySphereHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
+	if (MyContext.Instigator==nullptr)return;
 	//没有设置生命的 都算碰撞消失
 	if (EffectConfig.LifeSpan<=0)
 	{

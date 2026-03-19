@@ -19,7 +19,7 @@ public:
 
 	// 核心初始化接口（值传递）
  
-	virtual void InitializeEffect(FEffectContext InContext,USceneComponent* InAttachComp,FSkillVfxConfig* Config);
+	virtual void InitializeEffect(FEffectContext InContext,USceneComponent* InAttachComp);
  
 	static AMagicEffect* SpawnMagicEffect(
 		const UObject* WorldContextObject, const TSubclassOf<AMagicEffect> ClassToSpawn,
@@ -43,6 +43,7 @@ protected:
 	UAudioComponent* AudioComp;
 	 
 	FEffectContext MyContext;
+	 
 	UFUNCTION()
 	void OnFlySphereHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 	
