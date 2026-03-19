@@ -31,6 +31,8 @@ public:
 	// 在 Actor 类内部
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config", meta = (ShowOnlyInnerProperties))
 	FSkillVfxConfig EffectConfig;
+	
+	
 protected:
   
 	virtual void PostInitializeComponents() override;

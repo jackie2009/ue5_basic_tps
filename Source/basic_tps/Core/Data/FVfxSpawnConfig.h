@@ -2,10 +2,12 @@
 
 #include "CoreMinimal.h"
  
+
 #include "FVfxSpawnConfig.generated.h"
 class AMagicEffect;
 struct  FSkillBaseVo;
 class ACombatCharacter;
+ 
 inline TObjectPtr<USkillVisualDataAsset> GetSkillVisualDataById(FString DataID)
 {
 	 
@@ -71,19 +73,10 @@ public:
 	//  朝向永远与跟随者一致
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX Config")
 	bool AlwaysRotationWithSpaceActor = false;
-	
-
-	//   相对偏移 (相对于 Socket 或 Actor 中心)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX Config")
-	FVector RelativeLocation = FVector::ZeroVector;
+	bool HurtTargetWhenHit=true;
 
-	//  相对旋转
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX Config")
-	FRotator RelativeRotation = FRotator::ZeroRotator;
-
-	//   缩放
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX Config")
-	FVector RelativeScale = FVector::OneVector;
+ 
 
 	//   生命周期 (如果为 0 则由蓝图内部逻辑销毁)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX Config")
