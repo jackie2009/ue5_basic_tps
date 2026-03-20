@@ -20,10 +20,10 @@ public:
 	// 核心初始化接口（值传递）
  
 	virtual void InitializeEffect(FEffectContext InContext,USceneComponent* InAttachComp,FTransform & SpawnTransform);
- 
+	UFUNCTION(BlueprintCallable, Category = "MagicEffect")
 	static AMagicEffect* SpawnMagicEffect(
 		const UObject* WorldContextObject, const TSubclassOf<AMagicEffect> ClassToSpawn,
-		const FEffectContext& InContext,const FVector& location=FVector::ZeroVector,const FQuat& rotation=FQuat::Identity);
+		const FEffectContext& InContext,const FVector& location=FVector(0.f, 0.f, 0.f),const FQuat& rotation=FQuat());
 
 	UFUNCTION(BlueprintCallable, Category = "MagicEffect")
 	AMagicEffect* SpawnNextMagicEffect();
@@ -44,7 +44,7 @@ protected:
 	USceneComponent* EffectAnchor;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MagicEffect")
 	UAudioComponent* AudioComp;
-	 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MagicEffect")
 	FEffectContext MyContext;
 	 
 	UFUNCTION()

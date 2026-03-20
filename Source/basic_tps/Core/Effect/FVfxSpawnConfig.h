@@ -8,15 +8,7 @@ class AMagicEffect;
 struct  FSkillBaseVo;
 class ACombatCharacter;
  
-inline TObjectPtr<USkillVisualDataAsset> GetSkillVisualDataById(FString DataID)
-{
-	 
-	// 这里的路径必须是绝对路径
-	FString AssetPath = FString::Printf(TEXT("/Game/TableDataExtra/Skills/DA_%s.DA_%s"), *DataID, *DataID);
-    
-	return LoadObject<USkillVisualDataAsset>(nullptr, *AssetPath);
  
-}
 // 定义特效生成的空间规则
 UENUM(BlueprintType)
 enum class EVfxSpawnSpace : uint8
@@ -112,11 +104,13 @@ public:
 };
 
 //特效传递的数据快照
- 
+USTRUCT(BlueprintType, Category = "MagicEffect")
 struct FEffectContext
 {
 	 
+	GENERATED_BODY()
 
+public:
  
 
 	// 2. 溯源信息

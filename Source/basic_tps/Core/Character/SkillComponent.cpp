@@ -53,8 +53,13 @@ void USkillComponent::UseSkill(int32 SkillID, int32 SkillLevel)
 	//float Duration = AnimInst->Montage_Play(SkillData->SkillMontage);
 	if (!skillVo->skillVisualDataID.IsEmpty())
 	{
-
-		auto visualData=  GetSkillVisualDataById(skillVo->skillVisualDataID);
+		auto DataID=skillVo->skillVisualDataID;
+		 
+		// 这里的路径必须是绝对路径
+		FString AssetPath = FString::Printf(TEXT("/Game/TableDataExtra/Skills/DA_%s.DA_%s"), *DataID, *DataID);
+    
+		 
+		auto visualData=  LoadObject<USkillVisualDataAsset>(nullptr, *AssetPath);(skillVo->skillVisualDataID);
 		if (!IsValid(visualData))
 		{
 			UE_LOG(LogTemp, Error, TEXT("SkillVisualDataID [%s] 加载失败或无效！"), *skillVo->skillVisualDataID);
