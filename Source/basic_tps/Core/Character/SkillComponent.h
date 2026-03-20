@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "basic_tps/Core/Data/FVfxSpawnConfig.h"
+#include "basic_tps/Core/Effect/FVfxSpawnConfig.h"
 
 #include "Components/ActorComponent.h"
 #include "SkillComponent.generated.h"

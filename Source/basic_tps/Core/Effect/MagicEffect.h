@@ -4,7 +4,7 @@
 #include "GameFramework/Actor.h"
  
 
-#include "basic_tps/Core/Data/FVfxSpawnConfig.h"
+#include "FVfxSpawnConfig.h"
  
 #include "MagicEffect.generated.h"
  

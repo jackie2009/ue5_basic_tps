@@ -26,6 +26,8 @@ enum class EVfxSpawnSpace : uint8
 	WorldSpace          UMETA(DisplayName = "世界空间(不跟随,需设置坐标)"),
 	WorldSpaceInstigator          UMETA(DisplayName = "世界空间(不跟随,用释放者做初始位置)"),
 	WorldSpaceVictim          UMETA(DisplayName = "世界空间(不跟随,用承受者做初始位置)"),
+	CameraViewHitLocation  UMETA(DisplayName = "鼠标射线点(世界空间)"),
+	CameraViewHitGroundLocation  UMETA(DisplayName = "鼠标射线点对应的地面点(世界空间)"),
 };
 
 UENUM(BlueprintType)

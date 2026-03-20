@@ -8,6 +8,7 @@
 #include "basic_tps/Core/Character/CombatCharacter.h"
 #include "basic_tps/Core/Character/CombatComponent.h"
 #include "basic_tps/Core/TableData/SkillBaseVo.h"
+#include "basic_tps/Core/Utils/CombatCameraUtils.h"
 #include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -126,7 +127,9 @@ AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject,T
 		AttachToComp = InContext.TargetActor ? InContext.TargetActor->GetMesh() : nullptr;
 	}
 
-	if (!AttachToComp&&Config->SpawnSpace != EVfxSpawnSpace::WorldSpace ) return nullptr;
+	if (!AttachToComp&&(Config->SpawnSpace != EVfxSpawnSpace::WorldSpace&&Config->SpawnSpace != EVfxSpawnSpace::CameraViewHitLocation
+	&&Config->SpawnSpace != EVfxSpawnSpace::CameraViewHitGroundLocation
+	) ) return nullptr;
 
 
 
@@ -138,6 +141,26 @@ AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject,T
 	{
 		SpawnTransform.SetLocation(location);
 		SpawnTransform.SetRotation(rotation);
+	}else if (Config->SpawnSpace== EVfxSpawnSpace::CameraViewHitLocation)
+	{
+	 
+		FVector CameraHitPoint;
+		// 2. MaxRange: 20米 = 2000厘米
+		float MaxRange = 2000.0f;
+		if (!UCombatCameraUtils::GetCameraViewHitLocation(WorldContextObject,MaxRange,CameraHitPoint))return nullptr;
+		SpawnTransform.SetLocation(CameraHitPoint);
+		SpawnTransform.SetRotation( InContext.Instigator->GetActorRotation().Quaternion());
+		
+	}
+	else if (Config->SpawnSpace== EVfxSpawnSpace::CameraViewHitGroundLocation)
+	{
+	 
+		FVector CameraHitPoint;
+		// 2. MaxRange: 20米 = 2000厘米
+		float MaxRange = 2000.0f;
+		if (!UCombatCameraUtils::ProjectLocationToGround(WorldContextObject,MaxRange,CameraHitPoint))return nullptr;
+		SpawnTransform.SetLocation(CameraHitPoint);
+		SpawnTransform.SetRotation( InContext.Instigator->GetActorRotation().Quaternion());
 	}
 	
 	
@@ -146,9 +169,10 @@ AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject,T
 		||Config->SpawnSpace == EVfxSpawnSpace::AttachToInstigator ||Config->SpawnSpace == EVfxSpawnSpace::AttachToVictim)
 	{
 		SpawnTransform.SetLocation(AttachToComp->GetSocketLocation(Config->SocketName));
-		if (Config->InitRotationWithSpaceActor)
-		SpawnTransform.SetRotation(AttachToComp->GetOwner()->GetActorRotation().Quaternion());
+		
 	}
+	if (Config->InitRotationWithSpaceActor&&AttachToComp!=nullptr)
+		SpawnTransform.SetRotation(AttachToComp->GetOwner()->GetActorRotation().Quaternion());
 
 	FActorSpawnParameters Params;
 	Params.Instigator = InContext.Instigator;

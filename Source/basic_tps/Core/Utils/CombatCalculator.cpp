@@ -4,7 +4,7 @@
 #include "basic_tps/Core/Character/CombatCharacter.h"
 #include "basic_tps/Core/Data/CharacterDataComponent.h"
 #include "basic_tps/Core/Data/CombatTypes.h"
-#include "basic_tps/Core/Data/FVfxSpawnConfig.h"
+
 #include "basic_tps/Core/TableData/SkillBaseVo.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
