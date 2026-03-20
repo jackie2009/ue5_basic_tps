@@ -35,7 +35,7 @@ void AMagicEffect::PostInitializeComponents()
 		if (AudioComp)
 		{
 			AudioComp->bAutoActivate = false;
-			AudioComp->SetupAttachment(EffectAnchor);
+	 
 		}
 	
 	MainCollision=nullptr;
@@ -215,11 +215,13 @@ void AMagicEffect::OnEffectOverlap(UPrimitiveComponent* OverlappedComponent,
 //	GEngine->AddOnScreenDebugMessage(-1,5,FColor::Green,FString::Printf( TEXT("hit by c++,%s"),*OtherActor->GetName()));
  
  
-	//没有设置生命的 都算碰撞消失
-	if (EffectConfig.LifeSpan<=0)
+	 
+	if (EffectConfig.HitFirstTarget== EHitFirstTargetHandle::Disable||EffectConfig.HitFirstTarget== EHitFirstTargetHandle::Destroy)
 	{
-		SetLifeSpan(0.3f);
+		
 		if (IsValid(MainCollision)) MainCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+		if (EffectConfig.HitFirstTarget== EHitFirstTargetHandle::Destroy)SetLifeSpan(0.3f);
 
 	}
 	if (EffectConfig.HurtTargetWhenHit)
@@ -248,10 +250,13 @@ void AMagicEffect::OnEffectOverlap(UPrimitiveComponent* OverlappedComponent,
 void AMagicEffect::OnFlySphereHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	if (MyContext.Instigator==nullptr)return;
-	//没有设置生命的 都算碰撞消失
-	if (EffectConfig.LifeSpan<=0)
+	if (EffectConfig.HitFirstTarget== EHitFirstTargetHandle::Disable||EffectConfig.HitFirstTarget== EHitFirstTargetHandle::Destroy)
 	{
-		SetLifeSpan(0.3f);
+		
+		if (IsValid(MainCollision)) MainCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+		if (EffectConfig.HitFirstTarget== EHitFirstTargetHandle::Destroy)SetLifeSpan(0.3f);
+
 	}
 	auto effect=SpawnMagicEffect(this,EffectConfig.NextEffect,MyContext, Hit.ImpactPoint,UKismetMathLibrary::MakeRotFromX(Hit.ImpactNormal).Quaternion());
 	

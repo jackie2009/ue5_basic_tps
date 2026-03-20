@@ -29,11 +29,12 @@ enum class EVfxSpawnSpace : uint8
 };
 
 UENUM(BlueprintType)
-enum class EVfxObjectType : uint8
+enum class EHitFirstTargetHandle : uint8
 {
-	Niagara     UMETA(DisplayName = "Niagara 粒子"),
-	Emitter     UMETA(DisplayName = "Cascade 传统粒子"),
-	Actor       UMETA(DisplayName = "Actor 蓝图/逻辑物件")
+	Keep     UMETA(DisplayName = "保持继续"),
+	Disable       UMETA(DisplayName = "仅关闭碰撞"),
+	Destroy     UMETA(DisplayName = "关闭碰撞与渲染")
+	
 };
 UENUM(BlueprintType)
 enum class ECreateChildMode : uint8
@@ -67,16 +68,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX Config")
 	FName SocketName = NAME_None;
 
-	//  初始化朝向与跟随者一致
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX Config")
+	 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX Config",meta = (DisplayName = "初始化时朝向与跟随者一致"))
 	bool InitRotationWithSpaceActor = true;
-	//  朝向永远与跟随者一致
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX Config")
+	//  
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX Config",meta = (DisplayName = "朝向与跟随者始终保持一致"))
 	bool AlwaysRotationWithSpaceActor = false;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX Config")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX Config",meta = (DisplayName = "命中目标会造成伤害"))
 	bool HurtTargetWhenHit=true;
 
- 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX Config",meta = (DisplayName = "命中首个目标处理"))
+	EHitFirstTargetHandle HitFirstTarget;
 
 	//   生命周期 (如果为 0 则由蓝图内部逻辑销毁)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX Config")
