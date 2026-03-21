@@ -23,9 +23,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "MagicEffect")
 	static AMagicEffect* SpawnMagicEffect(
 		const UObject* WorldContextObject, const TSubclassOf<AMagicEffect> ClassToSpawn,
-		const FEffectContext& InContext,const FVector& location=FVector(0.f, 0.f, 0.f),const FQuat& rotation=FQuat());
+		const FEffectContext& InContext,const FVector& location=FVector(0.f, 0.f, 0.f),const FQuat& rotation=FQuat(),const bool ForceUseParamsTransform=false);
 
-	UFUNCTION(BlueprintCallable, Category = "MagicEffect")
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable, Category = "MagicEffect")
 	AMagicEffect* SpawnNextMagicEffect();
 
 	// 在 Actor 类内部
@@ -57,6 +57,10 @@ protected:
 						 int32 OtherBodyIndex, 
 						 bool bFromSweep, 
 						 const FHitResult& SweepResult);
+	
+	// 有效目标撞击之后 做连锁闪电类再次发射
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "MagicEffect")
+	void OnValidHit(ACombatCharacter *hitTarget);
 private:
  
 };

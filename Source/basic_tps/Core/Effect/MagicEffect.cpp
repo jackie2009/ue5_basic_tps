@@ -102,7 +102,7 @@ void AMagicEffect::Tick(float DeltaTime)
 	}
 }
 
-AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject,TSubclassOf<AMagicEffect> ClassToSpawn, const FEffectContext& InContext,const FVector& location,const FQuat& rotation)
+AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject,TSubclassOf<AMagicEffect> ClassToSpawn, const FEffectContext& InContext,const FVector& location,const FQuat& rotation,const bool ForceUseParamsTransform)
 {
 	if (!WorldContextObject || ClassToSpawn==nullptr) return nullptr;
   
@@ -137,7 +137,7 @@ AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject,T
 	// 2. 计算生成位置 (如果没传 AttachComp，默认在 Instigator 位置)
 	FTransform SpawnTransform = FTransform::Identity;
 	//没有初始化挂点 需要指定坐标与朝向
-	if (Config->SpawnSpace==EVfxSpawnSpace::WorldSpace)
+	if (ForceUseParamsTransform||Config->SpawnSpace==EVfxSpawnSpace::WorldSpace)
 	{
 		SpawnTransform.SetLocation(location);
 		SpawnTransform.SetRotation(rotation);
@@ -163,17 +163,18 @@ AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject,T
 		SpawnTransform.SetRotation( InContext.Instigator->GetActorRotation().Quaternion());
 	}
 	
-	
-	if (Config->SpawnSpace == EVfxSpawnSpace::WorldSpaceInstigator ||Config->SpawnSpace ==
-		EVfxSpawnSpace::WorldSpaceVictim
-		||Config->SpawnSpace == EVfxSpawnSpace::AttachToInstigator ||Config->SpawnSpace == EVfxSpawnSpace::AttachToVictim)
+	if (ForceUseParamsTransform==false)
 	{
-		SpawnTransform.SetLocation(AttachToComp->GetSocketLocation(Config->SocketName));
+		if (Config->SpawnSpace == EVfxSpawnSpace::WorldSpaceInstigator ||Config->SpawnSpace ==
+			EVfxSpawnSpace::WorldSpaceVictim
+			||Config->SpawnSpace == EVfxSpawnSpace::AttachToInstigator ||Config->SpawnSpace == EVfxSpawnSpace::AttachToVictim)
+		{
+			SpawnTransform.SetLocation(AttachToComp->GetSocketLocation(Config->SocketName));
 		
+		}
+		if (Config->InitRotationWithSpaceActor&&AttachToComp!=nullptr)
+			SpawnTransform.SetRotation(AttachToComp->GetOwner()->GetActorRotation().Quaternion());
 	}
-	if (Config->InitRotationWithSpaceActor&&AttachToComp!=nullptr)
-		SpawnTransform.SetRotation(AttachToComp->GetOwner()->GetActorRotation().Quaternion());
-
 	FActorSpawnParameters Params;
 	Params.Instigator = InContext.Instigator;
 
@@ -216,7 +217,7 @@ void AMagicEffect::InitializeEffect(FEffectContext InContext, USceneComponent* I
 }
 
  
-AMagicEffect* AMagicEffect::SpawnNextMagicEffect()
+AMagicEffect* AMagicEffect::SpawnNextMagicEffect_Implementation()
 {
  
 	if (EffectConfig.ChildMode!=ECreateChildMode::Notify) return nullptr;
@@ -248,9 +249,10 @@ void AMagicEffect::OnEffectOverlap(UPrimitiveComponent* OverlappedComponent,
 		if (EffectConfig.HitFirstTarget== EHitFirstTargetHandle::Destroy)SetLifeSpan(0.3f);
 
 	}
+	auto targetActor = Cast<ACombatCharacter>(OtherActor);
 	if (EffectConfig.HurtTargetWhenHit)
 	{
-		auto targetActor = Cast<ACombatCharacter>(OtherActor);
+		
 		if (IsValid(targetActor) && IsValid(MyContext.Instigator))
 		{
 			MyContext.TargetActor = targetActor;
@@ -267,6 +269,7 @@ void AMagicEffect::OnEffectOverlap(UPrimitiveComponent* OverlappedComponent,
 	
 		auto effect=SpawnMagicEffect(this,EffectConfig.NextEffect,MyContext, ImpactPoint,UKismetMathLibrary::MakeRotFromX(SweepResult.ImpactNormal).Quaternion());
 	}
+	OnValidHit(targetActor);
 	 
 	 
 }
