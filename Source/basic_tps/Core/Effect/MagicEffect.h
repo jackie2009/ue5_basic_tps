@@ -44,7 +44,7 @@ protected:
 	USceneComponent* EffectAnchor;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MagicEffect")
 	UAudioComponent* AudioComp;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MagicEffect")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MagicEffect")
 	FEffectContext MyContext;
 	 
 	UFUNCTION()

@@ -63,7 +63,14 @@ void AMagicEffect::PostInitializeComponents()
 
 	if (MainCollision)
 	{
+		 
 		MainCollision->IgnoreActorWhenMoving(MyContext.Instigator,true);
+		for (auto ignoreTarget : 	MyContext.IgnoreTargetSet)
+		{
+			MainCollision->IgnoreActorWhenMoving(ignoreTarget,true);
+		}
+		
+		
 		// 3. 执行逻辑配置
 		MainCollision->SetNotifyRigidBodyCollision(true);
 		MainCollision->SetCanEverAffectNavigation(false); // 弹丸不需要影响寻路
@@ -71,7 +78,7 @@ void AMagicEffect::PostInitializeComponents()
 		// 1. 核心设置：开启重叠事件产生
 		MainCollision->SetGenerateOverlapEvents(true);
 
-		 
+		
 		MainCollision->OnComponentHit.AddDynamic(this, &AMagicEffect::OnFlySphereHit);
 		MainCollision->OnComponentBeginOverlap.AddDynamic(this, &AMagicEffect::OnEffectOverlap);
 
@@ -196,6 +203,7 @@ AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject,T
 void AMagicEffect::InitializeEffect(FEffectContext InContext, USceneComponent* InAttachComp,FTransform & SpawnTransform)
 {
 	MyContext = InContext;
+	MyContext.Generation++;
 	// 先做组件初始化处理 在做 依赖组件的逻辑
 	 FinishSpawning(SpawnTransform);
 	auto Config = &EffectConfig;
@@ -234,6 +242,7 @@ void AMagicEffect::OnEffectOverlap(UPrimitiveComponent* OverlappedComponent,
 						 const FHitResult& SweepResult)
 {
 	if (MyContext.Instigator==nullptr)return;
+	if (MyContext.IgnoreTargetSet.Contains(OtherActor))return;
 	 
 	if (OtherActor==MyContext.Instigator)return;
 	

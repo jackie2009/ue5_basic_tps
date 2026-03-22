@@ -112,7 +112,14 @@ struct FEffectContext
 
 public:
  
-
+	// 结构体内部建议这样改
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MagicEffect")
+	TSet<AActor*> IgnoreTargetSet;
+	 
+	//创建的第几代 用来计算分裂发射次数控制 与伤害衰减等
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MagicEffect")
+	int Generation=0;
+	
 	// 2. 溯源信息
  
 	ACombatCharacter * Instigator;
