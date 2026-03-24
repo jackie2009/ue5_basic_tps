@@ -13,7 +13,7 @@ enum class EBuffAttribute : uint8
 	INDEX_OFFSET = 100,
 	OnPoison = 101,//中毒 持续效果 
 	AddHP = 102,//回血 持续效果 
-	Execution = 103,//斩杀 瞬时效果 伤害前计算
+	DeathBlow = 103,//斩杀 瞬时效果 伤害前计算
 	LifeSteal=104,// 吸血 瞬时效果 伤害后计算
 	IgnoreArmor=105//忽视防御
 	

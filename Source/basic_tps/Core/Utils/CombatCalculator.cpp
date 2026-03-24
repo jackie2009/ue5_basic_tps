@@ -11,6 +11,8 @@
 #include "basic_tps/Core/Character/BuffComponent.h"
 #include "basic_tps/Core/Character/CombatComponent.h"
 #include "basic_tps/Core/Character/SkillComponent.h"
+#include "basic_tps/Core/TableData/TableDataManagerSubsystem.h"
+
 FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACombatCharacter* Defencer, const FSkillBaseVo& SkillVo)
 {
     //修改属性 测试
@@ -25,10 +27,16 @@ FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACom
     // 阶段 0 技能合法性检查 不是伤害类技能不走伤害流水线
     int32 SkillEffectType = SkillVo.EffectType;
     bool bIsHarmSkill = (SkillEffectType > 0) || (SkillVo.Power.Num() > 0);
-    if (!bIsHarmSkill) return Result;
+    bool isPureBuffEffect = !bIsHarmSkill;
 
     // 阶段 I：初始化快照 (Snapshot Acquisition)
-    CaptureAttributeSnapshot(Result);
+    // 就算不产生伤害 也需要初始化创建buff
+    CaptureAttributeSnapshot(Result,isPureBuffEffect);
+    
+    if (!bIsHarmSkill) return Result;
+
+
+  
     
     //阶段 II：前置伤害的buff修正 忽视防御 低血量斩杀等 (Source-Side Pre-Processing)
     PreDamageProcess(Result);
@@ -53,13 +61,34 @@ FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACom
     return Result;
 }
 
-void UCombatCalculator::CaptureAttributeSnapshot(FCombatResult& Result)
+void UCombatCalculator::CaptureAttributeSnapshot(FCombatResult& Result,bool bPureBuffEffect)
 {
-
-    int32 HarmTypeOffset =  Result.SkillVo->EffectType - SkillEffectTypeEnum::DC;
-   
     if (Result.Attacker)
     {
+        //创建buff
+        if (Result.SkillVo->buffID > 0 && (FMath::FRand() * 100.f) < Result.SkillVo->buffRandom)
+        {
+            TSharedPtr<FBuffVo> BuffVo = MakeShared<FBuffVo>(Result.SkillVo->isBuffForSelf ? Result.Attacker : Result.Victim, Result.Attacker,
+                                      Result.SkillVo->buffID, Result.SkillVo->buffLife, Result.SkillVo->buffValue[0]);
+            
+            if (BuffVo->BaseVo != nullptr)
+            {
+                if (Result.SkillVo->buffLife <= 0)
+                    Result.WorkingBuffVo = BuffVo;
+                else
+                    Result.OnDamageFinishBuffVo = BuffVo;
+            }
+        }
+    }
+
+
+    if (bPureBuffEffect)return;
+    
+    int32 HarmTypeOffset = Result.SkillVo->EffectType - SkillEffectTypeEnum::DC;
+
+    if (Result.Attacker)
+    {
+         
         int32 DamageAttrIndex =  AttributeEnum::Damage1 + HarmTypeOffset;
         Result.AttackPoint = Result.Attacker->CharacterDataComp->GetAttribute(DamageAttrIndex);
 
@@ -82,7 +111,7 @@ void UCombatCalculator::PreDamageProcess(FCombatResult& Result)
     {
 
         //攻击方有忽视防御buff 防御快照数据为0
-      if ( Result.Attacker->BuffComp->GetBuffValue(static_cast<int32>(EBuffAttribute::IgnoreArmor))>0)
+      if ( Result.Attacker->BuffComp->GetBuffValue(EBuffAttribute::IgnoreArmor,Result.WorkingBuffVo)>0)
       {
           Result.DefencePoint=0;
       }
@@ -91,7 +120,7 @@ void UCombatCalculator::PreDamageProcess(FCombatResult& Result)
 
         if (Result.Victim)
         {
-            int32 DeathBlow = Result.Attacker->BuffComp->GetBuffValue(BuffAttributeEnum::DeathBlow);
+            int32 DeathBlow = Result.Attacker->BuffComp->GetBuffValue(EBuffAttribute::DeathBlow,Result.WorkingBuffVo);
             if (DeathBlow > 0 && (DeathBlow > Result.Victim->CharacterDataComp->GetCurrentHP() * 100 / Result.Victim->CharacterDataComp->GetMaxHP()))
               {
                   Result.Damage =999999;
@@ -168,7 +197,7 @@ void UCombatCalculator::PostDamageProcess(const FCombatResult& Result)
     // 6. 计算吸血 
     if (Result.Attacker)
     {
-        int32 LifestealPercent = Result.Attacker->BuffComp->GetBuffValue(static_cast<int32> (EBuffAttribute::LifeSteal));
+        int32 LifestealPercent = Result.Attacker->BuffComp->GetBuffValue( EBuffAttribute::LifeSteal,Result.WorkingBuffVo);
          auto LifestealHp = (LifestealPercent * Result.FinalDamage) / 100;
         if (LifestealHp>0)  Result.Attacker->CharacterDataComp->AddCurrentHP(LifestealHp);
     }

@@ -15,8 +15,8 @@ public:
 	int32 ID;                  // 技能序号
 	UPROPERTY(EditAnywhere)
 	FString MagName;           // 技能名字
-	UPROPERTY(EditAnywhere)
-	int32 aiPriority;          // ai选择优先级
+ 
+	 
 	UPROPERTY(EditAnywhere)
 	FString skillVisualDataID;  //技能视觉部分配置ID
  
@@ -28,16 +28,12 @@ public:
 	int32 TargetType;          // 0敌方 1自己 2友方
 	UPROPERTY(EditAnywhere)
 	int32 GroupTargets;        // 群体目标
-	UPROPERTY(EditAnywhere)
-	int32 isTargetMousePos;    // 释放目标用鼠标位置
-		UPROPERTY(EditAnywhere)
-	int32 isFirstHitOnly;      // 第一个碰撞为伤害对象
+ 
 	UPROPERTY(EditAnywhere)
 	int32 allowMiss;           // 允许miss
 	UPROPERTY(EditAnywhere)
 	int32 EffectType;          // 效果类型
-	UPROPERTY(EditAnywhere)
-	int32 animation;           // 技能动画
+ 
 	UPROPERTY(EditAnywhere)
 	int32 Spell;               // 每次使用技能使用的魔法值
 	UPROPERTY(EditAnywhere)

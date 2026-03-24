@@ -20,7 +20,7 @@ class BASIC_TPS_API UCombatCalculator : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 	
 public:
-	static void CaptureAttributeSnapshot( FCombatResult& Result);
+	static void CaptureAttributeSnapshot( FCombatResult& Result,bool bPureBuffEffect);
 	static void PreDamageProcess( FCombatResult& Result);
 	static void EvaluateCoreFormula( FCombatResult& Result);
 	static void AdjustFinalDamage( FCombatResult& Result);

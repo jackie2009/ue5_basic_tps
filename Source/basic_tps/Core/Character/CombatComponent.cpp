@@ -3,6 +3,7 @@
 
 #include "CombatComponent.h"
 
+#include "BuffComponent.h"
 #include "CombatCharacter.h"
 #include "basic_tps/Core/Data/CharacterDataComponent.h"
 #include "basic_tps/Core/TableData/TableDataManagerSubsystem.h"
@@ -38,6 +39,12 @@ void UCombatComponent::TryHurtTarget(ACombatCharacter* Target, int32 SkillID)
 	auto attacker=Cast<ACombatCharacter>(GetOwner());
 	 
 	auto rst=UCombatCalculator::DamagePipeline(attacker,Target,*(*skillBaseVoPtr)[0]);
+	 if (rst.OnDamageFinishBuffVo!=nullptr)
+	 {
+		 rst.OnDamageFinishBuffVo->EffectRole->BuffComp->AddBuff(*rst.OnDamageFinishBuffVo);
+	 }
+	
+	//rst.SkillVo->isBuffForSelf
 	
 	
 }

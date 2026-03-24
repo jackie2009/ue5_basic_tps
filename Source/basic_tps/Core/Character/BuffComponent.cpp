@@ -2,10 +2,15 @@
 
 #include "CombatCharacter.h"
 #include "basic_tps/Core/Data/CharacterDataComponent.h"
+#include "basic_tps/Core/Data/ICalBaseAttributes.h"
 
 
 UBuffComponent::UBuffComponent()
 {
+    PrimaryComponentTick.bCanEverTick = true;
+    
+    // 设置 Tick 间隔为 0.1 秒（单位是秒）
+    PrimaryComponentTick.TickInterval = 0.1f;
 }
 
 void UBuffComponent::AddBuff(FBuffVo NewBuff) {
@@ -24,38 +29,14 @@ void UBuffComponent::AddBuff(FBuffVo NewBuff) {
     BuffList.Add(NewBuff);
     
     // TODO: 这里触发特效 MagicRoot::CreateEffect
+
+ 
+
+      CalBuffAttributes();
+   
 }
 
-// ---------------- 核心流水线 ----------------
-// 阶段 A：伤害前修正 (斩杀 无视防御 等 buff影响伤害值计算)
-void UBuffComponent::PreDamageProcess(FCombatResult& Package) {
-    for (auto& Buff : BuffList) {
-            if (Buff.BaseVo->attribute ==static_cast<int32>(EBuffAttribute::Execution)) {
-                // 修改 Package 里的 FinalDamage 逻辑 
-                Package.FinalDamage = 9999999; 
-            }
-        }
-    
-}
-
-// 阶段 B：伤害后反馈 (计算吸血等 依赖本次伤害量)
-void UBuffComponent::PostDamageProcess(const FCombatResult& Package) {
-    for (auto& Buff : BuffList) {
-         
-            // 示例：如果是吸血 Buff
-            if (Buff.BaseVo->attribute ==static_cast<int32>(EBuffAttribute::LifeSteal)) {
-                // 根据实际伤害 Package.ActualDamage 回血
-                int32 HealAmount = Package.FinalDamage * Buff.Value/100;
-             
-                if (Package.Attacker!=nullptr)
-                {
-                    Package.Attacker->CharacterDataComp->AddCurrentHP(HealAmount);
-                }
-            }
-         
-    }
-}
-
+ 
 int32 UBuffComponent::GetBuffValue(int32 BuffAttType) const
 {
     int32 TotalValue = 0;
@@ -71,6 +52,17 @@ int32 UBuffComponent::GetBuffValue(int32 BuffAttType) const
         }
     }
  
+    return TotalValue;
+}
+
+int32 UBuffComponent::GetBuffValue(EBuffAttribute BuffType, TSharedPtr<FBuffVo> WorkingBuffVo)
+{
+    int32 TotalValue = 0;
+    if (WorkingBuffVo!=nullptr&&WorkingBuffVo->BaseVo->attribute == static_cast<int32> (BuffType))
+    {
+        TotalValue+= WorkingBuffVo->Value;
+    }
+    TotalValue+=GetBuffValue( static_cast<int32> (BuffType));
     return TotalValue;
 }
 
@@ -102,6 +94,8 @@ void UBuffComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
         }
     }
 }
+
+
 
 void UBuffComponent::RemoveBuff(const FBuffVo& BuffVo, bool bReplaceMode)
 {
@@ -136,6 +130,8 @@ void UBuffComponent::RemoveBuff(int32 Index, bool bReplaceMode)
     //   {
     //     Dispatcher->DispatchEvent(EGameEvents::OnBuffRemove, GetOwner(), BuffVo, bReplaceMode);
     // }
+
+    CalBuffAttributes();
 }
 void UBuffComponent::RemoveAllBuffs()
 {
@@ -150,10 +146,42 @@ void UBuffComponent::RemoveAllBuffs()
     }
 
     // 清空整个 TArray
-    BuffList.Empty(); 
+    BuffList.Empty();
+    CalBuffAttributes();
+    
 }
 
 void UBuffComponent::ExecuteDoT(FBuffVo& Buff)
 {
+    
+}
+
+
+void UBuffComponent::CalBuffAttributes()
+{
+    auto* BaseDataComp = GetOwner() ? GetOwner()->FindComponentByClass<UCharacterDataComponent>() : nullptr;
+    if (BaseDataComp==nullptr) return;
+    // 假设接口定义类名为 UICalBaseAttributes
+    IICalBaseAttributes* CalcInterface = GetOwner()->FindComponentByInterface<IICalBaseAttributes>();
+
+    if (CalcInterface)
+    {
+        CalcInterface->CalBaseAttributes();
+    }
+    for (int i = 1; i < AttributeEnum::MAX; i++)
+    {
+                
+        auto addValue= GetBuffValue(i);
+        BaseDataComp->Attributes[i] += addValue;
+       
+                
+    }
+
+           
+  
+
+    BaseDataComp->SetCurrentHP( BaseDataComp->GetCurrentHP());
+ 
+
     
 }

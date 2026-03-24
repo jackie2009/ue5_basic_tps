@@ -3,11 +3,12 @@
 #include "CoreMinimal.h"
  
 #include "CombatTypes.h"
+#include "ICalBaseAttributes.h"
 #include "basic_tps/Core/TableData/RoleLevelBaseVo.h"
 #include "HeroDataComponent.generated.h"
 
 UCLASS()
-class BASIC_TPS_API UHeroDataComponent : public UActorComponent
+class BASIC_TPS_API UHeroDataComponent : public UActorComponent,public IICalBaseAttributes
 {
     GENERATED_BODY()
 public:
@@ -29,8 +30,8 @@ public:
     FRoleLevelBaseVo *levelBaseVo;
     UFUNCTION(BlueprintCallable, Category = "CharacterData")
     void UpdateLevel(int32 level);
-    void CalculateBaseData();
-    
+     
+    virtual void CalBaseAttributes() override;
 };
 
 

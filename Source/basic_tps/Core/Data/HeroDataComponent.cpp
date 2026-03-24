@@ -45,9 +45,9 @@ void UHeroDataComponent::UpdateLevel(int32 level)
 		levelBaseVo=*dataPtr;
 		 GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Green,  FString::Printf(TEXT("UHeroDataComponent%d"),levelBaseVo->Exp));
 	}
-	CalculateBaseData();
+	CalBaseAttributes();
 }
-  void UHeroDataComponent::CalculateBaseData()
+  void UHeroDataComponent::CalBaseAttributes()
 {
 	// 1. 数据源校验（原本的判空保留，这是对的）
 	if (!levelBaseVo) return;

@@ -37,6 +37,11 @@ void UMonsterDataComponent::BeginPlay()
 	 if (!dataPtr) return;
 	  baseVo= *dataPtr;
 	 
+	CalBaseAttributes();
+	 
+}
+void UMonsterDataComponent::CalBaseAttributes()
+{
 	// 2. 缓存 Owner 上的组件。现实工程中，如果这个函数调用频繁，建议把 baseDataComp 变成成员变量并在 BeginPlay 缓存
 	auto* BaseDataComp = GetOwner() ? GetOwner()->FindComponentByClass<UCharacterDataComponent>() : nullptr;
     
@@ -56,7 +61,7 @@ void UMonsterDataComponent::BeginPlay()
 	BaseDataComp->displayName=baseVo->Name;
 	BaseDataComp->SetCurrentHP(BaseDataComp->GetMaxHP());
 	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Green,   TEXT("--------------------------------"));
-	 
 }
+
   
 

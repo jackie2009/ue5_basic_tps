@@ -1,7 +1,9 @@
 #pragma once
 #include "CoreMinimal.h"
+#include "../Character/CombatCharacter.h"
 #include "../TableData/BuffBaseVo.h"
 #include "../TableData/SkillBaseVo.h"
+#include "basic_tps/Core/TableData/TableDataManagerSubsystem.h"
 #include "CombatTypes.generated.h"
 
 class ACombatCharacter;
@@ -38,28 +40,28 @@ namespace SkillEffectTypeEnum {
 	constexpr int8 DeBuff = -2;
 	
 }
-
- namespace BuffAttributeEnum {
-	constexpr int8 INDEX_OFFSET = 100;
-	constexpr int8 OnPoison = 1;
-	constexpr int8 AddHP = 2;
-	constexpr int8 AddPet = 3;
-	constexpr int8 ExtraHarm = 4;
-	constexpr int8 Dizzy = 5;
-	constexpr int8 Hidden = 6;
-	constexpr int8 ForceDizzy = 7;
-	constexpr int8 HarmReducePercent = 8;
-	constexpr int8 IgnoreArmor = 9;
-	constexpr int8 ExtraHarmPercent = 10;
-	constexpr int8 FinalAttackHarmPercent = 11;
-	constexpr int8 DeathBlow = 12;
-	constexpr int8 AddHpFromAttack = 13;
-	constexpr int8 AddMpFromAttack = 14;
-	constexpr int8 RemoveSkillCD = 15;
-	constexpr int8 LessMPCost = 16;
-	constexpr int8 EscapeToInitPos = 17;
-
-}
+//
+//  namespace BuffAttributeEnum {
+// 	constexpr int8 INDEX_OFFSET = 100;
+// 	constexpr int8 OnPoison = 1;
+// 	constexpr int8 AddHP = 2;
+// 	constexpr int8 AddPet = 3;
+// 	constexpr int8 ExtraHarm = 4;
+// 	constexpr int8 Dizzy = 5;
+// 	constexpr int8 Hidden = 6;
+// 	constexpr int8 ForceDizzy = 7;
+// 	constexpr int8 HarmReducePercent = 8;
+// 	constexpr int8 IgnoreArmor = 9;
+// 	constexpr int8 ExtraHarmPercent = 10;
+// 	constexpr int8 FinalAttackHarmPercent = 11;
+// 	constexpr int8 DeathBlow = 12;
+// 	constexpr int8 AddHpFromAttack = 13;
+// 	constexpr int8 AddMpFromAttack = 14;
+// 	constexpr int8 RemoveSkillCD = 15;
+// 	constexpr int8 LessMPCost = 16;
+// 	constexpr int8 EscapeToInitPos = 17;
+//
+// }
 
 namespace SkillGroupTargetsEnum {
 	constexpr int8 Selected = 0;
@@ -121,6 +123,11 @@ struct FCombatResult
 
  
 	const FSkillBaseVo* SkillVo = nullptr;
+	//这次伤害计算过程中 技能附带的 持续生命为0 的 buff 比如 忽视防御等，
+	TSharedPtr<FBuffVo> WorkingBuffVo = nullptr;
+
+	//这次伤害计算结束 给目标挂上去的  buff 持续时间>0，
+	TSharedPtr<FBuffVo> OnDamageFinishBuffVo = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 FinalDamage = 0; // 经过buff修改后的伤害
@@ -139,13 +146,13 @@ struct FBuffVo
 public:
 	// 视觉表现：在 UE 中建议使用 TWeakObjectPtr 防止特效销毁后引用失效
 	UPROPERTY(BlueprintReadWrite)
-	TObjectPtr<AActor> View;
+	TObjectPtr<ACombatCharacter> View;
 
 	UPROPERTY(BlueprintReadWrite)
-	TObjectPtr<AActor> EffectRole;
+	TObjectPtr<ACombatCharacter> EffectRole;
 
 	UPROPERTY(BlueprintReadWrite)
-	TObjectPtr<AActor> FromRole;
+	TObjectPtr<ACombatCharacter> FromRole;
 
 	// 原始数据引用（假设这些是通过数据表获取的 const 指针）
 	const FBuffBaseVo* BaseVo;
@@ -178,7 +185,7 @@ public:
 	{}
 
 	// 带参构造函数直接实现在这里
-	FBuffVo(AActor* InEffectRole, AActor* InFromRole, int32 InBaseID, float InLastTime, int32 InValue, const FSkillBaseVo* InFromSkill = nullptr)
+	FBuffVo(ACombatCharacter* InEffectRole, ACombatCharacter* InFromRole, int32 InBaseID, float InLastTime, int32 InValue, const FSkillBaseVo* InFromSkill = nullptr)
 		: View(nullptr)
 		, EffectRole(InEffectRole)
 		, FromRole(InFromRole)
@@ -190,6 +197,9 @@ public:
 		, Duration(InLastTime)
 		, Value(InValue)
 	{
+		BaseVo=nullptr;
+		auto buffBaseVoPtr=UTableDataManagerSubsystem::Get(InFromRole)->BuffBaseMap.Find(InBaseID);
+		if (buffBaseVoPtr!=nullptr){ BaseVo=*buffBaseVoPtr;}
 		// 这里的 BaseData 映射逻辑通常在 BuffComponent 添加时处理更安全
 		// 因为头文件里很难直接引用全局数据单例而不产生循环包含
 	}
