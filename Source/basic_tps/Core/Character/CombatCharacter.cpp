@@ -3,6 +3,7 @@
 
 #include "CombatCharacter.h"
 
+#include "BuffComponent.h"
 #include "CombatComponent.h"
 #include "SkillComponent.h"
 #include "basic_tps/Core/Data/CharacterDataComponent.h"
@@ -37,8 +38,9 @@ void ACombatCharacter::PreInitializeComponents()
 
 	SkillComp = NewObject<USkillComponent>(this);
 	SkillComp->RegisterComponent();
-	
- 
+
+	BuffComp = NewObject<UBuffComponent>(this);
+	BuffComp->RegisterComponent();
 }
 
 void ACombatCharacter::PostInitializeComponents()

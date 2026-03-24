@@ -36,8 +36,9 @@ void UCombatComponent::TryHurtTarget(ACombatCharacter* Target, int32 SkillID)
 	auto skillBaseVoPtr=UTableDataManagerSubsystem::Get(this)->SkillBaseMap.Find(SkillID);
 	if (skillBaseVoPtr==nullptr)return;
 	auto attacker=Cast<ACombatCharacter>(GetOwner());
-	auto rst=UCombatCalculator::CalHurtPoint(attacker,Target,*(*skillBaseVoPtr)[0]);
-	Target->FindComponentByClass<UCombatComponent>()->HandleHurt(rst,attacker);
+	 
+	auto rst=UCombatCalculator::DamagePipeline(attacker,Target,*(*skillBaseVoPtr)[0]);
+	
 	
 }
 
@@ -52,23 +53,35 @@ void UCombatComponent::HandleHurt(const FCombatResult& Result, ACombatCharacter*
 		return;
 		
 	}
-	if (Result.Damage>0)
+	if (Result.bIsBlock)
 	{
-	   character->SelfOnHurt(Result.Damage, FVector::Zero());
+		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Green,   TEXT("--------------Block------------------"));
+	}
+	if (Result.bIsDeathBlow)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Green,   TEXT("--------------DeathBlow------------------"));
+	}
+	if (Result.bIsCritical)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Green,   TEXT("--------------Critical------------------"));
+	}
+	if (Result.FinalDamage>0)
+	{
+	   character->SelfOnHurt(Result.FinalDamage, FVector::Zero());
 	}
 	// 通知蓝图显示伤害数字、播受击动画
 	
 	
 
 	//   增加仇恨
-	if (Attacker&&Result.Damage>0)
+	if (Attacker&&Result.FinalDamage>0)
 	{
-		AddAggro(Attacker, FMath::Max(1, Result.Damage));
+		AddAggro(Attacker, FMath::Max(1, Result.FinalDamage));
 	}
 	// 1. 调用属性组件扣血
 	if (auto* AttrComp = GetOwner()->FindComponentByClass<UCharacterDataComponent>())
 	{
-		AttrComp->CostCurrentHP(Result.Damage);
+		AttrComp->CostCurrentHP(Result.FinalDamage);
 		
 	}
 	if (character->IsAlive()==false)

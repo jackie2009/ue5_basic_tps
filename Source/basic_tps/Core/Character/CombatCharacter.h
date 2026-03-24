@@ -7,6 +7,7 @@
 #include "CombatCharacter.generated.h"
 
 
+class UBuffComponent;
 class USkillComponent;
 class UCombatComponent;
 class UCharacterDataComponent;
@@ -41,6 +42,9 @@ public:
 	
 	UPROPERTY( BlueprintReadOnly, Category = "Combat")
 	TObjectPtr<USkillComponent> SkillComp = nullptr;
+
+	UPROPERTY( BlueprintReadOnly, Category = "Combat")
+	TObjectPtr<UBuffComponent> BuffComp = nullptr;
 	
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	bool IsAlive() const;

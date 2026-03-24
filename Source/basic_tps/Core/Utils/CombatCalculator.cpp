@@ -8,134 +8,173 @@
 #include "basic_tps/Core/TableData/SkillBaseVo.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
+#include "basic_tps/Core/Character/BuffComponent.h"
+#include "basic_tps/Core/Character/CombatComponent.h"
 #include "basic_tps/Core/Character/SkillComponent.h"
-
-FCombatResult UCombatCalculator::CalHurtPoint(ACombatCharacter* Attacker, ACombatCharacter* Defencer, const FSkillBaseVo& SkillVo)
+FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACombatCharacter* Defencer, const FSkillBaseVo& SkillVo)
 {
-    FCombatResult Result; // 创建结果对象
+    //修改属性 测试
     
-    if (!Attacker) return Result;
 
-    // 1. 技能合法性检查
-    int32 SkillEffectType = (int32)SkillVo.EffectType;
+    //测试内容结尾
+    FCombatResult Result; // 创建结果对象
+    if (!Attacker) return Result;
+    Result.Attacker=Attacker;
+    Result.Victim=Defencer;
+    Result.SkillVo=&SkillVo;
+    // 阶段 0 技能合法性检查 不是伤害类技能不走伤害流水线
+    int32 SkillEffectType = SkillVo.EffectType;
     bool bIsHarmSkill = (SkillEffectType > 0) || (SkillVo.Power.Num() > 0);
     if (!bIsHarmSkill) return Result;
 
-    UCharacterDataComponent* AttackerAttr = Attacker->FindComponentByClass<UCharacterDataComponent>();
-    UCharacterDataComponent* DefencerAttr = Defencer ? Defencer->FindComponentByClass<UCharacterDataComponent>() : nullptr;
-
-    // 2. 命中/闪避判定 (假设增加 Miss 逻辑)
-    // float HitChance = ... 
-    // if (FMath::FRand() > HitChance) { Result.bIsMiss = true; return Result; }
-
-    // 3. 斩杀逻辑
-    if (DefencerAttr)
-    {
-        // int32 DeathBlow = Attacker->GetBuffExtraValue(BuffAttributeEnum::DeathBlow);
-        // if (DeathBlow > 0 && (DeathBlow > (DefencerAttr->GetCurrentHP() * 100 / DefencerAttr->GetMaxHP())))
-        // {
-        //     Result.Damage = DefencerAttr->GetMaxHP() + 1;
-        //     Result.bIsDeathBlow = true;
-        //     return Result; 
-        // }
-    }
-
-    // 4. 基础属性判定
-    Result.bIsCritical = (FMath::FRand() * 100.f) < AttackerAttr->GetAttribute(AttributeEnum::Critical);
-    if (DefencerAttr)
-    {
-        Result.bIsBlock = (FMath::FRand() * 100.f) < DefencerAttr->GetAttribute(AttributeEnum::Block);
-    }
-
-    // 5. 调用 MultiHurt 计算
-    int32 SkillAttack =SkillVo.Power.Num()<1?0: SkillVo.Power[0]; //UGameModel::GetDynamicTableValue(AttackerAttr, SkillVo.Power);
+    // 阶段 I：初始化快照 (Snapshot Acquisition)
+    CaptureAttributeSnapshot(Result);
     
-    if (SkillEffectType == SkillEffectTypeEnum::DC || SkillEffectType == SkillEffectTypeEnum::MC)
-    {
-        // 传递 Result 引用，让内部函数去修改 Damage 和状态
-        InternalCalMultiHurt(Result, Attacker, Defencer, SkillVo, SkillAttack);
-    }
-    else
-    {
-        Result.Damage = SkillAttack;
-    }
-
-    // 6. 计算吸血 (仅记录数值，不执行加血)
-    if (Defencer)
-    {
-        //int32 LifestealPercent = Attacker->GetBuffExtraValue(EBuffAttribute::AddHpFromAttack);
-      //  Result.LifestealHp = (LifestealPercent * Result.Damage) / 100;
-    }
-
+    //阶段 II：前置伤害的buff修正 忽视防御 低血量斩杀等 (Source-Side Pre-Processing)
+    PreDamageProcess(Result);
+    
+    // 阶段 III：核心核心公式解算 (Mathematical Evaluation)
+    // 执行：WoW 除法公式、减法保底、等级压制修正
+    // 输出：FinalDamage
+    EvaluateCoreFormula(Result);
+ 
+    // 阶段 IV：伤害结果修正 (伤害加深、百分比减伤、护盾抵扣)
+    // 此时已经有 FinalDamage 了，Buff 可以基于这个值做乘除法
+    AdjustFinalDamage(Result); 
+    
+    // 阶段 V：伤害应用与分流 (Damage Application)
+    // 执行：实际扣除 HP
+    // 输出：ActualDamage (真正扣掉的血量)
+    CommitActualDamage(Result);
+    
+    //阶段 VI：后置反馈与副作用 根据最终伤害 攻击者吸血等 (Post-Process & Feedback)
+    PostDamageProcess(Result);
+    
     return Result;
 }
 
-
-
-void UCombatCalculator::InternalCalMultiHurt(FCombatResult& OutResult, ACombatCharacter* Attacker, ACombatCharacter* Defencer, const FSkillBaseVo& SkillVo, int32 SkillAttack)
+void UCombatCalculator::CaptureAttributeSnapshot(FCombatResult& Result)
 {
-    if (!Attacker) return;
 
-    UCharacterDataComponent* AttackerAttr = Attacker->FindComponentByClass<UCharacterDataComponent>();
-    UCharacterDataComponent* DefencerAttr = Defencer ? Defencer->FindComponentByClass<UCharacterDataComponent>() : nullptr;
-
-    // 1. 获取基础攻击力：AttributeEnum.Damage1 + harmTypeOffset
-    // harmTypeOffset 在你原版里是 skillEffectType - SkillEffectTypeEnum.DC
-    int32 HarmTypeOffset = (int32)SkillVo.EffectType - (int32)SkillEffectTypeEnum::DC;
-    int32 BaseDamageAttrIndex = (int32)AttributeEnum::Damage1 + HarmTypeOffset;
-    int32 Attack = AttackerAttr->GetAttribute(BaseDamageAttrIndex);
-    GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red,   FString::Printf(TEXT("--------------Attack:%d---%d---------------"),Attack,BaseDamageAttrIndex));
-
-    // 2. 累加技能基础伤害
-    Attack += SkillAttack;
-
-    // 3. 暴击修正 (150%)
-    if (OutResult.bIsCritical) 
+    int32 HarmTypeOffset =  Result.SkillVo->EffectType - SkillEffectTypeEnum::DC;
+   
+    if (Result.Attacker)
     {
-        Attack = Attack * 150 / 100;
+        int32 DamageAttrIndex =  AttributeEnum::Damage1 + HarmTypeOffset;
+        Result.AttackPoint = Result.Attacker->CharacterDataComp->GetAttribute(DamageAttrIndex);
+
+        
+        int32 SkillAttack = Result.SkillVo->Power.Num()<1?0:  Result.SkillVo->Power[0]; //UGameModel::GetDynamicTableValue(AttackerAttr, SkillVo.Power);
+        Result.AttackPoint +=SkillAttack;
+    }
+   
+    if (Result.Victim)
+    {
+        int32 DefenceAttrIndex =  AttributeEnum::Defence1 + HarmTypeOffset;
+        Result.DefencePoint = Result.Victim->CharacterDataComp->GetAttribute(DefenceAttrIndex);
+    }
+   
+}
+
+void UCombatCalculator::PreDamageProcess(FCombatResult& Result)
+{
+    if (Result.Attacker)
+    {
+
+        //攻击方有忽视防御buff 防御快照数据为0
+      if ( Result.Attacker->BuffComp->GetBuffValue(static_cast<int32>(EBuffAttribute::IgnoreArmor))>0)
+      {
+          Result.DefencePoint=0;
+      }
+        
+        Result.bIsCritical = (FMath::FRand() * 100.f) <Result.Attacker->CharacterDataComp->GetAttribute(AttributeEnum::Critical);
+
+        if (Result.Victim)
+        {
+            int32 DeathBlow = Result.Attacker->BuffComp->GetBuffValue(BuffAttributeEnum::DeathBlow);
+            if (DeathBlow > 0 && (DeathBlow > Result.Victim->CharacterDataComp->GetCurrentHP() * 100 / Result.Victim->CharacterDataComp->GetMaxHP()))
+              {
+                  Result.Damage =999999;
+                  Result.bIsDeathBlow = true;
+               }
+        }
+         
+    }
+    if (Result.Victim)
+    {
+        Result.bIsBlock = (FMath::FRand() * 100.f) < Result.Victim->CharacterDataComp->GetAttribute(AttributeEnum::Block);
+    
+    }
+    
+}
+
+void  UCombatCalculator::EvaluateCoreFormula( FCombatResult& Result)
+{
+    if (Result.bIsDeathBlow)return;//斩杀 结果固定不需要计算
+    UCharacterDataComponent* AttackerAttr = Result.Attacker->FindComponentByClass<UCharacterDataComponent>();
+  
+    // 7. 核心护甲曲线计算: attack * (1 - defence / (defence + 4 + 7 * level))
+    // 注意：UE 中 GetLevel() 是 ACharacter 的标准方法
+    float ArmorReduction = (float)Result.DefencePoint / (Result.DefencePoint + 4.0f + 7.0f * AttackerAttr->Level);
+    Result.Damage=Result.FinalDamage = FMath::TruncToInt(Result.AttackPoint * (1.0f - ArmorReduction));
+
+}
+
+void UCombatCalculator::AdjustFinalDamage(FCombatResult& Result)
+{
+    if (Result.bIsDeathBlow)  //斩杀 结果固定不需要修正
+    {
+        Result.Damage=Result.FinalDamage=Result.Victim->CharacterDataComp->GetCurrentHP();
+        return;
+    }
+       
+    // 3. 暴击修正 (150%)
+    if (Result.bIsCritical) 
+    {
+        Result.FinalDamage = Result.FinalDamage * 150 / 100;
     }
 
     // 4. 格挡修正 (25%)
-    if (OutResult.bIsBlock) 
+    if (Result.bIsBlock) 
     {
-        Attack = Attack * 25 / 100;
-        UE_LOG(LogTemp, Log, TEXT("isBlock: true"));
+         Result.FinalDamage =  Result.FinalDamage * 25 / 100;
+       
     }
 
-    if (Defencer && DefencerAttr)
-    {
-        // 5. 受击者 Buff 修正：额外伤害百分比与固定值
-        int32 ExtraHarmPercent =0;// Defencer->GetBuffExtraValue(EBuffAttribute::ExtraHarmPercent);
-        Attack += (Attack * ExtraHarmPercent) / 100;
-        //Attack += Defencer->GetBuffExtraValue(EBuffAttribute::ExtraHarm);
-
-        // 6. 防御力计算与忽略护甲
-        int32 Defence = 0;
-        bool bIgnoreArmor =0;// Attacker->GetBuffExtraValue(EBuffAttribute::IgnoreArmor) > 0;
-        
-        if (!bIgnoreArmor)
-        {
-            int32 DefenceAttrIndex = (int32)AttributeEnum::Defence1 + HarmTypeOffset;
-            Defence = DefencerAttr->GetAttribute(DefenceAttrIndex);
-        }
-
-        // 7. 核心护甲曲线计算: attack * (1 - defence / (defence + 4 + 7 * level))
-        // 注意：UE 中 GetLevel() 是 ACharacter 的标准方法
-        float ArmorReduction = (float)Defence / (Defence + 4.0f + 7.0f * AttackerAttr->Level);
-        Attack = FMath::TruncToInt(Attack * (1.0f - ArmorReduction));
-
+     
         // 8. 受击者减伤 Buff (HarmReducePercent)
-      //  float HarmReducePercent = Defencer->GetBuffExtraValue(EBuffAttribute::HarmReducePercent);
-      //  float HarmReduceMultiplier = FMath::Clamp(1.0f - (HarmReducePercent * 0.01f), 0.0f, 1.0f);
-      //  Attack = FMath::TruncToInt(Attack * HarmReduceMultiplier);
-    }
+        //  float HarmReducePercent = Defencer->GetBuffExtraValue(EBuffAttribute::HarmReducePercent);
+        //  float HarmReduceMultiplier = FMath::Clamp(1.0f - (HarmReducePercent * 0.01f), 0.0f, 1.0f);
+        //  Attack = FMath::TruncToInt(Attack * HarmReduceMultiplier);
+   
 
     // 9. 攻击者最终伤害百分比修正 (FinalAttackHarmPercent)
-   // int32 FinalAttackHarmPercent = Attacker->GetBuffExtraValue(EBuffAttribute::FinalAttackHarmPercent);
+    // int32 FinalAttackHarmPercent = Attacker->GetBuffExtraValue(EBuffAttribute::FinalAttackHarmPercent);
     //Attack += (Attack * FinalAttackHarmPercent) / 100;
-
-    // 10. 填充结果
-    OutResult.Damage = Attack;
 }
+
+void UCombatCalculator::CommitActualDamage(const FCombatResult& Result)
+{
+    if (Result.Victim)
+    {
+        Result.Victim->CombatComp->HandleHurt(Result,Result.Attacker);
+    }
+    
+}
+
+void UCombatCalculator::PostDamageProcess(const FCombatResult& Result)
+{
+
+    // 6. 计算吸血 
+    if (Result.Attacker)
+    {
+        int32 LifestealPercent = Result.Attacker->BuffComp->GetBuffValue(static_cast<int32> (EBuffAttribute::LifeSteal));
+         auto LifestealHp = (LifestealPercent * Result.FinalDamage) / 100;
+        if (LifestealHp>0)  Result.Attacker->CharacterDataComp->AddCurrentHP(LifestealHp);
+    }
+}
+
+
+ 
 
 
