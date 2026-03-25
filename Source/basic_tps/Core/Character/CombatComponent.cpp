@@ -39,7 +39,7 @@ void UCombatComponent::TryHurtTarget(ACombatCharacter* Target, int32 SkillID)
 	auto attacker=Cast<ACombatCharacter>(GetOwner());
 	 
 	auto rst=UCombatCalculator::DamagePipeline(attacker,Target,*(*skillBaseVoPtr)[0]);
-	 if (rst.OnDamageFinishBuffVo!=nullptr)
+	 if (rst.OnDamageFinishBuffVo!=nullptr&&rst.OnDamageFinishBuffVo->EffectRole!=nullptr)
 	 {
 		 rst.OnDamageFinishBuffVo->EffectRole->BuffComp->AddBuff(*rst.OnDamageFinishBuffVo);
 	 }
@@ -49,7 +49,7 @@ void UCombatComponent::TryHurtTarget(ACombatCharacter* Target, int32 SkillID)
 	
 }
 
-void UCombatComponent::HandleHurt(const FCombatResult& Result, ACombatCharacter* Attacker)
+void UCombatComponent::HandleHurt(const FCombatResult& Result)
 {
 	auto character=Cast<ACombatCharacter>(GetOwner());
 	if (character->IsAlive()==false)return;
@@ -81,9 +81,9 @@ void UCombatComponent::HandleHurt(const FCombatResult& Result, ACombatCharacter*
 	
 
 	//   增加仇恨
-	if (Attacker&&Result.FinalDamage>0)
+	if (Result.Attacker&&Result.FinalDamage>0)
 	{
-		AddAggro(Attacker, FMath::Max(1, Result.FinalDamage));
+		AddAggro(Result.Attacker, FMath::Max(1, Result.FinalDamage));
 	}
 	// 1. 调用属性组件扣血
 	if (auto* AttrComp = GetOwner()->FindComponentByClass<UCharacterDataComponent>())

@@ -28,19 +28,20 @@ int32 UCharacterDataComponent::GetMaxHP()
 void UCharacterDataComponent::SetCurrentHP(int value) 
 {
 	Hp=value;
+ 
 }
 
 void UCharacterDataComponent::AddCurrentHP(int value) 
 {
 	Hp = FMath::Clamp(Hp + value, 0, GetMaxHP());
+ 
 }
 
 void UCharacterDataComponent::CostCurrentHP(int value) 
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red,   FString::Printf(TEXT("--------------CostCurrentHP:%d------------------"),value));
-	Hp = FMath::Clamp(Hp - value, 0, GetMaxHP());
 	 
-}
+	Hp = FMath::Clamp(Hp - value, 0, GetMaxHP());
+ }
 
 int32 UCharacterDataComponent::GetAttribute(int32 AttributeID)
 {

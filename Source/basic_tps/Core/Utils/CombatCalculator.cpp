@@ -186,7 +186,7 @@ void UCombatCalculator::CommitActualDamage(const FCombatResult& Result)
 {
     if (Result.Victim)
     {
-        Result.Victim->CombatComp->HandleHurt(Result,Result.Attacker);
+        Result.Victim->CombatComp->HandleHurt(Result);
     }
     
 }

@@ -38,7 +38,14 @@ void UMonsterDataComponent::BeginPlay()
 	  baseVo= *dataPtr;
 	 
 	CalBaseAttributes();
+
+	auto* BaseDataComp = GetOwner() ? GetOwner()->FindComponentByClass<UCharacterDataComponent>() : nullptr;
+    
 	 
+	if (!BaseDataComp) return;
+	BaseDataComp->displayName=baseVo->Name;
+	BaseDataComp->SetCurrentHP(BaseDataComp->GetMaxHP());
+	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Green,   TEXT("--------------------------------"));
 }
 void UMonsterDataComponent::CalBaseAttributes()
 {
@@ -58,9 +65,7 @@ void UMonsterDataComponent::CalBaseAttributes()
 	{
 		BaseDataComp->Attributes[i+1] = baseVo->Attributes[i];
 	}
-	BaseDataComp->displayName=baseVo->Name;
-	BaseDataComp->SetCurrentHP(BaseDataComp->GetMaxHP());
-	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Green,   TEXT("--------------------------------"));
+
 }
 
   

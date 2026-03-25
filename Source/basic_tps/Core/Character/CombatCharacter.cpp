@@ -60,7 +60,7 @@ void ACombatCharacter::SelfOnDead()
 	// 延迟到下一帧执行真正的碰撞关闭
 	GetWorldTimerManager().SetTimerForNextTick(this, &ACombatCharacter::ExecutePhysicsDisabled);
 	
-	
+	OnCharacterDeath.Broadcast(this);
 	OnDead();
 }
 void ACombatCharacter::ExecutePhysicsDisabled()

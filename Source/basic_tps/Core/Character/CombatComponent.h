@@ -30,7 +30,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Combat")
     void  TryHurtTarget(  ACombatCharacter* Target, int32 SkillID);
 	// 处理受击逻辑 (整合之前讨论的 FCombatResult)
-	void HandleHurt(const FCombatResult& Result, ACombatCharacter* Attacker);
+	void HandleHurt(const FCombatResult& Result);
 
 	// 仇恨管理
 	void AddAggro(ACombatCharacter* Target, int32 Amount);

@@ -146,7 +146,7 @@ struct FBuffVo
 public:
 	// 视觉表现：在 UE 中建议使用 TWeakObjectPtr 防止特效销毁后引用失效
 	UPROPERTY(BlueprintReadWrite)
-	TObjectPtr<ACombatCharacter> View;
+	TObjectPtr<AActor> View;
 
 	UPROPERTY(BlueprintReadWrite)
 	TObjectPtr<ACombatCharacter> EffectRole;

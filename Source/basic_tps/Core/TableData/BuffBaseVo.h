@@ -16,8 +16,20 @@ enum class EBuffAttribute : uint8
 	DeathBlow = 103,//斩杀 瞬时效果 伤害前计算
 	LifeSteal=104,// 吸血 瞬时效果 伤害后计算
 	IgnoreArmor=105//忽视防御
-	
+	/** 1. 支持：枚举 == 数字 (EBuffAttribute == int32) */
+
 };
+FORCEINLINE bool operator==(EBuffAttribute Attr, int32 Value)
+{
+	return static_cast<int32>(Attr) == Value;
+}
+
+/** 2. 支持：数字 == 枚举 (int32 == EBuffAttribute) */
+FORCEINLINE bool operator==(int32 Value, EBuffAttribute Attr)
+{
+	return Value == static_cast<int32>(Attr);
+}
+
 // 仅用于 DataTable 导入，不向蓝图暴露任何属性
 USTRUCT(BlueprintType)
 struct FBuffBaseVo : public FTableRowBase
@@ -37,8 +49,7 @@ public:
 	int32  attribute;//作用属性
 
 
-	UPROPERTY(EditAnywhere)
-	FString effectRes;//名称
+ 
 
 	UPROPERTY(EditAnywhere)
 	int32   tick;//每几秒作用一次
@@ -47,8 +58,8 @@ public:
 	UPROPERTY(EditAnywhere)
 	FString icon;//
 	UPROPERTY(EditAnywhere)
-	int32  buffEffectID;//buff 效果
-
+	FString  buffEffectRes;//buff 效果
+ 
 
 	UPROPERTY(EditAnywhere)
 	FString tipOnAdd;//添加时提示

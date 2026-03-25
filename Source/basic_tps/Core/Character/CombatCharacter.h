@@ -6,12 +6,12 @@
 #include "GameFramework/Character.h"
 #include "CombatCharacter.generated.h"
 
-
+class ACombatCharacter;
 class UBuffComponent;
 class USkillComponent;
 class UCombatComponent;
 class UCharacterDataComponent;
-
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnCharacterDeath, ACombatCharacter*);
 UCLASS()
 class BASIC_TPS_API ACombatCharacter : public ACharacter
 {
@@ -20,7 +20,7 @@ class BASIC_TPS_API ACombatCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	ACombatCharacter();
-
+	FOnCharacterDeath OnCharacterDeath;
 	
 protected:
 	// Called when the game starts or when spawned

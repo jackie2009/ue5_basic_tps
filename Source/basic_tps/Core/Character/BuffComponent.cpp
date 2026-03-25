@@ -1,6 +1,7 @@
 #include "BuffComponent.h"
 
 #include "CombatCharacter.h"
+#include "CombatComponent.h"
 #include "basic_tps/Core/Data/CharacterDataComponent.h"
 #include "basic_tps/Core/Data/ICalBaseAttributes.h"
 
@@ -11,10 +12,13 @@ UBuffComponent::UBuffComponent()
     
     // 设置 Tick 间隔为 0.1 秒（单位是秒）
     PrimaryComponentTick.TickInterval = 0.1f;
+  
 }
 
 void UBuffComponent::AddBuff(FBuffVo NewBuff) {
+    if (bIsOwnerDead)return;
     if (NewBuff.Duration <=0)return;
+   
     // 1. 同组覆盖逻辑 (类似 Unity 里的 group 查找)
     for (int32 i = BuffList.Num() - 1; i >= 0; --i) {
         if (BuffList[i].BaseVo->group == NewBuff.BaseVo->group) {
@@ -24,16 +28,38 @@ void UBuffComponent::AddBuff(FBuffVo NewBuff) {
 
     // 2. 初始化时间
     auto StartTime = GetWorld()->GetTimeSeconds();
+    NewBuff.NextEffectTime = StartTime + NewBuff.BaseVo->tick;
     NewBuff.DieTime = (NewBuff.Duration > 0) ? (StartTime + NewBuff.Duration) : MAX_FLT;
      
-    BuffList.Add(NewBuff);
-    
-    // TODO: 这里触发特效 MagicRoot::CreateEffect
-
- 
-
-      CalBuffAttributes();
    
+
+    //创建特效
+    auto Res = NewBuff.BaseVo->buffEffectRes;
+    if (!Res.IsEmpty())
+    {
+        FString AssetPath = FString::Printf(TEXT("/Game/CombatActors/BuffEffect/%s.%s_C"), *Res, *Res);
+
+        UClass* BuffEffectClass = LoadObject<UClass>(nullptr, *AssetPath);
+        if (IsValid(BuffEffectClass))
+        {
+            UWorld* World = GetWorld();
+            FTransform SpawnTransform = FTransform::Identity;
+            auto NewEffectActor = World->SpawnActorDeferred<AActor>(BuffEffectClass, SpawnTransform, GetOwner());
+            if (NewEffectActor)
+            {
+                // 在这里可以设置 Actor 的属性 (因为是 Deferred 延迟生成)
+                // NewEffectActor->SetSomeValue(100);
+                NewEffectActor->FinishSpawning(SpawnTransform);
+                NewBuff.View=NewEffectActor;
+            }
+        }
+    }
+
+    //因为 是传值 所以需要最后 Add到数组
+    BuffList.Add(NewBuff);
+   
+    // TODO: 这里触发特效 MagicRoot::CreateEffect
+    CalBuffAttributes();
 }
 
  
@@ -69,6 +95,7 @@ int32 UBuffComponent::GetBuffValue(EBuffAttribute BuffType, TSharedPtr<FBuffVo> 
 void UBuffComponent::BeginPlay()
 {
     Super::BeginPlay();
+    Cast<ACombatCharacter>(GetOwner())->OnCharacterDeath.AddUObject(this,&UBuffComponent::HandleOwnerDeath);
 }
 
 // ---------------- 周期性 Tick (处理 DoT) ----------------
@@ -76,6 +103,7 @@ void UBuffComponent::BeginPlay()
 void UBuffComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) {
     Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+    if (bIsOwnerDead)return;
     float CurrentTime = GetWorld()->GetTimeSeconds();
 
     for (int32 i = BuffList.Num() - 1; i >= 0; --i) {
@@ -89,6 +117,7 @@ void UBuffComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
         if (BuffList[i].BaseVo->tick >0) {
             if (CurrentTime >= BuffList[i].NextEffectTime) {
                 ExecuteDoT(BuffList[i]);
+                if (bIsOwnerDead)return;  // 死亡跳出 
                 BuffList[i].NextEffectTime = CurrentTime + BuffList[i].BaseVo->tick;
             }
         }
@@ -115,10 +144,8 @@ void UBuffComponent::RemoveBuff(int32 Index, bool bReplaceMode)
     if (BuffList.IsValidIndex(Index)==false) return;
  
 
-    
-    // 打印调试信息 (UE_LOG 代替 print)
-    UE_LOG(LogTemp, Log, TEXT("RemoveBuff: %d, %s"), BuffList[Index].BaseID, *GetOwner()->GetName());
-
+    TryDestroyBuffView(BuffList[Index]);
+   
     // 从数组中移除
     BuffList.RemoveAt(Index);
 
@@ -136,8 +163,9 @@ void UBuffComponent::RemoveBuff(int32 Index, bool bReplaceMode)
 void UBuffComponent::RemoveAllBuffs()
 {
     // 遍历当前的 Buff 列表并发送移除事件
-    for (const FBuffVo& BuffVo : BuffList)
+    for ( FBuffVo& BuffVo : BuffList)
     {
+        TryDestroyBuffView(BuffVo);
        // if (UEventDispatcher* Dispatcher = UEventDispatcher::Get())
        // {
             // replaceMode 在全部移除时通常为 false
@@ -153,7 +181,26 @@ void UBuffComponent::RemoveAllBuffs()
 
 void UBuffComponent::ExecuteDoT(FBuffVo& Buff)
 {
-    
+    auto  owner =static_cast <ACombatCharacter*>( GetOwner());  
+    if (Buff.BaseVo->attribute == EBuffAttribute::OnPoison)
+    {
+        FCombatResult cbResult;
+        cbResult.Attacker =Buff.FromRole ;
+        cbResult.FinalDamage =Buff.Value ;
+        owner->CombatComp->HandleHurt(cbResult);
+    }
+}
+
+void UBuffComponent::TryDestroyBuffView(FBuffVo& BuffVo)
+{
+    if (BuffVo.View)
+    {
+        if (BuffVo.View && !BuffVo.View->IsPendingKillPending()) 
+        {
+            BuffVo.View->Destroy();
+           BuffVo.View=nullptr;
+        }
+    }
 }
 
 
@@ -168,20 +215,30 @@ void UBuffComponent::CalBuffAttributes()
     {
         CalcInterface->CalBaseAttributes();
     }
-    for (int i = 1; i < AttributeEnum::MAX; i++)
-    {
-                
-        auto addValue= GetBuffValue(i);
-        BaseDataComp->Attributes[i] += addValue;
-       
-                
-    }
 
+ 
+    for (const FBuffVo& Item : BuffList)
+    {
+        if (Item.BaseVo && Item.BaseVo->attribute>0&& Item.BaseVo->attribute<AttributeEnum::MAX)
+        {
+            BaseDataComp->Attributes[Item.BaseVo->attribute]+=Item.Value; 
+        }
+    }
+    
+ 
            
   
 
-    BaseDataComp->SetCurrentHP( BaseDataComp->GetCurrentHP());
- 
+    //BaseDataComp->SetCurrentHP( BaseDataComp->GetCurrentHP());
+    GEngine->AddOnScreenDebugMessage(-1,5,FColor::Green,FString::Printf( TEXT("buffcount=%d"),	BuffList.Num()));
 
     
+}
+void UBuffComponent::HandleOwnerDeath(ACombatCharacter* Victim)
+{
+    // 逻辑：清除所有 Buff，停止 Tick
+ 
+    bIsOwnerDead=true;
+    RemoveAllBuffs();
+    SetComponentTickEnabled(false);
 }

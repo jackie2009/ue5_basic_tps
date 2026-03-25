@@ -113,7 +113,7 @@ AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject,T
 {
 	if (!WorldContextObject || ClassToSpawn==nullptr) return nullptr;
   
-	GEngine->AddOnScreenDebugMessage(-1,10,FColor::Yellow,FString::Printf( TEXT("SpawnMagicEffect")));
+	//GEngine->AddOnScreenDebugMessage(-1,10,FColor::Yellow,FString::Printf( TEXT("SpawnMagicEffect")));
 
 	
 	UWorld* World = WorldContextObject->GetWorld();

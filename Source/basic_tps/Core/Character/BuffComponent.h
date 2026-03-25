@@ -26,6 +26,9 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	void CalBuffAttributes();
+	void HandleOwnerDeath(ACombatCharacter* Victim);
+	bool bIsOwnerDead=false;
+
 private:
 	UPROPERTY()
 	TArray<FBuffVo> BuffList;
@@ -34,4 +37,5 @@ private:
 	void RemoveBuff(int32 Index, bool bReplaceMode=false);
 	void RemoveAllBuffs();
 	void ExecuteDoT(FBuffVo& Buff);
+	void TryDestroyBuffView(FBuffVo &BuffVo);
 };

@@ -83,7 +83,7 @@ void USkillComponent::UseSkill(int32 SkillID, int32 SkillLevel)
 
 void USkillComponent::SpawnFirstMagicEffect()
 {
-	GEngine->AddOnScreenDebugMessage(-1,10,FColor::Yellow,FString::Printf( TEXT("SpawnFirstMagicEffect")));
+	//GEngine->AddOnScreenDebugMessage(-1,10,FColor::Yellow,FString::Printf( TEXT("SpawnFirstMagicEffect")));
 	FirstSkillMagicEffect=nullptr;
 	if (FirstSkillVfxContext.SkillBaseVo==nullptr)return;
 	 
