@@ -286,14 +286,13 @@ void AMagicEffect::OnEffectOverlap(UPrimitiveComponent* OverlappedComponent,
 void AMagicEffect::OnFlySphereHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	if (MyContext.Instigator==nullptr)return;
-	if (EffectConfig.HitFirstTarget== EHitFirstTargetHandle::Disable||EffectConfig.HitFirstTarget== EHitFirstTargetHandle::Destroy)
-	{
+ 
 		
-		if (IsValid(MainCollision)) MainCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	 if (IsValid(MainCollision)) MainCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-		if (EffectConfig.HitFirstTarget== EHitFirstTargetHandle::Destroy)SetLifeSpan(0.3f);
+	 SetLifeSpan(0.3f);
 
-	}
+ 
 	auto effect=SpawnMagicEffect(this,EffectConfig.NextEffect,MyContext, Hit.ImpactPoint,UKismetMathLibrary::MakeRotFromX(Hit.ImpactNormal).Quaternion());
 	
 }
