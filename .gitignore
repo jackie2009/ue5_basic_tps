@@ -10,6 +10,7 @@ Script/
 *.sln
 *.xcodeproj
 *.xcworkspace
+.idea/
 
 # --- macOS Specific ---
 .DS_Store
@@ -32,3 +33,4 @@ FileOpenOrder/
 
 # --- Logs & Crash Reports ---
 *.log
+/Plugins/RiderLink/
