@@ -35,7 +35,7 @@ public:
 	FEffectContext   FirstSkillVfxContext;
 	TSubclassOf<AMagicEffect>  FirstSkillMagicEffectClass;
 	UFUNCTION(BlueprintCallable, Category = "Combat")
-    void  UseSkill(   int32 SkillID,int32 SkillLevel=1);
+    void  UseSkill(   int32 SkillID,int32 CurrentWeaponType,int32 SkillLevel=1);
  
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	void  SpawnFirstMagicEffect();

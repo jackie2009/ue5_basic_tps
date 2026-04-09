@@ -5,6 +5,7 @@
 
 #include "CombatCharacter.h"
 #include "CombatComponent.h"
+#include "HeroCharacter.h"
 #include "basic_tps/Core/Data/CharacterDataComponent.h"
 #include "basic_tps/Core/Effect/MagicEffect.h"
 #include "basic_tps/Core/NotifyState/CombatGameplayTags.h"
@@ -33,7 +34,7 @@ void USkillComponent::BeginPlay()
 	
 }
 
-void USkillComponent::UseSkill(int32 SkillID, int32 SkillLevel)
+void USkillComponent::UseSkill(int32 SkillID,int32 CurrentWeaponType, int32 SkillLevel)
 {
 	auto attacker=Cast<ACombatCharacter>(GetOwner());
 	
@@ -46,20 +47,31 @@ void USkillComponent::UseSkill(int32 SkillID, int32 SkillLevel)
 	if (skillBaseVoPtr==nullptr)return;
 	auto skillVo=(*skillBaseVoPtr)[SkillLevel-1];
 	 
+	auto heroAttacker=Cast<AHeroCharacter>(GetOwner());
 
 
 
-	
+	USkillVisualDataAsset *visualData=nullptr;
 	//float Duration = AnimInst->Montage_Play(SkillData->SkillMontage);
 	if (!skillVo->skillVisualDataID.IsEmpty())
 	{
 		auto DataID=skillVo->skillVisualDataID;
-		 
-		// 这里的路径必须是绝对路径
-		FString AssetPath = FString::Printf(TEXT("/Game/TableDataExtra/Skills/DA_%s.DA_%s"), *DataID, *DataID);
-    
-		 
-		auto visualData=  LoadObject<USkillVisualDataAsset>(nullptr, *AssetPath);(skillVo->skillVisualDataID);
+		 if (heroAttacker!=nullptr&& DataID.Equals("weapon"))
+		 {
+		 	auto weaponVisualDataPtr= heroAttacker->WeaponVisualCollection.Find(CurrentWeaponType);
+		 	if (weaponVisualDataPtr)
+		 	{
+		 		visualData=*weaponVisualDataPtr;
+		 		
+		 	}
+		 }
+		if (visualData==nullptr)
+		{
+			//如果不是武器决定的效果 读取技能配置 比如 各自射击由枪械配置决定 不是有技能配置决定
+			// 这里的路径必须是绝对路径
+			FString AssetPath = FString::Printf(TEXT("/Game/TableDataExtra/Skills/DA_%s.DA_%s"), *DataID, *DataID);
+			visualData=  LoadObject<USkillVisualDataAsset>(nullptr, *AssetPath);(skillVo->skillVisualDataID);
+		}
 		if (!IsValid(visualData))
 		{
 			UE_LOG(LogTemp, Error, TEXT("SkillVisualDataID [%s] 加载失败或无效！"), *skillVo->skillVisualDataID);
