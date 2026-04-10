@@ -34,6 +34,7 @@ public:
 
 	// 仇恨管理
 	void AddAggro(ACombatCharacter* Target, int32 Amount);
+	USceneComponent* GetEffectAttachSource(FName SocketName);
 
 private:
 	void Die();

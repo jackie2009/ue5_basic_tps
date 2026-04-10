@@ -109,3 +109,23 @@ void UCombatComponent::AddAggro(ACombatCharacter* Target, int32 Amount)
 	int32& CurrentAggro = AggroTargets.FindOrAdd(Target);
 	CurrentAggro += Amount;
 }
+
+// 在你的技能执行类或角色类中
+USceneComponent* UCombatComponent::GetEffectAttachSource(FName SocketName)
+{
+	auto character = Cast<ACombatCharacter>(GetOwner());
+	// 1. 先在角色自身的 Mesh 上找
+	if (character->GetMesh()->DoesSocketExist(SocketName))
+	{
+		return character->GetMesh();
+	}
+
+
+	if (character->CurrentWeaponMesh && character->CurrentWeaponMesh->DoesSocketExist(SocketName))
+	{
+		return character->CurrentWeaponMesh;
+	}
+
+
+	return character->GetMesh();
+}

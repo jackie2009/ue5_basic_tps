@@ -28,6 +28,8 @@ protected:
 	virtual void PreInitializeComponents() override;
 	virtual void PostInitializeComponents() override;
 	virtual void ExecutePhysicsDisabled();
+	
+	
 
 public:
 
@@ -67,4 +69,8 @@ public:
 	// 定义一个给蓝图用的事件：死亡
 	UFUNCTION(BlueprintImplementableEvent, Category = "Combat")
 	void OnDead();
+
+
+	UPROPERTY( BlueprintReadWrite, Category = "Combat")
+	TObjectPtr<USkeletalMeshComponent> CurrentWeaponMesh = nullptr;
 };

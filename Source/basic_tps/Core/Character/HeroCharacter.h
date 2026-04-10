@@ -30,11 +30,13 @@ protected:
 	UPROPERTY( BlueprintReadOnly, Category = "Combat")
 	TObjectPtr<UHeroDataComponent> HeroDataComp = nullptr;
 	
+
 	
  
 public:
-	UPROPERTY(EditAnywhere, Instanced, BlueprintReadWrite, Category = "Config")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Config")
 	TMap<int32, TObjectPtr<USkillVisualDataAsset>> WeaponVisualCollection;
+	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

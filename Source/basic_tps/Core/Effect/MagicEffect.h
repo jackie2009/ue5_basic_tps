@@ -46,7 +46,11 @@ protected:
 	UAudioComponent* AudioComp;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MagicEffect")
 	FEffectContext MyContext;
-	 
+
+
+	/** 核心影响逻辑：无论是射线命中还是组件重叠，最终都调这个 */
+	UFUNCTION(BlueprintCallable, Category = "MagicEffect")
+	void ProcessImpact(AActor* OtherActor, UPrimitiveComponent* OtherComp, const FHitResult& HitResult);
 	UFUNCTION()
 	void OnFlySphereHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 	

@@ -121,9 +121,10 @@ public:
 	int Generation=0;
 	
 	// 2. 溯源信息
- 
+	// 加上 UPROPERTY 才能在蓝图中显示
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MagicEffect")
 	ACombatCharacter * Instigator;
- 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MagicEffect")
 	ACombatCharacter * TargetActor;
 
 	// 3. 战斗快照（防止飞行过程中属性变了）

@@ -28,6 +28,10 @@
 		{
 			"Name": "USDImporter",
 			"Enabled": true
+		},
+		{
+			"Name": "CascadeToNiagaraConverter",
+			"Enabled": true
 		}
 	]
 }

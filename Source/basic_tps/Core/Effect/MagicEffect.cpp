@@ -176,7 +176,8 @@ AMagicEffect* AMagicEffect::SpawnMagicEffect(const UObject* WorldContextObject,T
 			EVfxSpawnSpace::WorldSpaceVictim
 			||Config->SpawnSpace == EVfxSpawnSpace::AttachToInstigator ||Config->SpawnSpace == EVfxSpawnSpace::AttachToVictim)
 		{
-			SpawnTransform.SetLocation(AttachToComp->GetSocketLocation(Config->SocketName));
+			auto CombatComp=Cast<UCombatComponent>(AttachToComp->GetOwner()->GetComponentByClass(UCombatComponent::StaticClass()));
+			SpawnTransform.SetLocation(  CombatComp->GetEffectAttachSource(Config->SocketName)->GetSocketLocation(Config->SocketName));
 		
 		}
 		if (Config->InitRotationWithSpaceActor&&AttachToComp!=nullptr)
@@ -214,7 +215,8 @@ void AMagicEffect::InitializeEffect(FEffectContext InContext, USceneComponent* I
 	if (InAttachComp && (Config->SpawnSpace == EVfxSpawnSpace::AttachToInstigator || Config->
 		SpawnSpace == EVfxSpawnSpace::AttachToVictim))
 	{
-		AttachToComponent(InAttachComp, FAttachmentTransformRules::SnapToTargetIncludingScale,
+		auto CombatComp=Cast<UCombatComponent>(InAttachComp->GetOwner()->GetComponentByClass(UCombatComponent::StaticClass()));
+		AttachToComponent(CombatComp->GetEffectAttachSource( Config->SocketName), FAttachmentTransformRules::SnapToTargetIncludingScale,
 		                 Config->SocketName);
 		SetOwner(InAttachComp->GetOwner());
  
@@ -245,10 +247,20 @@ void AMagicEffect::OnEffectOverlap(UPrimitiveComponent* OverlappedComponent,
 	if (MyContext.IgnoreTargetSet.Contains(OtherActor))return;
 	 
 	if (OtherActor==MyContext.Instigator)return;
-	
+	 
+    
+	// 调用抽离后的核心逻辑
+	ProcessImpact(OtherActor, OtherComp, SweepResult);
 //	GEngine->AddOnScreenDebugMessage(-1,5,FColor::Green,FString::Printf( TEXT("hit by c++,%s"),*OtherActor->GetName()));
  
  
+	
+	 
+	 
+}
+void   AMagicEffect::ProcessImpact(AActor* OtherActor, UPrimitiveComponent* OtherComp, const FHitResult& HitResult)
+{
+
 	 
 	if (EffectConfig.HitFirstTarget== EHitFirstTargetHandle::Disable||EffectConfig.HitFirstTarget== EHitFirstTargetHandle::Destroy)
 	{
@@ -270,19 +282,16 @@ void AMagicEffect::OnEffectOverlap(UPrimitiveComponent* OverlappedComponent,
 	}
 	if (EffectConfig.ChildMode == ECreateChildMode::Hit)
 	{
-		FVector ImpactPoint=SweepResult.ImpactPoint;
+		FVector ImpactPoint=HitResult.ImpactPoint;
 	 
 		// 获取敌人碰撞体上距离我（子弹/火球）中心最近的点
-		OtherComp->GetClosestPointOnCollision(GetActorLocation(), ImpactPoint, SweepResult.BoneName);
+		OtherComp->GetClosestPointOnCollision(GetActorLocation(), ImpactPoint, HitResult.BoneName);
 	
 	
-		auto effect=SpawnMagicEffect(this,EffectConfig.NextEffect,MyContext, ImpactPoint,UKismetMathLibrary::MakeRotFromX(SweepResult.ImpactNormal).Quaternion());
+		auto effect=SpawnMagicEffect(this,EffectConfig.NextEffect,MyContext, ImpactPoint,UKismetMathLibrary::MakeRotFromX(HitResult.ImpactNormal).Quaternion());
 	}
 	OnValidHit(targetActor);
-	 
-	 
 }
-
 void AMagicEffect::OnFlySphereHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	if (MyContext.Instigator==nullptr)return;
