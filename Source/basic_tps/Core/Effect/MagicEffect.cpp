@@ -243,10 +243,7 @@ void AMagicEffect::OnEffectOverlap(UPrimitiveComponent* OverlappedComponent,
 						 bool bFromSweep, 
 						 const FHitResult& SweepResult)
 {
-	if (MyContext.Instigator==nullptr)return;
-	if (MyContext.IgnoreTargetSet.Contains(OtherActor))return;
-	 
-	if (OtherActor==MyContext.Instigator)return;
+
 	 
     
 	// 调用抽离后的核心逻辑
@@ -260,8 +257,11 @@ void AMagicEffect::OnEffectOverlap(UPrimitiveComponent* OverlappedComponent,
 }
 void   AMagicEffect::ProcessImpact(AActor* OtherActor, UPrimitiveComponent* OtherComp, const FHitResult& HitResult)
 {
-
+	if (MyContext.Instigator==nullptr)return;
+	
 	 
+	if (OtherActor==MyContext.Instigator)return;
+	if (MyContext.IgnoreTargetSet.Contains(OtherActor))return;
 	if (EffectConfig.HitFirstTarget== EHitFirstTargetHandle::Disable||EffectConfig.HitFirstTarget== EHitFirstTargetHandle::Destroy)
 	{
 		
