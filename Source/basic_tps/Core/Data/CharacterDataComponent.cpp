@@ -43,6 +43,34 @@ void UCharacterDataComponent::CostCurrentHP(int value)
 	Hp = FMath::Clamp(Hp - value, 0, GetMaxHP());
  }
 
+int32 UCharacterDataComponent::GetCurrentMP() 
+{
+	return  Mp;
+}
+
+int32 UCharacterDataComponent::GetMaxMP() 
+{
+	return Attributes[AttributeEnum::MP];
+}
+
+void UCharacterDataComponent::SetCurrentMP(int value) 
+{
+	Mp=value;
+ 
+}
+
+void UCharacterDataComponent::AddCurrentMP(int value) 
+{
+	Mp = FMath::Clamp(Mp + value, 0, GetMaxMP());
+ 
+}
+
+void UCharacterDataComponent::CostCurrentMP(int value) 
+{
+	 
+	Mp = FMath::Clamp(Mp - value, 0, GetMaxMP());
+}
+
 int32 UCharacterDataComponent::GetAttribute(int32 AttributeID)
 {
 	 

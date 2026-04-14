@@ -22,6 +22,18 @@ public:
     void AddCurrentHP(int value);
     UFUNCTION(BlueprintCallable, Category = "CharacterData")
     void CostCurrentHP(int value);
+
+    UFUNCTION(BlueprintCallable,BlueprintPure, Category = "CharacterData")
+    int32 GetCurrentMP();
+    UFUNCTION(BlueprintCallable,BlueprintPure, Category = "CharacterData")
+    int32 GetMaxMP();
+    UFUNCTION(BlueprintCallable, Category = "CharacterData")
+    void SetCurrentMP(int value);
+    UFUNCTION(BlueprintCallable, Category = "CharacterData")
+    void AddCurrentMP(int value);
+    UFUNCTION(BlueprintCallable, Category = "CharacterData")
+    void CostCurrentMP(int value);
+    
     UFUNCTION(BlueprintCallable,BlueprintPure, Category = "CharacterData")
     int32 GetAttribute(int32 AttributeID);
 
@@ -30,6 +42,7 @@ public:
 private:
    
     int32 Hp = 100;
+    int32 Mp = 100;
     
 public:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat")

@@ -29,6 +29,7 @@ void UHeroDataComponent::BeginPlay()
 	if ( BaseDataComp)
 	{
 		BaseDataComp->SetCurrentHP(BaseDataComp->Attributes[AttributeEnum::HP]);
+		BaseDataComp->SetCurrentMP(BaseDataComp->Attributes[AttributeEnum::MP]);
 	}
 	
  }

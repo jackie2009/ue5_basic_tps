@@ -69,7 +69,9 @@ void USkillComponent::UseSkill(int32 SkillID,int32 CurrentWeaponType, int32 Skil
 		{
 			//如果不是武器决定的效果 读取技能配置 比如 各自射击由枪械配置决定 不是有技能配置决定
 			// 这里的路径必须是绝对路径
-			FString AssetPath = FString::Printf(TEXT("/Game/TableDataExtra/Skills/DA_%s.DA_%s"), *DataID, *DataID);
+			FString FullPackagePath = "/Game/TableDataExtra/Skills" / DataID;
+			FString AssetName = FPaths::GetBaseFilename(FullPackagePath);
+			FString AssetPath = FString::Printf(TEXT("%s.%s"), *FullPackagePath, *AssetName);
 			visualData=  LoadObject<USkillVisualDataAsset>(nullptr, *AssetPath);(skillVo->skillVisualDataID);
 		}
 		if (!IsValid(visualData))
