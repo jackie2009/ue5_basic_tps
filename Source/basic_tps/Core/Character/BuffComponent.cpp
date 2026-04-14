@@ -1,5 +1,7 @@
 #include "BuffComponent.h"
 
+#include "AIController.h"
+#include "BrainComponent.h"
 #include "CombatCharacter.h"
 #include "CombatComponent.h"
 #include "basic_tps/Core/Data/CharacterDataComponent.h"
@@ -208,6 +210,25 @@ void UBuffComponent::CalBuffAttributes()
 {
     auto* BaseDataComp = GetOwner() ? GetOwner()->FindComponentByClass<UCharacterDataComponent>() : nullptr;
     if (BaseDataComp==nullptr) return;
+
+    bIsMovementAllowed=GetBuffValue((int32)EBuffAttribute::Frozen)==0;
+    bIsAttackAllowed=GetBuffValue((int32)EBuffAttribute::Frozen)==0;
+    AAIController* AI = Cast<AAIController>( (Cast<ACombatCharacter>(GetOwner())) ->GetController() );
+    if (!(bIsMovementAllowed&&bIsAttackAllowed))
+    {
+       
+        if (AI&&!bAIStoppedByBuff)
+        {
+            AI->StopMovement(); 
+            AI->GetBrainComponent()->StopLogic("buff");
+            GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red, TEXT("StopLogicStopLogicStopLogic "));
+        }
+        bAIStoppedByBuff = true;
+    }else
+    {
+        if (AI&&bAIStoppedByBuff)AI->GetBrainComponent()->ResumeLogic("buff");
+        bAIStoppedByBuff=false;
+    }
     // 假设接口定义类名为 UICalBaseAttributes
     IICalBaseAttributes* CalcInterface = GetOwner()->FindComponentByInterface<IICalBaseAttributes>();
 

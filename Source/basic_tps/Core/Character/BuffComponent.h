@@ -28,7 +28,9 @@ protected:
 	void CalBuffAttributes();
 	void HandleOwnerDeath(ACombatCharacter* Victim);
 	bool bIsOwnerDead=false;
-
+	bool bIsMovementAllowed;
+	bool bIsAttackAllowed;
+	bool bAIStoppedByBuff;
 private:
 	UPROPERTY()
 	TArray<FBuffVo> BuffList;
