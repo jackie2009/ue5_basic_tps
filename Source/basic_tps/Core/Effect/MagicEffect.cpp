@@ -277,7 +277,9 @@ void   AMagicEffect::ProcessImpact(AActor* OtherActor, UPrimitiveComponent* Othe
 		if (IsValid(targetActor) && IsValid(MyContext.Instigator))
 		{
 			MyContext.TargetActor = targetActor;
-			MyContext.Instigator->CombatComp->TryHurtTarget(targetActor, MyContext.SkillBaseVo->ID);
+ 
+			MyContext.distanceToEffect= FVector::Dist(targetActor->GetActorLocation(), GetActorLocation());
+			MyContext.Instigator->CombatComp->TryHurtTarget(targetActor, MyContext);
 		}
 	}
 	if (EffectConfig.ChildMode == ECreateChildMode::Hit)

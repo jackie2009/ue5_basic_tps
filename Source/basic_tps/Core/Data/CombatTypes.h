@@ -129,9 +129,10 @@ struct FCombatResult
 	//这次伤害计算结束 给目标挂上去的  buff 持续时间>0，
 	TSharedPtr<FBuffVo> OnDamageFinishBuffVo = nullptr;
 
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 FinalDamage = 0; // 经过buff修改后的伤害
- 
+	 
 };
 
  

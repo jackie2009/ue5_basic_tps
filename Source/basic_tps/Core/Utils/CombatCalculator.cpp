@@ -13,10 +13,17 @@
 #include "basic_tps/Core/Character/SkillComponent.h"
 #include "basic_tps/Core/TableData/TableDataManagerSubsystem.h"
 
-FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACombatCharacter* Defencer, const FSkillBaseVo& SkillVo)
+FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACombatCharacter* Defencer, const FEffectContext &  EffectContext)
 {
+    auto  & SkillVo= *EffectContext.SkillBaseVo;
     //修改属性 测试
-    
+    float  WeightAfterFadeoff=1.0f;
+    bool useFadeoffForBuffTime=false;
+    if (EffectContext.SkillVisualDataAsset!=nullptr&&EffectContext.SkillVisualDataAsset->bEnableFalloff)
+    {
+        WeightAfterFadeoff=EffectContext.SkillVisualDataAsset->CalWeightAfterFalloff(EffectContext.distanceToEffect/100.0f);
+        useFadeoffForBuffTime=EffectContext.SkillVisualDataAsset->bAffectBuffDuration;
+    }
 
     //测试内容结尾
     FCombatResult Result; // 创建结果对象
@@ -32,7 +39,10 @@ FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACom
     // 阶段 I：初始化快照 (Snapshot Acquisition)
     // 就算不产生伤害 也需要初始化创建buff
     CaptureAttributeSnapshot(Result,isPureBuffEffect);
-    
+    if (useFadeoffForBuffTime&&WeightAfterFadeoff<1&&Result.OnDamageFinishBuffVo!=nullptr)
+    {
+        Result.OnDamageFinishBuffVo->Duration = FMath::RoundToInt32(  Result.OnDamageFinishBuffVo->Duration*WeightAfterFadeoff);
+    }
     if (!bIsHarmSkill) return Result;
 
 
@@ -49,7 +59,9 @@ FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACom
     // 阶段 IV：伤害结果修正 (伤害加深、百分比减伤、护盾抵扣)
     // 此时已经有 FinalDamage 了，Buff 可以基于这个值做乘除法
     AdjustFinalDamage(Result); 
-    
+
+
+   Result.FinalDamage=FMath::RoundToInt32(Result.FinalDamage* WeightAfterFadeoff);
     // 阶段 V：伤害应用与分流 (Damage Application)
     // 执行：实际扣除 HP
     // 输出：ActualDamage (真正扣掉的血量)
@@ -68,6 +80,7 @@ void UCombatCalculator::CaptureAttributeSnapshot(FCombatResult& Result,bool bPur
         //创建buff
         if (Result.SkillVo->buffID > 0 && (FMath::FRand() * 100.f) < Result.SkillVo->buffRandom)
         {
+            
             TSharedPtr<FBuffVo> BuffVo = MakeShared<FBuffVo>(Result.SkillVo->isBuffForSelf ? Result.Attacker : Result.Victim, Result.Attacker,
                                       Result.SkillVo->buffID, Result.SkillVo->buffLife, Result.SkillVo->buffValue[0]);
             

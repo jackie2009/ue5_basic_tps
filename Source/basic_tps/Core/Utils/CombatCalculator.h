@@ -7,6 +7,7 @@
  
 #include "CombatCalculator.generated.h"
 
+struct FEffectContext;
 struct FCombatResult;
 class ACombatCharacter;
 class USkillVfxDataAsset;
@@ -30,7 +31,7 @@ public:
 	/**  伤害流程总入口，包含 预处理 基础伤害 后处理等 全套计算的流水线。普通的持续性buff放这个后面添加
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Combat")
-	static FCombatResult DamagePipeline(ACombatCharacter* Attacker, ACombatCharacter* Defencer, const FSkillBaseVo& SkillVo);
+	static FCombatResult DamagePipeline(ACombatCharacter* Attacker, ACombatCharacter* Defencer, const FEffectContext& EffectContext);
 
  
 	

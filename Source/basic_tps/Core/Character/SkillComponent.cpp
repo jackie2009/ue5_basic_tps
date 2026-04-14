@@ -86,6 +86,7 @@ void USkillComponent::UseSkill(int32 SkillID,int32 CurrentWeaponType, int32 Skil
 		FirstSkillVfxContext.Instigator=attacker;
 		FirstSkillVfxContext.TargetActor=nullptr;
 		FirstSkillVfxContext.SkillBaseVo=skillVo;
+		FirstSkillVfxContext.SkillVisualDataAsset= visualData;
 		FirstSkillMagicEffectClass=visualData->MagicEffectClass;
 	 
 	

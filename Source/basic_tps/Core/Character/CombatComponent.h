@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "CombatComponent.generated.h"
 
+struct FEffectContext;
 struct FCombatResult;
 class ACombatCharacter;
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
@@ -28,7 +29,7 @@ public:
 	bool IsAttacking() const;
 	bool IsHurting() const;
 	UFUNCTION(BlueprintCallable, Category = "Combat")
-    void  TryHurtTarget(  ACombatCharacter* Target, int32 SkillID);
+    void  TryHurtTarget(  ACombatCharacter* Target, const FEffectContext &  EffectContext);
 	// 处理受击逻辑 (整合之前讨论的 FCombatResult)
 	void HandleHurt(const FCombatResult& Result);
 

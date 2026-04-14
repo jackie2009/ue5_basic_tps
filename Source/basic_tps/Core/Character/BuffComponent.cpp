@@ -6,6 +6,7 @@
 #include "CombatComponent.h"
 #include "basic_tps/Core/Data/CharacterDataComponent.h"
 #include "basic_tps/Core/Data/ICalBaseAttributes.h"
+#include "Perception/AIPerceptionComponent.h"
 
 
 UBuffComponent::UBuffComponent()
@@ -97,7 +98,7 @@ int32 UBuffComponent::GetBuffValue(EBuffAttribute BuffType, TSharedPtr<FBuffVo> 
 void UBuffComponent::BeginPlay()
 {
     Super::BeginPlay();
-    Cast<ACombatCharacter>(GetOwner())->OnCharacterDeath.AddUObject(this,&UBuffComponent::HandleOwnerDeath);
+   Character->OnCharacterDeath.AddUObject(this,&UBuffComponent::HandleOwnerDeath);
 }
 
 // ---------------- 周期性 Tick (处理 DoT) ----------------
@@ -183,7 +184,7 @@ void UBuffComponent::RemoveAllBuffs()
 
 void UBuffComponent::ExecuteDoT(FBuffVo& Buff)
 {
-    auto  owner =static_cast <ACombatCharacter*>( GetOwner());  
+    auto  owner =Character;  
     if (Buff.BaseVo->attribute == EBuffAttribute::OnPoison)
     {
         FCombatResult cbResult;
@@ -213,7 +214,7 @@ void UBuffComponent::CalBuffAttributes()
 
     bIsMovementAllowed=GetBuffValue((int32)EBuffAttribute::Frozen)==0;
     bIsAttackAllowed=GetBuffValue((int32)EBuffAttribute::Frozen)==0;
-    AAIController* AI = Cast<AAIController>( (Cast<ACombatCharacter>(GetOwner())) ->GetController() );
+    AAIController* AI = Cast<AAIController>( Character ->GetController() );
     if (!(bIsMovementAllowed&&bIsAttackAllowed))
     {
        
@@ -221,12 +222,18 @@ void UBuffComponent::CalBuffAttributes()
         {
             AI->StopMovement(); 
             AI->GetBrainComponent()->StopLogic("buff");
-            GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red, TEXT("StopLogicStopLogicStopLogic "));
+            Character->GetMesh()->GlobalAnimRateScale= 0.f;
         }
         bAIStoppedByBuff = true;
     }else
     {
-        if (AI&&bAIStoppedByBuff)AI->GetBrainComponent()->ResumeLogic("buff");
+        if (AI&&bAIStoppedByBuff)
+        {
+           
+            AI->GetBrainComponent()->RestartLogic();
+            Character->GetMesh()->GlobalAnimRateScale= 1.f;
+            
+        }
         bAIStoppedByBuff=false;
     }
     // 假设接口定义类名为 UICalBaseAttributes

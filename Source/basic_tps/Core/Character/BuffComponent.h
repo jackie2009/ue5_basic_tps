@@ -1,12 +1,13 @@
 // BuffComponent.h
 #pragma once
 #include "CoreMinimal.h"
+#include "CharacterComponent.h"
 #include "Components/ActorComponent.h"
 #include "../Data/CombatTypes.h"
 #include "BuffComponent.generated.h"
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class  BASIC_TPS_API UBuffComponent : public UActorComponent {
+class  BASIC_TPS_API UBuffComponent : public UCharacterComponent {
 	GENERATED_BODY()
 
 public:

@@ -6,6 +6,7 @@
 #include "BuffComponent.h"
 #include "CombatCharacter.h"
 #include "basic_tps/Core/Data/CharacterDataComponent.h"
+#include "basic_tps/Core/Effect/FVfxSpawnConfig.h"
 #include "basic_tps/Core/TableData/TableDataManagerSubsystem.h"
 #include "basic_tps/Core/Utils/CombatCalculator.h"
 
@@ -31,14 +32,15 @@ void UCombatComponent::BeginPlay()
 }
 
 
-void UCombatComponent::TryHurtTarget(ACombatCharacter* Target, int32 SkillID)
+void UCombatComponent::TryHurtTarget(ACombatCharacter* Target, const FEffectContext &  EffectContext)
 {
 	if (Target==nullptr) return;
-	auto skillBaseVoPtr=UTableDataManagerSubsystem::Get(this)->SkillBaseMap.Find(SkillID);
+	auto skillBaseVoPtr=EffectContext.SkillBaseVo;
 	if (skillBaseVoPtr==nullptr)return;
 	auto attacker=Cast<ACombatCharacter>(GetOwner());
 	 
-	auto rst=UCombatCalculator::DamagePipeline(attacker,Target,*(*skillBaseVoPtr)[0]);
+	auto rst=UCombatCalculator::DamagePipeline(attacker,Target,EffectContext);
+
 	 if (rst.OnDamageFinishBuffVo!=nullptr&&rst.OnDamageFinishBuffVo->EffectRole!=nullptr)
 	 {
 		 rst.OnDamageFinishBuffVo->EffectRole->BuffComp->AddBuff(*rst.OnDamageFinishBuffVo);
