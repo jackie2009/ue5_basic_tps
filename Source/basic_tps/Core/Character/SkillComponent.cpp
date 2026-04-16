@@ -61,8 +61,10 @@ bool USkillComponent::UseSkill(int32 SkillID,int32 CurrentWeaponType, int32 Skil
 
 	
 	//check mp
-	if (!heroAttacker->CharacterDataComp->CostCurrentMP(skillVo->Spell)) return false;
-	
+	if (heroAttacker)
+	{
+		if (!heroAttacker->CharacterDataComp->CostCurrentMP(skillVo->Spell)) return false;
+	}
 	// ⭐ 这里你应该从 SkillBaseVo 里拿CD
 	float Cooldown =skillVo->CD*0.001f;  
 
