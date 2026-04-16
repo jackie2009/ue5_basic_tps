@@ -1,31 +1,40 @@
+#pragma once
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
- 
+#include "basic_tps/Core/Data/CombatTypes.h"
 
 #include "FVfxSpawnConfig.h"
  
 #include "SkillLogicBase.generated.h"
 
-class UCombatResultWrapper;
+ 
 struct FEffectContext;
-struct FBuffVo;
+ 
 UCLASS(Blueprintable, Abstract, EditInlineNew, DefaultToInstanced)
 class USkillLogicBase : public UObject
 {
 	GENERATED_BODY()
 
 public:
-
+	UPROPERTY(BlueprintReadOnly)
+	FCombatResult    CombatResult;
 	UFUNCTION(BlueprintImplementableEvent)
 	void ExecuteOnStart(const  FEffectContext& EffectContext);
 	
+
+	UFUNCTION(BlueprintImplementableEvent)
  
+	void ExecuteOnDealSigleTarget();
 
-	// 核心逻辑入口：必须没有返回值，才能在 EventGraph 中作为事件节点使用
-	UFUNCTION(BlueprintNativeEvent, Category = "Skill")
-	void OnExecuteSkillLogic(UCombatResultWrapper *CombatResult);
+	//以下函数 不能在 start里调用 这时候还没 CombatResult
+	UFUNCTION(BlueprintCallable)
+	void SetBaseSkillBaseHarm(int32 attackPoint);
+	
+	UFUNCTION(BlueprintCallable)
+	void AddBuffImmediate(FBuffVo BuffVo);
 
-	// 默认实现（可以为空）
-	virtual void OnExecuteSkillLogic_Implementation(UCombatResultWrapper* CombatResult) {}
-	 
+	UFUNCTION(BlueprintCallable)
+	void AddBuffDelay(FBuffVo BuffVo);
+	UFUNCTION(BlueprintCallable)
+	void AddBuffForTemp(FBuffVo BuffVo);
 };

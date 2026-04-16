@@ -131,6 +131,7 @@ void USkillComponent::SpawnFirstMagicEffect()
 	 if (FirstSkillVfxContext.SkillLogic!=nullptr) FirstSkillVfxContext.SkillLogic->ExecuteOnStart(FirstSkillVfxContext);
 	FirstSkillMagicEffect=AMagicEffect::SpawnMagicEffect(this,FirstSkillMagicEffectClass,FirstSkillVfxContext);
 	FirstSkillVfxContext.SkillBaseVo=nullptr;
+	FirstSkillVfxContext.SkillLogic=nullptr;
 }
 
 void USkillComponent::SpawnFlyMagicEffect()

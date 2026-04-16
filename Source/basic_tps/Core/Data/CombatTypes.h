@@ -227,16 +227,5 @@ struct FCombatResult
 	int32 FinalDamage = 0; // 经过buff修改后的伤害
 	 
 };
-UCLASS(BlueprintType)
-class UCombatResultWrapper : public UObject
-{
-	GENERATED_BODY()
-
-public:
-
-	UPROPERTY(BlueprintReadWrite)
-	FCombatResult Data;
-};
  
-
 

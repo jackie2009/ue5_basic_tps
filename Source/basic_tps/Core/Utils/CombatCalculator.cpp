@@ -41,11 +41,9 @@ FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACom
     // 创建buff
     if (Result.Attacker&&EffectContext.SkillLogic!=nullptr)
     {
-        UCombatResultWrapper* Wrapper = NewObject<UCombatResultWrapper>();
-        Wrapper->Data = Result;
-        
-        EffectContext.SkillLogic->OnExecuteSkillLogic(Wrapper);
-        Result=   Wrapper->Data;
+        EffectContext.SkillLogic->CombatResult= Result;
+        EffectContext.SkillLogic->ExecuteOnDealSigleTarget();
+        Result=EffectContext.SkillLogic->CombatResult;
        if (Result.OnDamageFinishBuffVo.BaseID>0)Result.OnDamageFinishBuffVo.InitBaseData();
         //  
         // if (BuffVo.BaseVo != nullptr)
