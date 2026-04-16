@@ -22,9 +22,16 @@ class BASIC_TPS_API UTableDataManagerSubsystem : public UGameInstanceSubsystem
 	GENERATED_BODY()
 
 public:
+	// 逻辑入口：初始化
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
- 
-	 
+	// 逻辑出口：清理静态引用，防止内存悬空
+	virtual void Deinitialize() override;
+	FORCEINLINE static UTableDataManagerSubsystem* Get()
+	{
+		// 这里可以加一个 ensure 或 check，确保在 Subsystem 初始化后调用
+		return Instance;
+	}
+	
 	// 数据字典缓存
 	 
 	 TMap<int32, FRoleBaseVo*> RoleBaseMap;
@@ -49,20 +56,7 @@ public:
 		return Result;
 	}
 
-	static UTableDataManagerSubsystem* Get(const UObject* WorldContextObject)
-	{
-		if (WorldContextObject)
-		{
-			if (UWorld* World = WorldContextObject->GetWorld())
-			{
-				if (UGameInstance* GI = World->GetGameInstance())
-				{
-					return GI->GetSubsystem<UTableDataManagerSubsystem>();
-				}
-			}
-		}
-		return nullptr;
-	}
+ 
 
 private:
 	

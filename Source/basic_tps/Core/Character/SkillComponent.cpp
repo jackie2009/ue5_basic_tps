@@ -8,6 +8,7 @@
 #include "HeroCharacter.h"
 #include "basic_tps/Core/Data/CharacterDataComponent.h"
 #include "basic_tps/Core/Effect/MagicEffect.h"
+#include "basic_tps/Core/Effect/SkillLogicBase.h"
 #include "basic_tps/Core/NotifyState/CombatGameplayTags.h"
 #include "basic_tps/Core/TableData/SkillBaseVo.h"
 #include "basic_tps/Core/TableData/TableDataManagerSubsystem.h"
@@ -34,20 +35,41 @@ void USkillComponent::BeginPlay()
 	
 }
 
-void USkillComponent::UseSkill(int32 SkillID,int32 CurrentWeaponType, int32 SkillLevel)
+bool USkillComponent::UseSkill(int32 SkillID,int32 CurrentWeaponType, int32 SkillLevel)
 {
 	auto attacker=Cast<ACombatCharacter>(GetOwner());
 	
 	//动作限制状态检测
-	if (attacker==nullptr)return;
-	if (attacker->CharacterDataComp->ActionTags.HasTag(FCombatTags::State_LockSkill))return;
+	if (attacker==nullptr)return false;
+	if (attacker->CharacterDataComp->ActionTags.HasTag(FCombatTags::State_LockSkill))return false;
 	
 	// cd mp check
-	auto skillBaseVoPtr=UTableDataManagerSubsystem::Get(this)->SkillBaseMap.Find(SkillID);
-	if (skillBaseVoPtr==nullptr)return;
-	auto skillVo=(*skillBaseVoPtr)[SkillLevel-1];
-	 
+	TArray<FSkillBaseVo*>* skillBaseVoPtr = UTableDataManagerSubsystem::Get()->SkillBaseMap.Find(SkillID);
+	if (skillBaseVoPtr==nullptr)return false;
 	auto heroAttacker=Cast<AHeroCharacter>(GetOwner());
+	
+	const int32 SkillLevelIndex = SkillLevel - 1;
+
+	if (!skillBaseVoPtr->IsValidIndex(SkillLevelIndex)) return false;
+	auto skillVo=(*skillBaseVoPtr)[SkillLevelIndex];
+	//check cd
+	if (!IsSkillReady(SkillID))
+	{
+		return false;
+	}
+
+
+	
+	//check mp
+	if (!heroAttacker->CharacterDataComp->CostCurrentMP(skillVo->Spell)) return false;
+	
+	// ⭐ 这里你应该从 SkillBaseVo 里拿CD
+	float Cooldown =skillVo->CD*0.001f;  
+
+	float CurrentTime = GetWorld()->GetTimeSeconds();
+	// ⭐ 写入CD
+	SkillNextAvailableTimeMap.Add(SkillID, CurrentTime + Cooldown);
+	
 
 
 
@@ -77,7 +99,7 @@ void USkillComponent::UseSkill(int32 SkillID,int32 CurrentWeaponType, int32 Skil
 		if (!IsValid(visualData))
 		{
 			UE_LOG(LogTemp, Error, TEXT("SkillVisualDataID [%s] 加载失败或无效！"), *skillVo->skillVisualDataID);
-		    return;
+		    return false;
 		}
 		UAnimInstance* AnimInst = attacker->GetMesh()->GetAnimInstance();
 		AnimInst->Montage_Play(visualData->SkillMontage);
@@ -88,10 +110,15 @@ void USkillComponent::UseSkill(int32 SkillID,int32 CurrentWeaponType, int32 Skil
 		FirstSkillVfxContext.SkillBaseVo=skillVo;
 		FirstSkillVfxContext.SkillVisualDataAsset= visualData;
 		FirstSkillMagicEffectClass=visualData->MagicEffectClass;
-	 
+		if (visualData->SkillLogicBase)
+		{
+			FirstSkillVfxContext.SkillLogic=  NewObject<USkillLogicBase>(this, visualData->SkillLogicBase);
+		}
+	   return true;
 	
 	 
 	}
+	return false;
  
 	
 }
@@ -101,7 +128,7 @@ void USkillComponent::SpawnFirstMagicEffect()
 	//GEngine->AddOnScreenDebugMessage(-1,10,FColor::Yellow,FString::Printf( TEXT("SpawnFirstMagicEffect")));
 	FirstSkillMagicEffect=nullptr;
 	if (FirstSkillVfxContext.SkillBaseVo==nullptr)return;
-	 
+	 if (FirstSkillVfxContext.SkillLogic!=nullptr) FirstSkillVfxContext.SkillLogic->ExecuteOnStart(FirstSkillVfxContext);
 	FirstSkillMagicEffect=AMagicEffect::SpawnMagicEffect(this,FirstSkillMagicEffectClass,FirstSkillVfxContext);
 	FirstSkillVfxContext.SkillBaseVo=nullptr;
 }
@@ -112,4 +139,29 @@ void USkillComponent::SpawnFlyMagicEffect()
 	FirstSkillMagicEffect->SpawnNextMagicEffect();
 	FirstSkillMagicEffect=nullptr;
 }
-  
+
+bool USkillComponent::IsSkillReady(int32 SkillID) const
+{
+	float CurrentTime = GetWorld()->GetTimeSeconds();
+
+	if (const float* NextTime = SkillNextAvailableTimeMap.Find(SkillID))
+	{
+		return CurrentTime >= *NextTime;
+	}
+
+	// 没记录过 → 默认可用
+	return true;
+}
+float USkillComponent::GetSkillRemainingCD(int32 SkillID) const
+{
+	if (!GetWorld()) return 0.f;
+
+	float CurrentTime = GetWorld()->GetTimeSeconds();
+
+	if (const float* NextTime = SkillNextAvailableTimeMap.Find(SkillID))
+	{
+		return FMath::Max(0.f, *NextTime - CurrentTime);
+	}
+
+	return 0.f;
+}

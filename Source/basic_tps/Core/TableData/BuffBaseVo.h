@@ -16,7 +16,8 @@ enum class EBuffAttribute : uint8
 	DeathBlow = 103,//斩杀 瞬时效果 伤害前计算
 	LifeSteal=104,// 吸血 瞬时效果 伤害后计算
 	IgnoreArmor=105,//忽视防御
-	Frozen =106//冻结
+	Frozen =106,//冻结
+	IceShield=107,//寒冰盾 加护甲 并冻结攻击者
 	/** 1. 支持：枚举 == 数字 (EBuffAttribute == int32) */
 
 };

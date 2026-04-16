@@ -21,7 +21,7 @@ public:
     UFUNCTION(BlueprintCallable, Category = "CharacterData")
     void AddCurrentHP(int value);
     UFUNCTION(BlueprintCallable, Category = "CharacterData")
-    void CostCurrentHP(int value);
+    bool CostCurrentHP(int value);
 
     UFUNCTION(BlueprintCallable,BlueprintPure, Category = "CharacterData")
     int32 GetCurrentMP();
@@ -32,7 +32,7 @@ public:
     UFUNCTION(BlueprintCallable, Category = "CharacterData")
     void AddCurrentMP(int value);
     UFUNCTION(BlueprintCallable, Category = "CharacterData")
-    void CostCurrentMP(int value);
+    bool CostCurrentMP(int value);
     
     UFUNCTION(BlueprintCallable,BlueprintPure, Category = "CharacterData")
     int32 GetAttribute(int32 AttributeID);

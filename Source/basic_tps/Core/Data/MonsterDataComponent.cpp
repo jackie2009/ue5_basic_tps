@@ -29,7 +29,7 @@ void UMonsterDataComponent::BeginPlay()
  
   void UMonsterDataComponent::InitWithBaseID(int32 BaseID)
 {
-	auto* TableManager = UTableDataManagerSubsystem::Get(this);
+	auto* TableManager = UTableDataManagerSubsystem::Get();
     
 	if (!TableManager) return; // 如果在构造函数或非法时机调用，这里会直接拦截
  

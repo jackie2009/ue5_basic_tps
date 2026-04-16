@@ -46,16 +46,7 @@ public:
 	int32 distanceTarget;      // 释放距离
 	UPROPERTY(EditAnywhere)
 	int32 CD;                  // 冷却延迟
-	UPROPERTY(EditAnywhere)
-	int32 isBuffForSelf;       // buff是否给自己
-	UPROPERTY(EditAnywhere)
-	int32 buffID;              // 产生的buff ID
-	UPROPERTY(EditAnywhere)
-	int32 buffRandom;          // buff作用成功率
-	UPROPERTY(EditAnywhere)
-	int32 buffLife;    // buff持续时间
-	UPROPERTY(EditAnywhere)
-	TArray<int32> buffValue;   // buff属性值
+	
 	UPROPERTY(EditAnywhere)
 	FString icon;              // 图标
 	UPROPERTY(EditAnywhere)

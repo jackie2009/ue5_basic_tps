@@ -84,12 +84,12 @@ int32 UBuffComponent::GetBuffValue(int32 BuffAttType) const
     return TotalValue;
 }
 
-int32 UBuffComponent::GetBuffValue(EBuffAttribute BuffType, TSharedPtr<FBuffVo> WorkingBuffVo)
+int32 UBuffComponent::GetBuffValue(EBuffAttribute BuffType, const FBuffVo &WorkingBuffVo)
 {
     int32 TotalValue = 0;
-    if (WorkingBuffVo!=nullptr&&WorkingBuffVo->BaseVo->attribute == static_cast<int32> (BuffType))
+    if (WorkingBuffVo.BaseID!=0&&WorkingBuffVo.BaseVo->attribute == static_cast<int32> (BuffType))
     {
-        TotalValue+= WorkingBuffVo->Value;
+        TotalValue+= WorkingBuffVo.Value;
     }
     TotalValue+=GetBuffValue( static_cast<int32> (BuffType));
     return TotalValue;
@@ -243,8 +243,8 @@ void UBuffComponent::CalBuffAttributes()
     {
         CalcInterface->CalBaseAttributes();
     }
-
- 
+    BaseDataComp->Attributes[AttributeEnum::Defence1]+=GetBuffValue((int32)EBuffAttribute::IceShield); 
+    BaseDataComp->Attributes[AttributeEnum::Defence2]+=GetBuffValue((int32)EBuffAttribute::IceShield);
     for (const FBuffVo& Item : BuffList)
     {
         if (Item.BaseVo && Item.BaseVo->attribute>0&& Item.BaseVo->attribute<AttributeEnum::MAX)

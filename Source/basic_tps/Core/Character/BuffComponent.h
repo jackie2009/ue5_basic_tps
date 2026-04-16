@@ -19,7 +19,7 @@ public:
  
 	int32 GetBuffValue(int32 BuffAttType) const;
 
-	int32 GetBuffValue(EBuffAttribute BuffType, TSharedPtr<FBuffVo> WorkingBuffVo);
+	int32 GetBuffValue(EBuffAttribute BuffType, const FBuffVo &WorkingBuffVo);
 	
 	
 

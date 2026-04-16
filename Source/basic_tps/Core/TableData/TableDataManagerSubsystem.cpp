@@ -22,11 +22,12 @@ static const FString BuffBasePath = TEXT("/Game/TableData/BuffBaseVo.BuffBaseVo"
  static const FString WeaponTypeBasePath = TEXT("/Game/TableData/WeaponTypeBaseVo.WeaponTypeBaseVo");
  
 static const FString SkillBasePath = TEXT("/Game/TableData/SkillBaseVo.SkillBaseVo");
-
+// 初始化静态指针，这行代码负责为 Instance 分配内存
+UTableDataManagerSubsystem* UTableDataManagerSubsystem::Instance = nullptr;
 void UTableDataManagerSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
     Super::Initialize(Collection);
- 
+    Instance = this;
     GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red, TEXT("UTableDataManagerSubsystem"));
     // 同步加载所有表格
 
@@ -41,7 +42,15 @@ void UTableDataManagerSubsystem::Initialize(FSubsystemCollectionBase& Collection
     LoadTableToGroupMap<FSkillBaseVo>(SkillBasePath, SkillBaseMap);
 }
 
+void UTableDataManagerSubsystem::Deinitialize()
+{
  
+    
+    Instance = nullptr;
+    
+    Super::Deinitialize();
+}
+
 
 template<typename TVo>
 void UTableDataManagerSubsystem::LoadTableToMap(const FString& Path, TMap<int32, TVo*>& OutMap)

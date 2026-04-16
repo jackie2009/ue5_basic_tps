@@ -34,15 +34,24 @@ public:
 	 
 	FEffectContext   FirstSkillVfxContext;
 	TSubclassOf<AMagicEffect>  FirstSkillMagicEffectClass;
-	UFUNCTION(BlueprintCallable, Category = "Combat")
-    void  UseSkill(   int32 SkillID,int32 CurrentWeaponType,int32 SkillLevel=1);
+	UFUNCTION(BlueprintCallable, Category = "Combat",meta=(ExpandBoolAsExecs="ReturnValue"))
+    bool  UseSkill(   int32 SkillID,int32 CurrentWeaponType,int32 SkillLevel=1);
  
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	void  SpawnFirstMagicEffect();
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	void  SpawnFlyMagicEffect();
+
+
+	// 是否CD可用
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	bool IsSkillReady(int32 SkillID) const;
+	UFUNCTION(BlueprintCallable, Category="Combat")
+	float GetSkillRemainingCD(int32 SkillID) const;
 private:
- 	 
+	// 技能CD：SkillID → 下次可用时间
+	UPROPERTY()
+	TMap<int32, float> SkillNextAvailableTimeMap;
 };
 
 

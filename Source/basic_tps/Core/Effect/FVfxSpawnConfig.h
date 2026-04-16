@@ -4,6 +4,7 @@
  
 
 #include "FVfxSpawnConfig.generated.h"
+class USkillLogicBase;
 class AMagicEffect;
 struct  FSkillBaseVo;
 class ACombatCharacter;
@@ -102,7 +103,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Visual")
 	TSubclassOf<AMagicEffect> MagicEffectClass;
 
-
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Visual")
+	TSubclassOf<USkillLogicBase> SkillLogicBase;
+	
 	
 
 	//衰减配置
@@ -203,6 +206,7 @@ public:
 	
  
 	TObjectPtr<USkillVisualDataAsset> SkillVisualDataAsset = nullptr;
+	TObjectPtr<USkillLogicBase> SkillLogic=nullptr;
 	float distanceToEffect;
      
 };

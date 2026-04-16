@@ -4,13 +4,14 @@
 #include "basic_tps/Core/Character/CombatCharacter.h"
 #include "basic_tps/Core/Data/CharacterDataComponent.h"
 #include "basic_tps/Core/Data/CombatTypes.h"
-
+ 
 #include "basic_tps/Core/TableData/SkillBaseVo.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
 #include "basic_tps/Core/Character/BuffComponent.h"
 #include "basic_tps/Core/Character/CombatComponent.h"
 #include "basic_tps/Core/Character/SkillComponent.h"
+#include "basic_tps/Core/Effect/SkillLogicBase.h"
 #include "basic_tps/Core/TableData/TableDataManagerSubsystem.h"
 
 FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACombatCharacter* Defencer, const FEffectContext &  EffectContext)
@@ -33,19 +34,41 @@ FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACom
     Result.SkillVo=&SkillVo;
     // 阶段 0 技能合法性检查 不是伤害类技能不走伤害流水线
     int32 SkillEffectType = SkillVo.EffectType;
-    bool bIsHarmSkill = (SkillEffectType > 0) || (SkillVo.Power.Num() > 0);
+    bool bIsHarmSkill = SkillEffectType > 0;
     bool isPureBuffEffect = !bIsHarmSkill;
 
+
+    // 创建buff
+    if (Result.Attacker&&EffectContext.SkillLogic!=nullptr)
+    {
+        UCombatResultWrapper* Wrapper = NewObject<UCombatResultWrapper>();
+        Wrapper->Data = Result;
+        
+        EffectContext.SkillLogic->OnExecuteSkillLogic(Wrapper);
+        Result=   Wrapper->Data;
+       if (Result.OnDamageFinishBuffVo.BaseID>0)Result.OnDamageFinishBuffVo.InitBaseData();
+        //  
+        // if (BuffVo.BaseVo != nullptr)
+        // {
+        //     BuffVo.FromRole=Result.Attacker;
+        //     BuffVo.EffectRole=Result.Victim;
+        //     if (BuffVo.Duration <= 0)
+        //         Result.WorkingBuffVo =  MakeShared<FBuffVo>(MoveTemp(BuffVo));
+        //     else
+        //         Result.OnDamageFinishBuffVo =  MakeShared<FBuffVo>(MoveTemp(BuffVo));
+        // }
+
+    }
     // 阶段 I：初始化快照 (Snapshot Acquisition)
     // 就算不产生伤害 也需要初始化创建buff
     CaptureAttributeSnapshot(Result,isPureBuffEffect);
-    if (useFadeoffForBuffTime&&WeightAfterFadeoff<1&&Result.OnDamageFinishBuffVo!=nullptr)
+    if (useFadeoffForBuffTime&&WeightAfterFadeoff<1&&Result.OnDamageFinishBuffVo.BaseID!=0)
     {
-        Result.OnDamageFinishBuffVo->Duration = FMath::RoundToInt32(  Result.OnDamageFinishBuffVo->Duration*WeightAfterFadeoff);
+        Result.OnDamageFinishBuffVo.Duration = FMath::RoundToInt32(  Result.OnDamageFinishBuffVo.Duration*WeightAfterFadeoff);
     }
     if (!bIsHarmSkill) return Result;
 
-
+ 
   
     
     //阶段 II：前置伤害的buff修正 忽视防御 低血量斩杀等 (Source-Side Pre-Processing)
@@ -75,24 +98,7 @@ FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACom
 
 void UCombatCalculator::CaptureAttributeSnapshot(FCombatResult& Result,bool bPureBuffEffect)
 {
-    if (Result.Attacker)
-    {
-        //创建buff
-        if (Result.SkillVo->buffID > 0 && (FMath::FRand() * 100.f) < Result.SkillVo->buffRandom)
-        {
-            
-            TSharedPtr<FBuffVo> BuffVo = MakeShared<FBuffVo>(Result.SkillVo->isBuffForSelf ? Result.Attacker : Result.Victim, Result.Attacker,
-                                      Result.SkillVo->buffID, Result.SkillVo->buffLife, Result.SkillVo->buffValue[0]);
-            
-            if (BuffVo->BaseVo != nullptr)
-            {
-                if (Result.SkillVo->buffLife <= 0)
-                    Result.WorkingBuffVo = BuffVo;
-                else
-                    Result.OnDamageFinishBuffVo = BuffVo;
-            }
-        }
-    }
+
 
 
     if (bPureBuffEffect)return;
@@ -106,7 +112,7 @@ void UCombatCalculator::CaptureAttributeSnapshot(FCombatResult& Result,bool bPur
         Result.AttackPoint = Result.Attacker->CharacterDataComp->GetAttribute(DamageAttrIndex);
 
         
-        int32 SkillAttack = Result.SkillVo->Power.Num()<1?0:  Result.SkillVo->Power[0]; //UGameModel::GetDynamicTableValue(AttackerAttr, SkillVo.Power);
+        int32 SkillAttack = Result.SkillBaseHarm; //UGameModel::GetDynamicTableValue(AttackerAttr, SkillVo.Power);
         Result.AttackPoint +=SkillAttack;
     }
    

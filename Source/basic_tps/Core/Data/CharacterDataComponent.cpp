@@ -37,10 +37,11 @@ void UCharacterDataComponent::AddCurrentHP(int value)
  
 }
 
-void UCharacterDataComponent::CostCurrentHP(int value) 
+bool UCharacterDataComponent::CostCurrentHP(int value) 
 {
 	 
 	Hp = FMath::Clamp(Hp - value, 0, GetMaxHP());
+	return true;
  }
 
 int32 UCharacterDataComponent::GetCurrentMP() 
@@ -65,10 +66,11 @@ void UCharacterDataComponent::AddCurrentMP(int value)
  
 }
 
-void UCharacterDataComponent::CostCurrentMP(int value) 
+bool UCharacterDataComponent::CostCurrentMP(int value) 
 {
-	 
+	 if (Mp<value) return false;
 	Mp = FMath::Clamp(Mp - value, 0, GetMaxMP());
+	return  true;
 }
 
 int32 UCharacterDataComponent::GetAttribute(int32 AttributeID)

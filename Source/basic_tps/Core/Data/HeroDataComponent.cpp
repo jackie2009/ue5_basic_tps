@@ -37,7 +37,7 @@ void UHeroDataComponent::BeginPlay()
 void UHeroDataComponent::UpdateLevel(int32 level)
 {
 	// 传入 this，函数会自动判断当前环境是否能拿 Subsystem
-	auto* TableManager = UTableDataManagerSubsystem::Get(this);
+	auto* TableManager = UTableDataManagerSubsystem::Get();
     
 	if (!TableManager) return; // 如果在构造函数或非法时机调用，这里会直接拦截
  
