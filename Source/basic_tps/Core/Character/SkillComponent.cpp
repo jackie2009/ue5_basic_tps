@@ -104,7 +104,7 @@ bool USkillComponent::UseSkill(int32 SkillID,int32 CurrentWeaponType, int32 Skil
 		    return false;
 		}
 		UAnimInstance* AnimInst = attacker->GetMesh()->GetAnimInstance();
-		AnimInst->Montage_Play(visualData->SkillMontage);
+		AnimInst->Montage_Play(visualData->SkillMontage,1,EMontagePlayReturnType::MontageLength,0,false);
 		 
 		 
 		FirstSkillVfxContext.Instigator=attacker;
