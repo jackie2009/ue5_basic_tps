@@ -211,16 +211,16 @@ struct FCombatResult
 
  
 	const FSkillBaseVo* SkillVo = nullptr;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	 
 	//这次伤害计算过程中 技能附带的 持续生命为0 的 buff 比如 忽视防御等，
 	 FBuffVo WorkingBuffVo ;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	 
 	int SkillBaseHarm;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	 
 	//这次伤害计算结束 给目标挂上去的  buff 持续时间>0，
-	 FBuffVo  OnDamageFinishBuffVo ;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	 
+	 
 	 TArray<FBuffVo>  OnDamageFinishBuffVoArray ;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

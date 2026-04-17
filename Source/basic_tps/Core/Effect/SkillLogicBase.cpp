@@ -2,7 +2,7 @@
 
 #include "basic_tps/Core/Character/BuffComponent.h"
 
-void USkillLogicBase::SetBaseSkillBaseHarm(int32 attackPoint)
+void USkillLogicBase::SetSkillBaseHarm(int32 attackPoint)
 {
 	CombatResult.SkillBaseHarm=attackPoint;
 }
@@ -16,7 +16,7 @@ void USkillLogicBase::AddBuffImmediate(FBuffVo BuffVo)
 void USkillLogicBase::AddBuffDelay(FBuffVo BuffVo)
 {
 	BuffVo.InitBaseData();
-	CombatResult.OnDamageFinishBuffVo=BuffVo;
+	CombatResult.OnDamageFinishBuffVoArray.Add(BuffVo);
 }
 
 void USkillLogicBase::AddBuffForTemp(FBuffVo BuffVo)

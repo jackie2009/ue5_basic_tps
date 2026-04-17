@@ -40,16 +40,19 @@ void UCombatComponent::TryHurtTarget(ACombatCharacter* Target, const FEffectCont
 	auto attacker=Cast<ACombatCharacter>(GetOwner());
 	 
 	auto rst=UCombatCalculator::DamagePipeline(attacker,Target,EffectContext);
-	if (Target->BuffComp->GetBuffValue((int32)EBuffAttribute::IceShield)>0)
+	if (Target->BuffComp->GetBuffValue((int32)EBuffAttribute::IceShield)>0||
+		Target->BuffComp->GetBuffValue((int32)EBuffAttribute::IceShield_Frozen)>0)
 	{
 	TSharedPtr<FBuffVo> FrozenBuffVo = MakeShared<FBuffVo>(attacker ,Target,
     								 105, 3, 1);	
 		attacker->BuffComp->AddBuff(*FrozenBuffVo);
+		Target->BuffComp->CostBuffValue((int32)EBuffAttribute::IceShield_Frozen,1);
 	}
-	 if (rst.OnDamageFinishBuffVo.BaseID!=0&&rst.OnDamageFinishBuffVo.EffectRole!=nullptr)
-	 {
-		 rst.OnDamageFinishBuffVo.EffectRole->BuffComp->AddBuff(rst.OnDamageFinishBuffVo);
-	 }
+	for (auto &BuffVo : rst.OnDamageFinishBuffVoArray)
+	{
+		if (BuffVo.EffectRole)BuffVo.EffectRole->BuffComp->AddBuff(BuffVo);
+	}
+	 
 	
 	//rst.SkillVo->isBuffForSelf
 	

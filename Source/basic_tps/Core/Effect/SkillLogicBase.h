@@ -28,7 +28,7 @@ public:
 
 	//以下函数 不能在 start里调用 这时候还没 CombatResult
 	UFUNCTION(BlueprintCallable)
-	void SetBaseSkillBaseHarm(int32 attackPoint);
+	void SetSkillBaseHarm(int32 attackPoint);
 	
 	UFUNCTION(BlueprintCallable)
 	void AddBuffImmediate(FBuffVo BuffVo);

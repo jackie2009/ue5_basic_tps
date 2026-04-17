@@ -44,25 +44,19 @@ FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACom
         EffectContext.SkillLogic->CombatResult= Result;
         EffectContext.SkillLogic->ExecuteOnDealSigleTarget();
         Result=EffectContext.SkillLogic->CombatResult;
-       if (Result.OnDamageFinishBuffVo.BaseID>0)Result.OnDamageFinishBuffVo.InitBaseData();
-        //  
-        // if (BuffVo.BaseVo != nullptr)
-        // {
-        //     BuffVo.FromRole=Result.Attacker;
-        //     BuffVo.EffectRole=Result.Victim;
-        //     if (BuffVo.Duration <= 0)
-        //         Result.WorkingBuffVo =  MakeShared<FBuffVo>(MoveTemp(BuffVo));
-        //     else
-        //         Result.OnDamageFinishBuffVo =  MakeShared<FBuffVo>(MoveTemp(BuffVo));
-        // }
+    
 
     }
     // 阶段 I：初始化快照 (Snapshot Acquisition)
     // 就算不产生伤害 也需要初始化创建buff
     CaptureAttributeSnapshot(Result,isPureBuffEffect);
-    if (useFadeoffForBuffTime&&WeightAfterFadeoff<1&&Result.OnDamageFinishBuffVo.BaseID!=0)
+    if (useFadeoffForBuffTime&&WeightAfterFadeoff<1)
     {
-        Result.OnDamageFinishBuffVo.Duration = FMath::RoundToInt32(  Result.OnDamageFinishBuffVo.Duration*WeightAfterFadeoff);
+        for (auto & BuffVo : Result.OnDamageFinishBuffVoArray)
+        {
+          BuffVo.Duration = FMath::RoundToInt32(  BuffVo.Duration*WeightAfterFadeoff);
+        }
+      
     }
     if (!bIsHarmSkill) return Result;
 

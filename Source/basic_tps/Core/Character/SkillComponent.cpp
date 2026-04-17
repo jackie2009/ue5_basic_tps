@@ -111,6 +111,7 @@ bool USkillComponent::UseSkill(int32 SkillID,int32 CurrentWeaponType, int32 Skil
 		FirstSkillVfxContext.TargetActor=nullptr;
 		FirstSkillVfxContext.SkillBaseVo=skillVo;
 		FirstSkillVfxContext.SkillVisualDataAsset= visualData;
+		FirstSkillVfxContext.SkillLogic= nullptr;
 		FirstSkillMagicEffectClass=visualData->MagicEffectClass;
 		if (visualData->SkillLogicBase)
 		{

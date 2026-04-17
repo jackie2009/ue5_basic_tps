@@ -18,6 +18,8 @@ enum class EBuffAttribute : uint8
 	IgnoreArmor=105,//忽视防御
 	Frozen =106,//冻结
 	IceShield=107,//寒冰盾 加护甲 并冻结攻击者
+	IceShield_Armor=108,//寒冰盾:护甲
+	IceShield_Frozen=109,//寒冰盾:冻结
 	/** 1. 支持：枚举 == 数字 (EBuffAttribute == int32) */
 
 };

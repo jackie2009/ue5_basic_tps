@@ -84,6 +84,35 @@ int32 UBuffComponent::GetBuffValue(int32 BuffAttType) const
     return TotalValue;
 }
 
+int32 UBuffComponent::CostBuffValue(int32 BuffAttType, int32 value)
+{
+     
+
+    FBuffVo* Found = BuffList.FindByPredicate([BuffAttType](const FBuffVo& Item)
+    {
+        return Item.BaseVo && Item.BaseVo->attribute == BuffAttType;
+    });
+
+    if (Found)
+    {
+        if (Found->Value > value)
+        {
+            Found->Value-=value;
+            return value;
+        }else
+        {
+            int realCost=Found->Value;
+            Found->Value=0;
+            RemoveBuff(*Found,false);
+            return  realCost;
+        }
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 int32 UBuffComponent::GetBuffValue(EBuffAttribute BuffType, const FBuffVo &WorkingBuffVo)
 {
     int32 TotalValue = 0;
@@ -245,6 +274,9 @@ void UBuffComponent::CalBuffAttributes()
     }
     BaseDataComp->Attributes[AttributeEnum::Defence1]+=GetBuffValue((int32)EBuffAttribute::IceShield); 
     BaseDataComp->Attributes[AttributeEnum::Defence2]+=GetBuffValue((int32)EBuffAttribute::IceShield);
+
+    BaseDataComp->Attributes[AttributeEnum::Defence1]+=GetBuffValue((int32)EBuffAttribute::IceShield_Armor); 
+    BaseDataComp->Attributes[AttributeEnum::Defence2]+=GetBuffValue((int32)EBuffAttribute::IceShield_Armor);
     for (const FBuffVo& Item : BuffList)
     {
         if (Item.BaseVo && Item.BaseVo->attribute>0&& Item.BaseVo->attribute<AttributeEnum::MAX)

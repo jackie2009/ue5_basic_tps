@@ -18,6 +18,8 @@ public:
 
  
 	int32 GetBuffValue(int32 BuffAttType) const;
+	int32 CostBuffValue(int32 BuffAttType,int32 value);
+	
 
 	int32 GetBuffValue(EBuffAttribute BuffType, const FBuffVo &WorkingBuffVo);
 	
