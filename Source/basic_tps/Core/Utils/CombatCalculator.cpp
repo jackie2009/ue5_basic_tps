@@ -36,9 +36,9 @@ FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACom
     int32 SkillEffectType = SkillVo.EffectType;
     bool bIsHarmSkill = SkillEffectType > 0;
     bool isPureBuffEffect = !bIsHarmSkill;
+    Result.SkillBaseHarm=SkillVo.Power.Num()>0?SkillVo.Power[0]:0;
 
-
-    // 创建buff
+    // 设置 基础伤害 与创建buff 等具体逻辑蓝图执行
     if (Result.Attacker&&EffectContext.SkillLogic!=nullptr)
     {
         EffectContext.SkillLogic->CombatResult= Result;
