@@ -204,8 +204,9 @@ public:
  
 	FSkillBaseVo * SkillBaseVo;
 	
- 
+	UPROPERTY()
 	TObjectPtr<USkillVisualDataAsset> SkillVisualDataAsset = nullptr;
+	UPROPERTY()
 	TObjectPtr<USkillLogicBase> SkillLogic=nullptr;
 	float distanceToEffect;
      
