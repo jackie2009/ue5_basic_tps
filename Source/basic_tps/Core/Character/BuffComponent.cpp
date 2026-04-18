@@ -213,14 +213,28 @@ void UBuffComponent::RemoveAllBuffs()
 
 void UBuffComponent::ExecuteDoT(FBuffVo& Buff)
 {
-    auto  owner =Character;  
-    if (Buff.BaseVo->attribute == EBuffAttribute::OnPoison)
+    auto owner = Character;
+    switch (static_cast<EBuffAttribute>(Buff.BaseVo->attribute))
     {
-        FCombatResult cbResult;
-        cbResult.Attacker =Buff.FromRole ;
-        cbResult.FinalDamage =Buff.Value ;
-        owner->CombatComp->HandleHurt(cbResult);
+        //中毒buff 每x秒执行一次 受伤处理
+        case EBuffAttribute::OnPoison:
+            {
+                FCombatResult cbResult;
+                cbResult.Attacker = Buff.FromRole;
+                cbResult.FinalDamage = Buff.Value;
+                owner->CombatComp->HandleHurt(cbResult);
+            }
+        break;
+        //回血buff 每x秒执行一次  增加HP
+        case EBuffAttribute::AddHP:
+            {
+                owner->CharacterDataComp->AddCurrentHP(Buff.Value);
+            }
+        break;
+        default:
+        break;
     }
+ 
 }
 
 void UBuffComponent::TryDestroyBuffView(FBuffVo& BuffVo)
