@@ -25,8 +25,8 @@ public:
 	static void PreDamageProcess( FCombatResult& Result);
 	static void EvaluateCoreFormula( FCombatResult& Result);
 	static void AdjustFinalDamage( FCombatResult& Result);
-	static void CommitActualDamage(const FCombatResult& Result);
-	static void PostDamageProcess(const FCombatResult& Result);
+	static void CommitActualDamage( FCombatResult& Result);
+	static void PostDamageProcess( FCombatResult& Result);
 
 	/**  伤害流程总入口，包含 预处理 基础伤害 后处理等 全套计算的流水线。普通的持续性buff放这个后面添加
 	 */

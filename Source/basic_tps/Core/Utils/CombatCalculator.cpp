@@ -65,6 +65,15 @@ FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACom
     
     //阶段 II：前置伤害的buff修正 忽视防御 低血量斩杀等 (Source-Side Pre-Processing)
     PreDamageProcess(Result);
+    // 设置   具体逻辑蓝图 前置伤害修正
+    if (Result.Attacker&&EffectContext.SkillLogic!=nullptr)
+    {
+        EffectContext.SkillLogic->CombatResult= Result;
+        EffectContext.SkillLogic->PreDamageProcess();
+        Result=EffectContext.SkillLogic->CombatResult;
+    
+
+    }
     
     // 阶段 III：核心核心公式解算 (Mathematical Evaluation)
     // 执行：WoW 除法公式、减法保底、等级压制修正
@@ -74,9 +83,20 @@ FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACom
     // 阶段 IV：伤害结果修正 (伤害加深、百分比减伤、护盾抵扣)
     // 此时已经有 FinalDamage 了，Buff 可以基于这个值做乘除法
     AdjustFinalDamage(Result); 
+    // 设置   具体逻辑蓝图 伤害结果修正
+    if (Result.Attacker&&EffectContext.SkillLogic!=nullptr)
+    {
+        EffectContext.SkillLogic->CombatResult= Result;
+        EffectContext.SkillLogic->AdjustFinalDamage();
+        Result=EffectContext.SkillLogic->CombatResult;
+
+    }
+    
 
 
    Result.FinalDamage=FMath::RoundToInt32(Result.FinalDamage* WeightAfterFadeoff);
+    
+    
     // 阶段 V：伤害应用与分流 (Damage Application)
     // 执行：实际扣除 HP
     // 输出：ActualDamage (真正扣掉的血量)
@@ -84,6 +104,14 @@ FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACom
     
     //阶段 VI：后置反馈与副作用 根据最终伤害 攻击者吸血等 (Post-Process & Feedback)
     PostDamageProcess(Result);
+    // 设置   具体逻辑蓝图 后置反馈与副作用
+    if (Result.Attacker&&EffectContext.SkillLogic!=nullptr)
+    {
+        EffectContext.SkillLogic->CombatResult= Result;
+        EffectContext.SkillLogic->PostDamageProcess();
+        Result=EffectContext.SkillLogic->CombatResult;
+
+    }
     
     return Result;
 }
@@ -121,23 +149,11 @@ void UCombatCalculator::PreDamageProcess(FCombatResult& Result)
     if (Result.Attacker)
     {
 
-        //攻击方有忽视防御buff 防御快照数据为0
-      if ( Result.Attacker->BuffComp->GetBuffValue(EBuffAttribute::IgnoreArmor,Result.WorkingBuffVo)>0)
-      {
-          Result.DefencePoint=0;
-      }
+    
         
         Result.bIsCritical = (FMath::FRand() * 100.f) <Result.Attacker->CharacterDataComp->GetAttribute(AttributeEnum::Critical);
-
-        if (Result.Victim)
-        {
-            int32 DeathBlow = Result.Attacker->BuffComp->GetBuffValue(EBuffAttribute::DeathBlow,Result.WorkingBuffVo);
-            if (DeathBlow > 0 && (DeathBlow > Result.Victim->CharacterDataComp->GetCurrentHP() * 100 / Result.Victim->CharacterDataComp->GetMaxHP()))
-              {
-                  Result.Damage =999999;
-                  Result.bIsDeathBlow = true;
-               }
-        }
+ 
+     
          
     }
     if (Result.Victim)
@@ -193,7 +209,7 @@ void UCombatCalculator::AdjustFinalDamage(FCombatResult& Result)
     //Attack += (Attack * FinalAttackHarmPercent) / 100;
 }
 
-void UCombatCalculator::CommitActualDamage(const FCombatResult& Result)
+void UCombatCalculator::CommitActualDamage( FCombatResult& Result)
 {
     if (Result.Victim)
     {
@@ -202,16 +218,10 @@ void UCombatCalculator::CommitActualDamage(const FCombatResult& Result)
     
 }
 
-void UCombatCalculator::PostDamageProcess(const FCombatResult& Result)
+void UCombatCalculator::PostDamageProcess( FCombatResult& Result)
 {
-
-    // 6. 计算吸血 
-    if (Result.Attacker)
-    {
-        int32 LifestealPercent = Result.Attacker->BuffComp->GetBuffValue( EBuffAttribute::LifeSteal,Result.WorkingBuffVo);
-         auto LifestealHp = (LifestealPercent * Result.FinalDamage) / 100;
-        if (LifestealHp>0)  Result.Attacker->CharacterDataComp->AddCurrentHP(LifestealHp);
-    }
+//基本留空 预留函数 主要处理在各自技能蓝图
+ 
 }
 
 

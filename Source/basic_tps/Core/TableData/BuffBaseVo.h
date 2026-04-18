@@ -9,13 +9,10 @@
 UENUM(BlueprintType)
 enum class EBuffAttribute : uint8
 {
-	 NONE=0,
+	NONE=0,
 	INDEX_OFFSET = 100,
 	OnPoison = 101,//中毒 持续效果 
 	AddHP = 102,//回血 持续效果 
-	DeathBlow = 103,//斩杀 瞬时效果 伤害前计算
-	LifeSteal=104,// 吸血 瞬时效果 伤害后计算
-	IgnoreArmor=105,//忽视防御
 	Frozen =106,//冻结
 	IceShield=107,//寒冰盾 加护甲 并冻结攻击者
 	IceShield_Armor=108,//寒冰盾:护甲

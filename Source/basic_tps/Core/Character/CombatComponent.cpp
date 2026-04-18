@@ -59,7 +59,7 @@ void UCombatComponent::TryHurtTarget(ACombatCharacter* Target, const FEffectCont
 	
 }
 
-void UCombatComponent::HandleHurt(const FCombatResult& Result)
+void UCombatComponent::HandleHurt( FCombatResult& Result)
 {
 	auto character=Cast<ACombatCharacter>(GetOwner());
 	if (character->IsAlive()==false)return;
@@ -84,6 +84,7 @@ void UCombatComponent::HandleHurt(const FCombatResult& Result)
 	}
 	if (Result.FinalDamage>0)
 	{
+		Result.FinalDamage=FMath::Min(Result.FinalDamage,character->CharacterDataComp->GetCurrentHP());
 	   character->SelfOnHurt(Result.FinalDamage, FVector::Zero());
 	}
 	// 通知蓝图显示伤害数字、播受击动画
@@ -96,11 +97,8 @@ void UCombatComponent::HandleHurt(const FCombatResult& Result)
 		AddAggro(Result.Attacker, FMath::Max(1, Result.FinalDamage));
 	}
 	// 1. 调用属性组件扣血
-	if (auto* AttrComp = GetOwner()->FindComponentByClass<UCharacterDataComponent>())
-	{
-		AttrComp->CostCurrentHP(Result.FinalDamage);
-		
-	}
+	character->CharacterDataComp->CostCurrentHP(Result.FinalDamage);
+	 
 	if (character->IsAlive()==false)
 	{
 		character->SelfOnDead();

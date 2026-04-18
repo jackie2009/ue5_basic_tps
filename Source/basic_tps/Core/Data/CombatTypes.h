@@ -80,7 +80,7 @@ struct FBuffVo
 
 public:
 	// 视觉表现：在 UE 中建议使用 TWeakObjectPtr 防止特效销毁后引用失效
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<AActor> View;
 
 	UPROPERTY(BlueprintReadWrite)
@@ -96,10 +96,10 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	int32 BaseID;
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadOnly)
 	float DieTime;
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadOnly)
 	float NextEffectTime;
 
 	UPROPERTY(BlueprintReadWrite)
@@ -181,25 +181,25 @@ struct FCombatResult
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite)
 	int32 Damage = 0;
 	
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite)
 	int32 AttackPoint=0;
 	
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite)
 	int32 DefencePoint=0;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite)
 	bool bIsMiss = false;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite)
 	bool bIsCritical = false;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite)
 	bool bIsBlock = false;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite)
 	bool bIsDeathBlow = false; // 是否触发了斩杀
 
 
