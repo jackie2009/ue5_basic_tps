@@ -73,91 +73,7 @@ namespace SkillGroupTargetsEnum {
 
  
 
-
-USTRUCT(BlueprintType)
-struct FBuffVo
-{
-	GENERATED_BODY()
-
-public:
-	// 视觉表现：在 UE 中建议使用 TWeakObjectPtr 防止特效销毁后引用失效
-	UPROPERTY(BlueprintReadOnly)
-	TObjectPtr<AActor> View;
-
-	UPROPERTY(BlueprintReadWrite)
-	TObjectPtr<ACombatCharacter> EffectRole;
-
-	UPROPERTY(BlueprintReadWrite)
-	TObjectPtr<ACombatCharacter> FromRole;
-
-	// 原始数据引用（假设这些是通过数据表获取的 const 指针）
-	const FBuffBaseVo* BaseVo;
-	const FSkillBaseVo* FromSkill;
-
-	UPROPERTY(BlueprintReadWrite)
-	int32 BaseID;
-
-	UPROPERTY(BlueprintReadOnly)
-	float DieTime;
-
-	UPROPERTY(BlueprintReadOnly)
-	float NextEffectTime;
-
-	UPROPERTY(BlueprintReadWrite)
-	float Duration; // 建议用 float，UE 时间轴全是 float
-
-	UPROPERTY(BlueprintReadWrite)
-	int32 Value;
-	// 核心修复：定义“相等”即“BaseID相同”
-	bool operator==(const FBuffVo& Other) const
-	{
-		return BaseID == Other.BaseID;
-	}
-	// 默认构造函数（UE 序列化需要）
-	FBuffVo() 
-		: View(nullptr), EffectRole(nullptr), FromRole(nullptr)
-		, BaseVo(nullptr), FromSkill(nullptr), BaseID(0)
-		, DieTime(0.f), NextEffectTime(0.f), Duration(0.f), Value(0)
-	{
-	 
-	}
-
-	// 带参构造函数直接实现在这里
-	FBuffVo(ACombatCharacter* InEffectRole, ACombatCharacter* InFromRole, int32 InBaseID, float InLastTime, int32 InValue, const FSkillBaseVo* InFromSkill = nullptr)
-		: View(nullptr)
-		, EffectRole(InEffectRole)
-		, FromRole(InFromRole)
-		, BaseVo(nullptr) // 注意：这里需要在外部或通过单例赋值
-		, FromSkill(InFromSkill)
-		, BaseID(InBaseID)
-		, DieTime(0.f)
-		, NextEffectTime(0.f)
-		, Duration(InLastTime)
-		, Value(InValue)
-	{
-	
-		InitBaseData();
-	}
-	void InitBaseData()
-	{
-		BaseVo=nullptr;
-		auto buffBaseVoPtr=UTableDataManagerSubsystem::Get()->BuffBaseMap.Find(BaseID);
-		if (buffBaseVoPtr!=nullptr){ BaseVo=*buffBaseVoPtr;}
-	}
-
-	// 功能函数
-	int32 UseAmount(int32 Amount)
-	{
-		Value -= Amount;
-		return Value;
-	}
-
-	// 辅助逻辑
-	bool IsExpired(float CurrentTime) const 
-	{ 
-		return CurrentTime > DieTime; 
-	}
-};
+ 
 
 
 UENUM(BlueprintType)
@@ -213,8 +129,7 @@ struct FCombatResult
  
 	const FSkillBaseVo* SkillVo = nullptr;
 	 
-	//这次伤害计算过程中 技能附带的 持续生命为0 的 buff 比如 忽视防御等，
-	 FBuffVo WorkingBuffVo ;
+	 
 	 
 	int SkillBaseHarm;
 

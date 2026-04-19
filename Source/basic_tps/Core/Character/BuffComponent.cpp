@@ -26,25 +26,24 @@ void UBuffComponent::AddBuff(UBuffLogicBase *NewBuff) {
     NewBuff->OwnerBuff=this;
     // 1. 同组覆盖逻辑 (类似 Unity 里的 group 查找)
     for (int32 i = BuffList.Num() - 1; i >= 0; --i) {
-        if (BuffList[i]->BaseVo->group == NewBuff->BaseVo->group) {
+        if (BuffList[i]->group == NewBuff->group) {
             RemoveBuff(i);
         }
     }
 
     // 2. 初始化时间
     auto StartTime = GetWorld()->GetTimeSeconds();
-    NewBuff->NextEffectTime = StartTime + NewBuff->BaseVo->tick;
+    NewBuff->NextEffectTime = StartTime + NewBuff->tick;
     NewBuff->DieTime = (NewBuff->Duration > 0) ? (StartTime + NewBuff->Duration) : MAX_FLT;
      
    
 
     //创建特效
-    auto Res = NewBuff->BaseVo->buffEffectRes;
-    if (!Res.IsEmpty())
+    auto Res = NewBuff->buffEffectRes;
+    if (Res)
     {
-        FString AssetPath = FString::Printf(TEXT("/Game/CombatActors/BuffEffect/%s.%s_C"), *Res, *Res);
-
-        UClass* BuffEffectClass = LoadObject<UClass>(nullptr, *AssetPath);
+ 
+        UClass* BuffEffectClass =Res.Get();
         if (IsValid(BuffEffectClass))
         {
             UWorld* World = GetWorld();
@@ -67,54 +66,7 @@ void UBuffComponent::AddBuff(UBuffLogicBase *NewBuff) {
     CalBuffAttributes();
 }
  
- 
-int32 UBuffComponent::GetBuffValue(int32 BuffAttType) const
-{
-    int32 TotalValue = 0;
-
-    // 使用 const 自动推导迭代器，保证读取安全
-    for (auto Item : BuffList)
-    {
-        // 假设 FBuffVo 结构体里包含 BaseVo 指针或直接有 Attribute 字段
-        // 这里根据你之前的结构体定义来匹配
-        if (Item->BaseVo && Item->BaseVo->attribute == BuffAttType)
-        {
-            TotalValue += Item->Value;
-        }
-    }
- 
-    return TotalValue;
-}
-
-int32 UBuffComponent::CostBuffValue(int32 BuffAttType, int32 value)
-{
-     
-
-   auto* FoundPtr = BuffList.FindByPredicate([BuffAttType](const UBuffLogicBase* Item)
-    {
-        return Item->BaseVo && Item->BaseVo->attribute == BuffAttType;
-    });
-
-    if (FoundPtr)
-    {
-        UBuffLogicBase* Found = *FoundPtr;
-        if (Found->Value > value)
-        {
-            Found->Value-=value;
-            return value;
-        }else
-        {
-            int realCost=Found->Value;
-            Found->Value=0;
-            RemoveBuff(Found,false);
-            return  realCost;
-        }
-    }
-    else
-    {
-        return 0;
-    }
-}
+  
 
  
 
@@ -140,11 +92,11 @@ void UBuffComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
         }
 
         // 处理 DoT 周期 (每 X 秒一次)
-        if (BuffList[i]->BaseVo->tick >0) {
+        if (BuffList[i]->tick >0) {
             if (CurrentTime >= BuffList[i]->NextEffectTime) {
                 BuffList[i]->OnIntervalTick();
                 if (bIsOwnerDead)return;  // 死亡跳出 
-                BuffList[i]->NextEffectTime = CurrentTime + BuffList[i]->BaseVo->tick;
+                BuffList[i]->NextEffectTime = CurrentTime + BuffList[i]->tick;
             }
         }
     }
@@ -224,9 +176,25 @@ void UBuffComponent::CalBuffAttributes()
 {
     auto* BaseDataComp = GetOwner() ? GetOwner()->FindComponentByClass<UCharacterDataComponent>() : nullptr;
     if (BaseDataComp==nullptr) return;
+    bIsAttackAllowed=bIsMovementAllowed=true;
+   
+    // 假设接口定义类名为 UICalBaseAttributes
+    IICalBaseAttributes* CalcInterface = GetOwner()->FindComponentByInterface<IICalBaseAttributes>();
 
-    bIsMovementAllowed=GetBuffValue((int32)EBuffAttribute::Frozen)==0;
-    bIsAttackAllowed=GetBuffValue((int32)EBuffAttribute::Frozen)==0;
+    if (CalcInterface)
+    {
+        CalcInterface->CalBaseAttributes();
+    }
+    
+   
+ 
+    for (auto Item : BuffList)
+    {
+        Item->ApplyAttributesModify();
+        
+    }
+    
+   
     AAIController* AI = Cast<AAIController>( Character ->GetController() );
     if (!(bIsMovementAllowed&&bIsAttackAllowed))
     {
@@ -249,31 +217,11 @@ void UBuffComponent::CalBuffAttributes()
         }
         bAIStoppedByBuff=false;
     }
-    // 假设接口定义类名为 UICalBaseAttributes
-    IICalBaseAttributes* CalcInterface = GetOwner()->FindComponentByInterface<IICalBaseAttributes>();
-
-    if (CalcInterface)
-    {
-        CalcInterface->CalBaseAttributes();
-    }
-    
-   
- 
-    for (auto Item : BuffList)
-    {
-        Item->ApplyAttributesModify();
-        if (Item->BaseVo && Item->BaseVo->attribute>0&& Item->BaseVo->attribute<AttributeEnum::MAX)
-        {
-            BaseDataComp->Attributes[Item->BaseVo->attribute]+=Item->Value; 
-        }
-    }
-    
- 
            
   
 
-    //BaseDataComp->SetCurrentHP( BaseDataComp->GetCurrentHP());
-    GEngine->AddOnScreenDebugMessage(-1,5,FColor::Green,FString::Printf( TEXT("buffcount=%d"),	BuffList.Num()));
+     
+   // GEngine->AddOnScreenDebugMessage(-1,5,FColor::Green,FString::Printf( TEXT("buffcount=%d"),	BuffList.Num()));
 
     
 }

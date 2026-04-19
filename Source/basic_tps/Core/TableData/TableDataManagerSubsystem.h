@@ -37,7 +37,7 @@ public:
 	 TMap<int32, FRoleBaseVo*> RoleBaseMap;
 	 TMap<int32, FRoleLevelBaseVo*> RoleLevelBaseMap;
 	 TMap<int32, FMonsterBaseVo*> MonsterBaseMap;
-	 TMap<int32, FBuffBaseVo*> BuffBaseMap;
+	 
 	 TMap<int32, FWeaponTypeBaseVo*> WeaponTypeBaseMap;
 	 TMap<int32, TArray<FSkillBaseVo*>> SkillBaseMap;
  

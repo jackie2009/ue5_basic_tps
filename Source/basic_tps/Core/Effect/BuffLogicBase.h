@@ -1,11 +1,13 @@
 #pragma once
 #include "CoreMinimal.h"
+#include "BuffEffect_Base.h"
 #include "GameFramework/Actor.h"
 #include "basic_tps/Core/Data/CombatTypes.h"
 
 #include "FVfxSpawnConfig.h"
  
 #include "BuffLogicBase.generated.h"
+
 
  
 struct FEffectContext;
@@ -20,6 +22,18 @@ public:
 	TObjectPtr<ACombatCharacter> Owner;
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<UBuffComponent> OwnerBuff;
+	
+	
+	 
+	UPROPERTY(EditAnywhere)
+	int32  group;//分组，同组替换
+ 
+    UPROPERTY(EditAnywhere)
+	int32   tick;//每几秒作用一次
+	 
+	 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<ABuffEffect_Base>  buffEffectRes;//buff 效果
 
 	UFUNCTION(BlueprintCallable)
 	void InitBaseData(ACombatCharacter* EffectRole,ACombatCharacter* FromRole, int BaseID,float Duration,int Value)
@@ -30,9 +44,7 @@ public:
 		this->Duration = Duration;
 		this->Value = Value;
 		 
-		BaseVo=nullptr;
-		auto buffBaseVoPtr=UTableDataManagerSubsystem::Get()->BuffBaseMap.Find(BaseID);
-		if (buffBaseVoPtr!=nullptr){ BaseVo=*buffBaseVoPtr;}
+		 
 	}
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<AActor> View;
@@ -43,8 +55,7 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	TObjectPtr<ACombatCharacter> FromRole;
 
-	// 原始数据引用（假设这些是通过数据表获取的 const 指针）
-	const FBuffBaseVo* BaseVo;
+	 
 	const FSkillBaseVo* FromSkill;
 
 	UPROPERTY(BlueprintReadWrite)

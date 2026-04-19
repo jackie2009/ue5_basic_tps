@@ -18,12 +18,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void AddBuff(UBuffLogicBase *NewBuff);
 
-	UFUNCTION(BlueprintCallable)
-	int32 GetBuffValue(int32 BuffAttType) const;
-	
-	UFUNCTION(BlueprintCallable)
-	int32 CostBuffValue(int32 BuffAttType,int32 value);
- 
+	 
 	UFUNCTION(BlueprintCallable)
 	void RemoveBuff(UBuffLogicBase *BuffLogic, bool bReplaceMode=false);
 	
@@ -35,7 +30,10 @@ public:
 	
 	void BroadcastOnTakeDamage(FCombatResult& Result);
 	
-	 
+	UPROPERTY(BlueprintReadWrite)
+	bool bIsMovementAllowed=true;
+	UPROPERTY(BlueprintReadWrite)
+	bool bIsAttackAllowed=true;
 	
 
 protected:
@@ -45,8 +43,7 @@ protected:
 	void HandleOwnerDeath(ACombatCharacter* Victim);
 	
 	bool bIsOwnerDead=false;
-	bool bIsMovementAllowed;
-	bool bIsAttackAllowed;
+
 	bool bAIStoppedByBuff;
 private:
 	UPROPERTY()

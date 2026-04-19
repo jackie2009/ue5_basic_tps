@@ -34,7 +34,7 @@ void UTableDataManagerSubsystem::Initialize(FSubsystemCollectionBase& Collection
     LoadTableToMap<FRoleBaseVo>(RoleBasePath, RoleBaseMap);
     LoadTableToMap<FRoleLevelBaseVo>(RoleLevelBasePath, RoleLevelBaseMap);
     LoadTableToMap<FMonsterBaseVo>(MonsterBasePath, MonsterBaseMap);
-    LoadTableToMap<FBuffBaseVo>(BuffBasePath, BuffBaseMap);
+   
 
     LoadTableToMap<FWeaponTypeBaseVo>(WeaponTypeBasePath, WeaponTypeBaseMap);
 

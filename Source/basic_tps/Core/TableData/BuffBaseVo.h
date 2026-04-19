@@ -5,31 +5,8 @@
 #include "BuffBaseVo.generated.h"
  
 
-//100开始 避开 人物属性 buff表里同时支持2种
-UENUM(BlueprintType)
-enum class EBuffAttribute : uint8
-{
-	NONE=0,
-	INDEX_OFFSET = 100,
-	OnPoison = 101,//中毒 持续效果 
-	AddHP = 102,//回血 持续效果 
-	Frozen =106,//冻结
-	IceShield=107,//寒冰盾 加护甲 并冻结攻击者
  
-	/** 1. 支持：枚举 == 数字 (EBuffAttribute == int32) */
-
-};
-FORCEINLINE bool operator==(EBuffAttribute Attr, int32 Value)
-{
-	return static_cast<int32>(Attr) == Value;
-}
-
-/** 2. 支持：数字 == 枚举 (int32 == EBuffAttribute) */
-FORCEINLINE bool operator==(int32 Value, EBuffAttribute Attr)
-{
-	return Value == static_cast<int32>(Attr);
-}
-
+ 
 // 仅用于 DataTable 导入，不向蓝图暴露任何属性
 USTRUCT(BlueprintType)
 struct FBuffBaseVo : public FTableRowBase
