@@ -1,5 +1,6 @@
 #include "SkillLogicBase.h"
 
+#include "BuffLogicBase.h"
 #include "basic_tps/Core/Character/BuffComponent.h"
 
 void USkillLogicBase::SetSkillBaseHarm(int32 attackPoint)
@@ -7,20 +8,19 @@ void USkillLogicBase::SetSkillBaseHarm(int32 attackPoint)
 	CombatResult.SkillBaseHarm=attackPoint;
 }
 
-void USkillLogicBase::AddBuffImmediate(FBuffVo BuffVo)
+void USkillLogicBase::AddBuff(UBuffLogicBase* BuffLogic)
 {
-	BuffVo.InitBaseData();
-	if (BuffVo.EffectRole)BuffVo.EffectRole->BuffComp->AddBuff(BuffVo);
+	if (BuffLogic==nullptr)return;
+	 //如果计算伤害过程时加 需要放入对列延迟加 否则直接加
+	 if (bIsInStartState)
+	 {
+		 if (BuffLogic->EffectRole)BuffLogic->EffectRole->BuffComp->AddBuff(BuffLogic);
+	 }else
+	 {
+	 	CombatResult.OnDamageFinishBuffLogicArray.Add(BuffLogic);
+	 }
 }
 
-void USkillLogicBase::AddBuffDelay(FBuffVo BuffVo)
-{
-	BuffVo.InitBaseData();
-	CombatResult.OnDamageFinishBuffVoArray.Add(BuffVo);
-}
+ 
 
-void USkillLogicBase::AddBuffForTemp(FBuffVo BuffVo)
-{
-	BuffVo.InitBaseData();
-	CombatResult.WorkingBuffVo=BuffVo;
-}
+ 

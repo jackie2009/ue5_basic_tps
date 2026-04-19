@@ -7,7 +7,8 @@
  
 #include "SkillLogicBase.generated.h"
 
- 
+
+class UBuffLogicBase;
 struct FEffectContext;
  
 UCLASS(Blueprintable, Abstract, EditInlineNew, DefaultToInstanced)
@@ -18,6 +19,7 @@ class USkillLogicBase : public UObject
 public:
 	UPROPERTY(BlueprintReadOnly)
 	FCombatResult    CombatResult;
+    bool bIsInStartState;
 	UFUNCTION(BlueprintImplementableEvent ,meta=(ToolTip="技能被创建出来时 这时还没碰撞到目标"))
 	void ExecuteOnStart(const  FEffectContext& EffectContext);
 	
@@ -41,11 +43,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetSkillBaseHarm(int32 attackPoint);
 	
+	 
 	UFUNCTION(BlueprintCallable)
-	void AddBuffImmediate(FBuffVo BuffVo);
-
-	UFUNCTION(BlueprintCallable)
-	void AddBuffDelay(FBuffVo BuffVo);
-	UFUNCTION(BlueprintCallable)
-	void AddBuffForTemp(FBuffVo BuffVo);
+	void AddBuff(UBuffLogicBase* BuffLogic);
+	
+ 
 };

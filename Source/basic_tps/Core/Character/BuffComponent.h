@@ -12,17 +12,30 @@ class  BASIC_TPS_API UBuffComponent : public UCharacterComponent {
 
 public:
 	UBuffComponent();
+	UPROPERTY(BlueprintReadOnly)
+	FCombatResult    TempCombatResult;
 
-	// 添加 Buff
-	void AddBuff(FBuffVo NewBuff);
+	UFUNCTION(BlueprintCallable)
+	void AddBuff(UBuffLogicBase *NewBuff);
 
- 
+	UFUNCTION(BlueprintCallable)
 	int32 GetBuffValue(int32 BuffAttType) const;
+	
+	UFUNCTION(BlueprintCallable)
 	int32 CostBuffValue(int32 BuffAttType,int32 value);
+ 
+	UFUNCTION(BlueprintCallable)
+	void RemoveBuff(UBuffLogicBase *BuffLogic, bool bReplaceMode=false);
 	
-
-	int32 GetBuffValue(EBuffAttribute BuffType, const FBuffVo &WorkingBuffVo);
+ 
+	void RemoveBuff(int32 Index, bool bReplaceMode=false);
 	
+	UFUNCTION(BlueprintCallable)
+	void RemoveAllBuffs();
+	
+	void BroadcastOnTakeDamage(FCombatResult& Result);
+	
+	 
 	
 
 protected:
@@ -30,17 +43,19 @@ protected:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	void CalBuffAttributes();
 	void HandleOwnerDeath(ACombatCharacter* Victim);
+	
 	bool bIsOwnerDead=false;
 	bool bIsMovementAllowed;
 	bool bIsAttackAllowed;
 	bool bAIStoppedByBuff;
 private:
 	UPROPERTY()
-	TArray<FBuffVo> BuffList;
+	TArray<TObjectPtr<UBuffLogicBase>> BuffList;
 
-	void RemoveBuff(const FBuffVo& BuffVo, bool bReplaceMode=false);
-	void RemoveBuff(int32 Index, bool bReplaceMode=false);
-	void RemoveAllBuffs();
-	void ExecuteDoT(FBuffVo& Buff);
-	void TryDestroyBuffView(FBuffVo &BuffVo);
+	
+
+ 
+	void TryDestroyBuffView(UBuffLogicBase *BuffLogic);
+	
+ 
 };

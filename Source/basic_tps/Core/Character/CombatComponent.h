@@ -31,6 +31,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Combat")
     void  TryHurtTarget(  ACombatCharacter* Target, const FEffectContext &  EffectContext);
 	// 处理受击逻辑 (整合之前讨论的 FCombatResult)
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void HandleHurt( int FinalDamage,ACombatCharacter * From=nullptr);
 	void HandleHurt( FCombatResult& Result);
 
 	// 仇恨管理

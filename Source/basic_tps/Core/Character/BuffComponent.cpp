@@ -6,6 +6,7 @@
 #include "CombatComponent.h"
 #include "basic_tps/Core/Data/CharacterDataComponent.h"
 #include "basic_tps/Core/Data/ICalBaseAttributes.h"
+#include "basic_tps/Core/Effect/BuffLogicBase.h"
 #include "Perception/AIPerceptionComponent.h"
 
 
@@ -18,26 +19,27 @@ UBuffComponent::UBuffComponent()
   
 }
 
-void UBuffComponent::AddBuff(FBuffVo NewBuff) {
+void UBuffComponent::AddBuff(UBuffLogicBase *NewBuff) {
     if (bIsOwnerDead)return;
-    if (NewBuff.Duration <=0)return;
-   
+    if (NewBuff->Duration <=0)return;
+    NewBuff->Owner=NewBuff->EffectRole;
+    NewBuff->OwnerBuff=this;
     // 1. 同组覆盖逻辑 (类似 Unity 里的 group 查找)
     for (int32 i = BuffList.Num() - 1; i >= 0; --i) {
-        if (BuffList[i].BaseVo->group == NewBuff.BaseVo->group) {
+        if (BuffList[i]->BaseVo->group == NewBuff->BaseVo->group) {
             RemoveBuff(i);
         }
     }
 
     // 2. 初始化时间
     auto StartTime = GetWorld()->GetTimeSeconds();
-    NewBuff.NextEffectTime = StartTime + NewBuff.BaseVo->tick;
-    NewBuff.DieTime = (NewBuff.Duration > 0) ? (StartTime + NewBuff.Duration) : MAX_FLT;
+    NewBuff->NextEffectTime = StartTime + NewBuff->BaseVo->tick;
+    NewBuff->DieTime = (NewBuff->Duration > 0) ? (StartTime + NewBuff->Duration) : MAX_FLT;
      
    
 
     //创建特效
-    auto Res = NewBuff.BaseVo->buffEffectRes;
+    auto Res = NewBuff->BaseVo->buffEffectRes;
     if (!Res.IsEmpty())
     {
         FString AssetPath = FString::Printf(TEXT("/Game/CombatActors/BuffEffect/%s.%s_C"), *Res, *Res);
@@ -53,7 +55,7 @@ void UBuffComponent::AddBuff(FBuffVo NewBuff) {
                 // 在这里可以设置 Actor 的属性 (因为是 Deferred 延迟生成)
                 // NewEffectActor->SetSomeValue(100);
                 NewEffectActor->FinishSpawning(SpawnTransform);
-                NewBuff.View=NewEffectActor;
+                NewBuff->View=NewEffectActor;
             }
         }
     }
@@ -64,20 +66,20 @@ void UBuffComponent::AddBuff(FBuffVo NewBuff) {
     // TODO: 这里触发特效 MagicRoot::CreateEffect
     CalBuffAttributes();
 }
-
+ 
  
 int32 UBuffComponent::GetBuffValue(int32 BuffAttType) const
 {
     int32 TotalValue = 0;
 
     // 使用 const 自动推导迭代器，保证读取安全
-    for (const FBuffVo& Item : BuffList)
+    for (auto Item : BuffList)
     {
         // 假设 FBuffVo 结构体里包含 BaseVo 指针或直接有 Attribute 字段
         // 这里根据你之前的结构体定义来匹配
-        if (Item.BaseVo && Item.BaseVo->attribute == BuffAttType)
+        if (Item->BaseVo && Item->BaseVo->attribute == BuffAttType)
         {
-            TotalValue += Item.Value;
+            TotalValue += Item->Value;
         }
     }
  
@@ -88,13 +90,14 @@ int32 UBuffComponent::CostBuffValue(int32 BuffAttType, int32 value)
 {
      
 
-    FBuffVo* Found = BuffList.FindByPredicate([BuffAttType](const FBuffVo& Item)
+   auto* FoundPtr = BuffList.FindByPredicate([BuffAttType](const UBuffLogicBase* Item)
     {
-        return Item.BaseVo && Item.BaseVo->attribute == BuffAttType;
+        return Item->BaseVo && Item->BaseVo->attribute == BuffAttType;
     });
 
-    if (Found)
+    if (FoundPtr)
     {
+        UBuffLogicBase* Found = *FoundPtr;
         if (Found->Value > value)
         {
             Found->Value-=value;
@@ -103,7 +106,7 @@ int32 UBuffComponent::CostBuffValue(int32 BuffAttType, int32 value)
         {
             int realCost=Found->Value;
             Found->Value=0;
-            RemoveBuff(*Found,false);
+            RemoveBuff(Found,false);
             return  realCost;
         }
     }
@@ -113,16 +116,7 @@ int32 UBuffComponent::CostBuffValue(int32 BuffAttType, int32 value)
     }
 }
 
-int32 UBuffComponent::GetBuffValue(EBuffAttribute BuffType, const FBuffVo &WorkingBuffVo)
-{
-    int32 TotalValue = 0;
-    if (WorkingBuffVo.BaseID!=0&&WorkingBuffVo.BaseVo->attribute == static_cast<int32> (BuffType))
-    {
-        TotalValue+= WorkingBuffVo.Value;
-    }
-    TotalValue+=GetBuffValue( static_cast<int32> (BuffType));
-    return TotalValue;
-}
+ 
 
 void UBuffComponent::BeginPlay()
 {
@@ -140,17 +134,17 @@ void UBuffComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 
     for (int32 i = BuffList.Num() - 1; i >= 0; --i) {
         // 过期移除
-        if (CurrentTime > BuffList[i].DieTime) {
+        if (CurrentTime > BuffList[i]->DieTime) {
             RemoveBuff(i);
             continue;
         }
 
         // 处理 DoT 周期 (每 X 秒一次)
-        if (BuffList[i].BaseVo->tick >0) {
-            if (CurrentTime >= BuffList[i].NextEffectTime) {
-                ExecuteDoT(BuffList[i]);
+        if (BuffList[i]->BaseVo->tick >0) {
+            if (CurrentTime >= BuffList[i]->NextEffectTime) {
+                BuffList[i]->OnIntervalTick();
                 if (bIsOwnerDead)return;  // 死亡跳出 
-                BuffList[i].NextEffectTime = CurrentTime + BuffList[i].BaseVo->tick;
+                BuffList[i]->NextEffectTime = CurrentTime + BuffList[i]->BaseVo->tick;
             }
         }
     }
@@ -158,10 +152,10 @@ void UBuffComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 
 
 
-void UBuffComponent::RemoveBuff(const FBuffVo& BuffVo, bool bReplaceMode)
+void UBuffComponent::RemoveBuff(UBuffLogicBase *BuffLogic, bool bReplaceMode)
 {
     // UE5 的 TArray::Find 可以代替 IndexOf
-    int32 Index = BuffList.Find(BuffVo);
+    int32 Index = BuffList.Find(BuffLogic);
     if (Index == -1) 
     {
         return;
@@ -195,9 +189,9 @@ void UBuffComponent::RemoveBuff(int32 Index, bool bReplaceMode)
 void UBuffComponent::RemoveAllBuffs()
 {
     // 遍历当前的 Buff 列表并发送移除事件
-    for ( FBuffVo& BuffVo : BuffList)
+    for (UBuffLogicBase *BuffLogic : BuffList)
     {
-        TryDestroyBuffView(BuffVo);
+        TryDestroyBuffView(BuffLogic);
        // if (UEventDispatcher* Dispatcher = UEventDispatcher::Get())
        // {
             // replaceMode 在全部移除时通常为 false
@@ -211,40 +205,16 @@ void UBuffComponent::RemoveAllBuffs()
     
 }
 
-void UBuffComponent::ExecuteDoT(FBuffVo& Buff)
-{
-    auto owner = Character;
-    switch (static_cast<EBuffAttribute>(Buff.BaseVo->attribute))
-    {
-        //中毒buff 每x秒执行一次 受伤处理
-        case EBuffAttribute::OnPoison:
-            {
-                FCombatResult cbResult;
-                cbResult.Attacker = Buff.FromRole;
-                cbResult.FinalDamage = Buff.Value;
-                owner->CombatComp->HandleHurt(cbResult);
-            }
-        break;
-        //回血buff 每x秒执行一次  增加HP
-        case EBuffAttribute::AddHP:
-            {
-                owner->CharacterDataComp->AddCurrentHP(Buff.Value);
-            }
-        break;
-        default:
-        break;
-    }
  
-}
 
-void UBuffComponent::TryDestroyBuffView(FBuffVo& BuffVo)
+void UBuffComponent::TryDestroyBuffView(UBuffLogicBase *BuffLogic)
 {
-    if (BuffVo.View)
+    if (BuffLogic->View)
     {
-        if (BuffVo.View && !BuffVo.View->IsPendingKillPending()) 
+        if (BuffLogic->View && !BuffLogic->View->IsPendingKillPending()) 
         {
-            BuffVo.View->Destroy();
-           BuffVo.View=nullptr;
+           BuffLogic->View->Destroy();
+          BuffLogic->View=nullptr;
         }
     }
 }
@@ -291,11 +261,11 @@ void UBuffComponent::CalBuffAttributes()
 
     BaseDataComp->Attributes[AttributeEnum::Defence1]+=GetBuffValue((int32)EBuffAttribute::IceShield_Armor); 
     BaseDataComp->Attributes[AttributeEnum::Defence2]+=GetBuffValue((int32)EBuffAttribute::IceShield_Armor);
-    for (const FBuffVo& Item : BuffList)
+    for (auto Item : BuffList)
     {
-        if (Item.BaseVo && Item.BaseVo->attribute>0&& Item.BaseVo->attribute<AttributeEnum::MAX)
+        if (Item->BaseVo && Item->BaseVo->attribute>0&& Item->BaseVo->attribute<AttributeEnum::MAX)
         {
-            BaseDataComp->Attributes[Item.BaseVo->attribute]+=Item.Value; 
+            BaseDataComp->Attributes[Item->BaseVo->attribute]+=Item->Value; 
         }
     }
     
@@ -315,4 +285,22 @@ void UBuffComponent::HandleOwnerDeath(ACombatCharacter* Victim)
     bIsOwnerDead=true;
     RemoveAllBuffs();
     SetComponentTickEnabled(false);
+}
+
+void UBuffComponent::BroadcastOnTakeDamage( FCombatResult& Result)
+{
+     TempCombatResult=Result;
+    TArray<TObjectPtr<UBuffLogicBase>> Snapshot = BuffList;
+    // 内部统一管理遍历，可以方便地添加性能监控（Profiling）
+    for (auto& Buff : Snapshot)
+    {
+        if (Buff)
+        {
+            
+            Buff->OnTakeDamage();
+        }
+    }
+   
+    // 执行清空：直接赋值一个默认构造的结构体
+    TempCombatResult = FCombatResult();
 }

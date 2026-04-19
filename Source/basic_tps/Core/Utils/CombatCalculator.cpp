@@ -11,6 +11,7 @@
 #include "basic_tps/Core/Character/BuffComponent.h"
 #include "basic_tps/Core/Character/CombatComponent.h"
 #include "basic_tps/Core/Character/SkillComponent.h"
+#include "basic_tps/Core/Effect/BuffLogicBase.h"
 #include "basic_tps/Core/Effect/SkillLogicBase.h"
 #include "basic_tps/Core/TableData/TableDataManagerSubsystem.h"
 
@@ -52,9 +53,10 @@ FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACom
     CaptureAttributeSnapshot(Result,isPureBuffEffect);
     if (useFadeoffForBuffTime&&WeightAfterFadeoff<1)
     {
-        for (auto & BuffVo : Result.OnDamageFinishBuffVoArray)
+ 
+        for (auto   BuffLogic : Result.OnDamageFinishBuffLogicArray)
         {
-          BuffVo.Duration = FMath::RoundToInt32(  BuffVo.Duration*WeightAfterFadeoff);
+            BuffLogic->Duration = FMath::RoundToInt32(  BuffLogic->Duration*WeightAfterFadeoff);
         }
       
     }
@@ -224,6 +226,8 @@ void UCombatCalculator::PostDamageProcess( FCombatResult& Result)
  
 }
 
+
+ 
 
  
 

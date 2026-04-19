@@ -6,6 +6,7 @@
 #include "BuffComponent.h"
 #include "CombatCharacter.h"
 #include "basic_tps/Core/Data/CharacterDataComponent.h"
+#include "basic_tps/Core/Effect/BuffLogicBase.h"
 #include "basic_tps/Core/Effect/FVfxSpawnConfig.h"
 #include "basic_tps/Core/TableData/TableDataManagerSubsystem.h"
 #include "basic_tps/Core/Utils/CombatCalculator.h"
@@ -43,22 +44,31 @@ void UCombatComponent::TryHurtTarget(ACombatCharacter* Target, const FEffectCont
 	if (Target->BuffComp->GetBuffValue((int32)EBuffAttribute::IceShield)>0||
 		Target->BuffComp->GetBuffValue((int32)EBuffAttribute::IceShield_Frozen)>0)
 	{
-	TSharedPtr<FBuffVo> FrozenBuffVo = MakeShared<FBuffVo>(attacker ,Target,
-    								 105, 3, 1);	
-		attacker->BuffComp->AddBuff(*FrozenBuffVo);
-		Target->BuffComp->CostBuffValue((int32)EBuffAttribute::IceShield_Frozen,1);
+	//TSharedPtr<FBuffVo> FrozenBuffVo = MakeShared<FBuffVo>(attacker ,Target,
+    					//			 105, 3, 1);	
+		//attacker->BuffComp->AddBuff(*FrozenBuffVo);
+		//Target->BuffComp->CostBuffValue((int32)EBuffAttribute::IceShield_Frozen,1);
 	}
-	for (auto &BuffVo : rst.OnDamageFinishBuffVoArray)
-	{
-		if (BuffVo.EffectRole)BuffVo.EffectRole->BuffComp->AddBuff(BuffVo);
-	}
+	Target->BuffComp->BroadcastOnTakeDamage(rst);
 	 
+	 
+	for (auto BuffLogic : rst.OnDamageFinishBuffLogicArray)
+	{
+		if (BuffLogic->EffectRole)BuffLogic->EffectRole->BuffComp->AddBuff(BuffLogic);
+	}
 	
 	//rst.SkillVo->isBuffForSelf
 	
 	
 }
-
+void UCombatComponent::HandleHurt( int FinalDamage,ACombatCharacter * From)
+{
+	FCombatResult Result;
+	Result.FinalDamage=FinalDamage;
+	Result.Attacker=From;
+	Result.Victim=Cast<ACombatCharacter>(GetOwner());
+	HandleHurt(Result);
+}
 void UCombatComponent::HandleHurt( FCombatResult& Result)
 {
 	auto character=Cast<ACombatCharacter>(GetOwner());
