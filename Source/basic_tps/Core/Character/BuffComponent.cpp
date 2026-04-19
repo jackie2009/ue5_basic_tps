@@ -256,13 +256,12 @@ void UBuffComponent::CalBuffAttributes()
     {
         CalcInterface->CalBaseAttributes();
     }
-    BaseDataComp->Attributes[AttributeEnum::Defence1]+=GetBuffValue((int32)EBuffAttribute::IceShield); 
-    BaseDataComp->Attributes[AttributeEnum::Defence2]+=GetBuffValue((int32)EBuffAttribute::IceShield);
-
-    BaseDataComp->Attributes[AttributeEnum::Defence1]+=GetBuffValue((int32)EBuffAttribute::IceShield_Armor); 
-    BaseDataComp->Attributes[AttributeEnum::Defence2]+=GetBuffValue((int32)EBuffAttribute::IceShield_Armor);
+    
+   
+ 
     for (auto Item : BuffList)
     {
+        Item->ApplyAttributesModify();
         if (Item->BaseVo && Item->BaseVo->attribute>0&& Item->BaseVo->attribute<AttributeEnum::MAX)
         {
             BaseDataComp->Attributes[Item->BaseVo->attribute]+=Item->Value; 

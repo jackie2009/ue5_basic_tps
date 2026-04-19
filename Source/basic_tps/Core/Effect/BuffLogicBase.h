@@ -85,5 +85,8 @@ public:
 	void OnIntervalTick();
 	UFUNCTION(BlueprintImplementableEvent ,meta=(ToolTip="受到伤害时执行"))
 	void OnTakeDamage();
+	UFUNCTION(BlueprintImplementableEvent ,meta=(ToolTip="对角色属性的修改"))
+	void ApplyAttributesModify();
+	
 	
 };

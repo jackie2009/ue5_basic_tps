@@ -36,7 +36,9 @@ public:
     
     UFUNCTION(BlueprintCallable,BlueprintPure, Category = "CharacterData")
     int32 GetAttribute(int32 AttributeID);
-
+    
+    UFUNCTION(BlueprintCallable, Category = "CharacterData")
+    int32 AddAttribute(int32 AttributeID,int32 value);
    
    
 private:

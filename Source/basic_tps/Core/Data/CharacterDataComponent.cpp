@@ -86,3 +86,14 @@ int32 UCharacterDataComponent::GetAttribute(int32 AttributeID)
 }
 
  
+int32 UCharacterDataComponent::AddAttribute(int32 AttributeID,int32 value)
+{
+	 
+	// 检查：不能小于0，且必须小于枚举的最大值
+	if (AttributeID >= 0 && AttributeID <  AttributeEnum::MAX)
+	{
+		Attributes[AttributeID]+=value;
+		return Attributes[AttributeID];
+	}
+	return 0;
+}
