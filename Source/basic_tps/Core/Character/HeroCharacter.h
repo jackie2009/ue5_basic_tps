@@ -10,7 +10,7 @@
 #include "HeroCharacter.generated.h"
 class USkillVisualDataAsset;
 class UHeroDataComponent;
- 
+ class USkillLogicBase;
 
 UCLASS()
 class BASIC_TPS_API AHeroCharacter : public ACombatCharacter
@@ -35,7 +35,8 @@ protected:
  
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Config")
-	TMap<int32, TObjectPtr<USkillVisualDataAsset>> WeaponVisualCollection;
+	
+	TMap<int32, TObjectPtr<USkillLogicBase>> WeaponVisualCollection;
 	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

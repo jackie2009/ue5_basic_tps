@@ -75,7 +75,7 @@ bool USkillComponent::UseSkill(int32 SkillID,int32 CurrentWeaponType, int32 Skil
 
 
 
-	USkillVisualDataAsset *visualData=nullptr;
+	USkillLogicBase *SkillLogicData=nullptr;
 	//float Duration = AnimInst->Montage_Play(SkillData->SkillMontage);
 	if (!skillVo->skillVisualDataID.IsEmpty())
 	{
@@ -85,38 +85,43 @@ bool USkillComponent::UseSkill(int32 SkillID,int32 CurrentWeaponType, int32 Skil
 		 	auto weaponVisualDataPtr= heroAttacker->WeaponVisualCollection.Find(CurrentWeaponType);
 		 	if (weaponVisualDataPtr)
 		 	{
-		 		visualData=*weaponVisualDataPtr;
+		 		SkillLogicData=*weaponVisualDataPtr;
 		 		
 		 	}
 		 }
-		if (visualData==nullptr)
+		if (SkillLogicData==nullptr)
 		{
 			//如果不是武器决定的效果 读取技能配置 比如 各自射击由枪械配置决定 不是有技能配置决定
 			// 这里的路径必须是绝对路径
 			FString FullPackagePath = "/Game/TableDataExtra/Skills" / DataID;
 			FString AssetName = FPaths::GetBaseFilename(FullPackagePath);
-			FString AssetPath = FString::Printf(TEXT("%s.%s"), *FullPackagePath, *AssetName);
-			visualData=  LoadObject<USkillVisualDataAsset>(nullptr, *AssetPath);(skillVo->skillVisualDataID);
+			FString AssetPath = FString::Printf(TEXT("%s.%s_C"), *FullPackagePath, *AssetName);
+			UClass* SkillClass =  LoadObject<UClass>(nullptr, *AssetPath);
+		 
+			// 3. 实例化并配置表现数据
+			if (SkillClass)
+			{
+				SkillLogicData = NewObject<USkillLogicBase>(GetOwner(), SkillClass);
+				// 此时 NewSkill 里的属性（如 MontageToPlay, EffectClass）已经是你在蓝图里预设好的了
+			}
 		}
-		if (!IsValid(visualData))
+		if (!IsValid(SkillLogicData))
 		{
 			UE_LOG(LogTemp, Error, TEXT("SkillVisualDataID [%s] 加载失败或无效！"), *skillVo->skillVisualDataID);
 		    return false;
 		}
 		UAnimInstance* AnimInst = attacker->GetMesh()->GetAnimInstance();
-		AnimInst->Montage_Play(visualData->SkillMontage,1,EMontagePlayReturnType::MontageLength,0,false);
+		AnimInst->Montage_Play(SkillLogicData->SkillMontage,1,EMontagePlayReturnType::MontageLength,0,false);
 		 
 		 
 		FirstSkillVfxContext.Instigator=attacker;
 		FirstSkillVfxContext.TargetActor=nullptr;
 		FirstSkillVfxContext.SkillBaseVo=skillVo;
-		FirstSkillVfxContext.SkillVisualDataAsset= visualData;
+	 
 		FirstSkillVfxContext.SkillLogic= nullptr;
-		FirstSkillMagicEffectClass=visualData->MagicEffectClass;
-		if (visualData->SkillLogicBase)
-		{
-			FirstSkillVfxContext.SkillLogic=  NewObject<USkillLogicBase>(this, visualData->SkillLogicBase);
-		}
+		FirstSkillMagicEffectClass=SkillLogicData->MagicEffectClass;
+	  FirstSkillVfxContext.SkillLogic=  SkillLogicData;
+	 
 	   return true;
 	
 	 

@@ -21,9 +21,9 @@ FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACom
     //修改属性 测试
     float  WeightAfterFadeoff=1.0f;
     
-    if (EffectContext.SkillVisualDataAsset!=nullptr&&EffectContext.SkillVisualDataAsset->bEnableFalloff)
+    if (EffectContext.SkillLogic!=nullptr&&EffectContext.SkillLogic->bEnableFalloff)
     {
-        WeightAfterFadeoff=EffectContext.SkillVisualDataAsset->CalWeightAfterFalloff(EffectContext.distanceToEffect/100.0f);
+        WeightAfterFadeoff=EffectContext.SkillLogic->CalWeightAfterFalloff(EffectContext.distanceToEffect/100.0f);
     
     }
 
