@@ -132,6 +132,8 @@ struct FCombatResult
 	 
 	 
 	int SkillBaseHarm;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float WeightAfterFadeoff;
 
 	 
 	//这次伤害计算结束 给目标挂上去的  buff 持续时间>0，

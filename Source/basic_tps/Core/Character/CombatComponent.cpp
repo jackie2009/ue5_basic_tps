@@ -43,15 +43,7 @@ void UCombatComponent::TryHurtTarget(ACombatCharacter* Target, const FEffectCont
 	auto rst=UCombatCalculator::DamagePipeline(attacker,Target,EffectContext);
  
 	Target->BuffComp->BroadcastOnTakeDamage(rst);
-	 
-	 
-	for (auto BuffLogic : rst.OnDamageFinishBuffLogicArray)
-	{
-		if (BuffLogic->EffectRole)BuffLogic->EffectRole->BuffComp->AddBuff(BuffLogic);
-	}
-	
-	//rst.SkillVo->isBuffForSelf
-	
+	  
 	
 }
 void UCombatComponent::HandleHurt( int FinalDamage,ACombatCharacter * From)

@@ -44,8 +44,7 @@ public:
 	void SetSkillBaseHarm(int32 attackPoint);
 	
 	 
-	UFUNCTION(BlueprintCallable)
-	void AddBuff(UBuffLogicBase* BuffLogic);
+ 
 	
  
 };

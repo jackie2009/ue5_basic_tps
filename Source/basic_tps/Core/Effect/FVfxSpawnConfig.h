@@ -128,10 +128,7 @@ public:
 	float FalloffExponent = 1.0f;
 
 
-	// 是否影响Buff持续时间
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Falloff",
-		meta=(DisplayName="是否影响Buff时间",EditCondition="bEnableFalloff", EditConditionHides))
-	bool bAffectBuffDuration = false;
+ 
 
 	float CalWeightAfterFalloff(float DisToCenter) const
 	{

@@ -36,13 +36,13 @@ public:
 	TSubclassOf<ABuffEffect_Base>  buffEffectRes;//buff 效果
 
 	UFUNCTION(BlueprintCallable)
-	void InitBaseData(ACombatCharacter* EffectRole,ACombatCharacter* FromRole, int BaseID,float Duration,int Value)
+	void InitBaseData(ACombatCharacter* InEffectRole,ACombatCharacter* InFromRole,float InDuration,int InValue)
 	{
-		this->EffectRole = EffectRole;
-		this->FromRole = FromRole;
-		this->BaseID = BaseID;
-		this->Duration = Duration;
-		this->Value = Value;
+		this->EffectRole = InEffectRole;
+		this->FromRole = InFromRole;
+	 
+		this->Duration = InDuration;
+		this->Value = InValue;
 		 
 		 
 	}
@@ -58,8 +58,7 @@ public:
 	 
 	const FSkillBaseVo* FromSkill;
 
-	UPROPERTY(BlueprintReadWrite)
-	int32 BaseID;
+ 
 
 	UPROPERTY(BlueprintReadOnly)
 	float DieTime;
@@ -72,11 +71,7 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	int32 Value;
-	// 核心修复：定义“相等”即“BaseID相同”
-	bool operator==(const UBuffLogicBase& Other) const
-	{
-		return BaseID == Other.BaseID;
-	}
+	 
 	// 功能函数
 	int32 UseAmount(int32 Amount)
 	{

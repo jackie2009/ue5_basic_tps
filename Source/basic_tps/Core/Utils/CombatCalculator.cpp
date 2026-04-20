@@ -20,11 +20,11 @@ FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACom
     auto  & SkillVo= *EffectContext.SkillBaseVo;
     //修改属性 测试
     float  WeightAfterFadeoff=1.0f;
-    bool useFadeoffForBuffTime=false;
+    
     if (EffectContext.SkillVisualDataAsset!=nullptr&&EffectContext.SkillVisualDataAsset->bEnableFalloff)
     {
         WeightAfterFadeoff=EffectContext.SkillVisualDataAsset->CalWeightAfterFalloff(EffectContext.distanceToEffect/100.0f);
-        useFadeoffForBuffTime=EffectContext.SkillVisualDataAsset->bAffectBuffDuration;
+    
     }
 
     //测试内容结尾
@@ -38,7 +38,7 @@ FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACom
     bool bIsHarmSkill = SkillEffectType > 0;
     bool isPureBuffEffect = !bIsHarmSkill;
     Result.SkillBaseHarm=SkillVo.Power.Num()>0?SkillVo.Power[0]:0;
-
+    Result.WeightAfterFadeoff=WeightAfterFadeoff;
     // 设置 基础伤害 与创建buff 等具体逻辑蓝图执行
     if (Result.Attacker&&EffectContext.SkillLogic!=nullptr)
     {
@@ -51,15 +51,8 @@ FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACom
     // 阶段 I：初始化快照 (Snapshot Acquisition)
     // 就算不产生伤害 也需要初始化创建buff
     CaptureAttributeSnapshot(Result,isPureBuffEffect);
-    if (useFadeoffForBuffTime&&WeightAfterFadeoff<1)
-    {
+    
  
-        for (auto   BuffLogic : Result.OnDamageFinishBuffLogicArray)
-        {
-            BuffLogic->Duration = FMath::RoundToInt32(  BuffLogic->Duration*WeightAfterFadeoff);
-        }
-      
-    }
     if (!bIsHarmSkill) return Result;
 
  
