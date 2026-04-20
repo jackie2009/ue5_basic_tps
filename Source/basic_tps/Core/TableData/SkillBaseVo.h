@@ -46,7 +46,8 @@ public:
 	int32 distanceTarget;      // 释放距离
 	UPROPERTY(EditAnywhere)
 	int32 CD;                  // 冷却延迟
-	
+	UPROPERTY(EditAnywhere)
+	int32 MaxCharges;                  // 冷却延迟
 	UPROPERTY(EditAnywhere)
 	FString icon;              // 图标
 	UPROPERTY(EditAnywhere)

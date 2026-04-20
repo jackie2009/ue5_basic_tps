@@ -12,7 +12,21 @@ class AMagicEffect;
 class USkillVfxDataAsset;
 struct FCombatResult;
 class ACombatCharacter;
- 
+USTRUCT(BlueprintType)
+struct FSkillChargeState {
+	GENERATED_BODY() // 必须加这个，用来注入反射代码
+	int32 MaxCharges ;
+	float RechargeDuration;
+    
+	// 关键：记录上一次充能彻底清零或消耗时的起始参考时间
+	float LastRechargeStartTime;
+	// 默认构造函数
+	FSkillChargeState() : MaxCharges(1), RechargeDuration(5.0f), LastRechargeStartTime(0.0f) {}
+
+	// 自定义构造函数
+	FSkillChargeState(int32 InMax, float InCD, float InTime) 
+		: MaxCharges(InMax), RechargeDuration(InCD), LastRechargeStartTime(InTime) {}
+};
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class BASIC_TPS_API USkillComponent : public UActorComponent
 {
@@ -47,11 +61,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	bool IsSkillReady(int32 SkillID) const;
 	UFUNCTION(BlueprintCallable, Category="Combat")
-	float GetSkillRemainingCD(int32 SkillID) const;
+	float GetSkillCDDetails(int32 SkillID,int32& OutCharges) const;
 private:
-	// 技能CD：SkillID → 下次可用时间
+	 
 	UPROPERTY()
-	TMap<int32, float> SkillNextAvailableTimeMap;
+	TMap<int32, FSkillChargeState> SkillChargeStateMap;
 };
 
 
