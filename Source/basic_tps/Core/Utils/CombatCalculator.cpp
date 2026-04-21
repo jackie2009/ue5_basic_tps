@@ -43,7 +43,7 @@ FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACom
     if (Result.Attacker&&EffectContext.SkillLogic!=nullptr)
     {
         EffectContext.SkillLogic->CombatResult= Result;
-        EffectContext.SkillLogic->ExecuteOnDealSigleTarget();
+        EffectContext.SkillLogic->ExecuteOnDealSigleTarget(EffectContext);
         Result=EffectContext.SkillLogic->CombatResult;
     
 

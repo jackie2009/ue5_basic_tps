@@ -126,9 +126,11 @@ bool USkillComponent::UseSkill(int32 SkillID,int32 CurrentWeaponType, int32 Skil
 			if (SkillClass)
 			{
 				SkillLogicData = NewObject<USkillLogicBase>(GetOwner(), SkillClass);
+				
 				// 此时 NewSkill 里的属性（如 MontageToPlay, EffectClass）已经是你在蓝图里预设好的了
 			}
 		}
+		SkillLogicData->Init(Cast<ACombatCharacter>( GetOwner()),this);
 		if (!IsValid(SkillLogicData))
 		{
 			UE_LOG(LogTemp, Error, TEXT("SkillVisualDataID [%s] 加载失败或无效！"), *skillVo->skillVisualDataID);

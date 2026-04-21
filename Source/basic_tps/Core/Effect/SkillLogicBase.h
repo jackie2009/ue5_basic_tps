@@ -19,14 +19,18 @@ class USkillLogicBase : public UObject
 public:
 	UPROPERTY(BlueprintReadOnly)
 	FCombatResult    CombatResult;
-    bool bIsInStartState;
+	UPROPERTY(BlueprintReadOnly)
+	TObjectPtr<ACombatCharacter> Owner;
+	UPROPERTY(BlueprintReadOnly)
+	TObjectPtr<USkillComponent> SkillComp;
+    
 	UFUNCTION(BlueprintImplementableEvent ,meta=(ToolTip="技能被创建出来时 这时还没碰撞到目标"))
 	void ExecuteOnStart(const  FEffectContext& EffectContext);
 	
 	
 	UFUNCTION(BlueprintImplementableEvent ,meta=(ToolTip="开始处理每个目标对象"))
  
-	void ExecuteOnDealSigleTarget();
+	void ExecuteOnDealSigleTarget(const  FEffectContext& EffectContext);
 	
 	UFUNCTION(BlueprintImplementableEvent ,meta=(ToolTip="伤害公式计算前修正参数 比如 忽视目标防御"))
 	void PreDamageProcess();
@@ -42,8 +46,9 @@ public:
 	//以下函数 不能在 start里调用 这时候还没 CombatResult
 	UFUNCTION(BlueprintCallable)
 	void SetSkillBaseHarm(int32 attackPoint);
-	
-	 
+	void Init(ACombatCharacter* InOwner, USkillComponent* InSkillComp);
+
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Visual")
 	TObjectPtr<UAnimMontage> SkillMontage;
 	
