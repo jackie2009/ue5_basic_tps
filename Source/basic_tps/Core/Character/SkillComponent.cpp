@@ -65,36 +65,12 @@ bool USkillComponent::UseSkill(int32 SkillID,int32 CurrentWeaponType, int32 Skil
 	{
 		if (!heroAttacker->CharacterDataComp->CostCurrentMP(skillVo->Spell)) return false;
 	}
-	// 1. 获取引用（如果不存在则原地创建一个默认的）
-	FSkillChargeState& State = SkillChargeStateMap.FindOrAdd(SkillID);
-
-	// 2. 如果是第一次创建（或者需要强制同步配置），先更新配置
-	// 注意：如果你的配置是在别的初始化地方做的，这里可以省略赋值
-	State.MaxCharges =FMath::Max(1, skillVo->MaxCharges); 
-	State.RechargeDuration = skillVo->CD * 0.001f;
+	// ⭐ 这里你应该从 SkillBaseVo 里拿CD
+	float Cooldown =skillVo->CD*0.001f;  
 
 	float CurrentTime = GetWorld()->GetTimeSeconds();
-
-	// 3. 检查是否是首次初始化（如果 LastRechargeStartTime 是 0，说明从未充能过）
-	// 我们需要给它一个初始时间。如果希望第一次直接能用，就设为“全满”状态
-	if (State.LastRechargeStartTime <= 0.0f)
-	{
-		State.LastRechargeStartTime = CurrentTime - ( State.RechargeDuration);
-	}
-	float MaxAccumulatedTime = State.MaxCharges * State.RechargeDuration;
-	float TimeSinceStart = CurrentTime - State.LastRechargeStartTime;
-	if (TimeSinceStart >= MaxAccumulatedTime)
-	{
-		// 如果已经攒满了（甚至溢出了），强制把起点设为“刚好全满”的那个时刻
-		// 这样扣除一个 CD 后，它会立刻变成“剩 2 发，且第 3 发刚开始转”的状态
-		State.LastRechargeStartTime = CurrentTime - MaxAccumulatedTime;
-	}
-
- 
-
-	// 5. 消耗点数：时间轴向后推一格
-	State.LastRechargeStartTime += State.RechargeDuration;
- 
+	// ⭐ 写入CD
+	SkillNextAvailableTimeMap.Add(SkillID, CurrentTime + Cooldown);
 	
 
 
@@ -178,48 +154,25 @@ void USkillComponent::SpawnFlyMagicEffect()
 
 bool USkillComponent::IsSkillReady(int32 SkillID) const
 {
-	// 如果没有记录，默认技能是好的
-	if (!SkillChargeStateMap.Contains(SkillID))
-	{
-		return true;
-	}
-
-	const FSkillChargeState& State = SkillChargeStateMap[SkillID];
 	float CurrentTime = GetWorld()->GetTimeSeconds();
 
-	// 逻辑：计算从起始点到现在一共攒了多少秒
-	float TimePassed = CurrentTime - State.LastRechargeStartTime;
+	if (const float* NextTime = SkillNextAvailableTimeMap.Find(SkillID))
+	{
+		return CurrentTime >= *NextTime;
+	}
 
-	// 只要攒的时间能够抵扣 1 次 CD，技能就是 Ready 的
-	// (TimePassed / State.RechargeDuration) >= 1.0f
-	return TimePassed >= State.RechargeDuration;
-
-	 
+	// 没记录过 → 默认可用
+	return true;
 }
-// 核心函数定义
-float USkillComponent::GetSkillCDDetails(int32 SkillID, int32& OutCharges) const
+float USkillComponent::GetSkillRemainingCD(int32 SkillID) const
 {
-	OutCharges = 0; // 初始化默认值
 	if (!GetWorld()) return 0.f;
 
-	const FSkillChargeState* State = SkillChargeStateMap.Find(SkillID);
-	if (!State)
-	{
-		OutCharges = 1; 
-		return 0.f;
-	}
-
 	float CurrentTime = GetWorld()->GetTimeSeconds();
-	float TimePassed = CurrentTime - State->LastRechargeStartTime;
 
-	// 计算可用次数并通过引用“传出”
-	OutCharges = FMath::Clamp(FMath::FloorToInt(TimePassed / State->RechargeDuration), 0, State->MaxCharges);
-
-	// 返回剩余时间
-	if (OutCharges < State->MaxCharges)
+	if (const float* NextTime = SkillNextAvailableTimeMap.Find(SkillID))
 	{
-		float CurrentElapsed = FMath::Fmod(TimePassed, State->RechargeDuration);
-		return State->RechargeDuration - CurrentElapsed;
+		return FMath::Max(0.f, *NextTime - CurrentTime);
 	}
 
 	return 0.f;
