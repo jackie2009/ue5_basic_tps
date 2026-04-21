@@ -41,7 +41,7 @@ bool USkillComponent::UseSkill(int32 SkillID,int32 CurrentWeaponType, int32 Skil
 	
 	//动作限制状态检测
 	if (attacker==nullptr)return false;
-	if (attacker->CharacterDataComp->ActionTags.HasTag(FCombatTags::State_LockSkill))return false;
+	
 	
 	// cd mp check
 	TArray<FSkillBaseVo*>* skillBaseVoPtr = UTableDataManagerSubsystem::Get()->SkillBaseMap.Find(SkillID);
@@ -57,7 +57,8 @@ bool USkillComponent::UseSkill(int32 SkillID,int32 CurrentWeaponType, int32 Skil
 	{
 		return false;
 	}
-
+	//CD 0为 不锁动作
+	if (skillVo->CD>0&&attacker->CharacterDataComp->ActionTags.HasTag(FCombatTags::State_LockSkill))return false;
 
 	
 	//check mp
@@ -136,9 +137,7 @@ bool USkillComponent::UseSkill(int32 SkillID,int32 CurrentWeaponType, int32 Skil
 			UE_LOG(LogTemp, Error, TEXT("SkillVisualDataID [%s] 加载失败或无效！"), *skillVo->skillVisualDataID);
 		    return false;
 		}
-		UAnimInstance* AnimInst = attacker->GetMesh()->GetAnimInstance();
-		AnimInst->Montage_Play(SkillLogicData->SkillMontage,1,EMontagePlayReturnType::MontageLength,0,false);
-		 
+		
 		 
 		FirstSkillVfxContext.Instigator=attacker;
 		FirstSkillVfxContext.TargetActor=nullptr;
@@ -147,7 +146,17 @@ bool USkillComponent::UseSkill(int32 SkillID,int32 CurrentWeaponType, int32 Skil
 		FirstSkillVfxContext.SkillLogic= nullptr;
 		FirstSkillMagicEffectClass=SkillLogicData->MagicEffectClass;
 	  FirstSkillVfxContext.SkillLogic=  SkillLogicData;
-	 
+		if (SkillLogicData->SkillMontage)
+		{
+			UAnimInstance* AnimInst = attacker->GetMesh()->GetAnimInstance();
+			AnimInst->Montage_Play(SkillLogicData->SkillMontage,1,EMontagePlayReturnType::MontageLength,0,false);
+		}else
+		{
+			 
+			 SpawnFirstMagicEffect();
+			 SpawnFlyMagicEffect();
+		}
+		 
 	   return true;
 	
 	 
@@ -163,7 +172,13 @@ void USkillComponent::SpawnFirstMagicEffect()
 	FirstSkillMagicEffect=nullptr;
 	if (FirstSkillVfxContext.SkillBaseVo==nullptr)return;
 	 if (FirstSkillVfxContext.SkillLogic!=nullptr)
-	 { 
+	 {
+	 	if (FirstSkillVfxContext.SkillLogic->Owner==nullptr)
+	 	{
+	 		FirstSkillVfxContext.SkillLogic=nullptr;
+	 		FirstSkillVfxContext.SkillBaseVo=nullptr;
+	 		return;	
+	 	}
 	 	FirstSkillVfxContext.SkillLogic->ExecuteOnStart(FirstSkillVfxContext);
 	 }
 	FirstSkillMagicEffect=AMagicEffect::SpawnMagicEffect(this,FirstSkillMagicEffectClass,FirstSkillVfxContext);
