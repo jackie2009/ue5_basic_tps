@@ -119,7 +119,7 @@ public:
 	FSkillBaseVo * SkillBaseVo;
 	
  
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly, Category = "MagicEffect")
 	TObjectPtr<USkillLogicBase> SkillLogic=nullptr;
 	float distanceToEffect;
      

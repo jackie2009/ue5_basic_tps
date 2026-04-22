@@ -7,6 +7,7 @@
 #include "basic_tps/Core/Data/CharacterDataComponent.h"
 #include "basic_tps/Core/Data/ICalBaseAttributes.h"
 #include "basic_tps/Core/Effect/BuffLogicBase.h"
+ 
 #include "Perception/AIPerceptionComponent.h"
 
 
@@ -21,6 +22,7 @@ UBuffComponent::UBuffComponent()
 
 void UBuffComponent::AddBuff(UBuffLogicBase *NewBuff) {
     if (bIsOwnerDead)return;
+    if (IsValid(NewBuff->EffectRole)==false)return;
     if (NewBuff->Duration <=0)return;
     NewBuff->Owner=NewBuff->EffectRole;
     NewBuff->OwnerBuff=this;
@@ -56,12 +58,18 @@ void UBuffComponent::AddBuff(UBuffLogicBase *NewBuff) {
                 NewEffectActor->FinishSpawning(SpawnTransform);
                 NewBuff->View=NewEffectActor;
             }
+            
         }
+    
+    }
+    if (IsValid(NewBuff->FromRole))
+    {
+        NewBuff->FromRole->BuffComp->RegisterActor(NewBuff->GetClass(), Character);
     }
 
     //因为 是传值 所以需要最后 Add到数组
     BuffList.Add(NewBuff);
-   
+  
     // TODO: 这里触发特效 MagicRoot::CreateEffect
     CalBuffAttributes();
 }
@@ -117,18 +125,31 @@ void UBuffComponent::RemoveBuff(UBuffLogicBase *BuffLogic, bool bReplaceMode)
    
 }
 
+UBuffLogicBase* UBuffComponent::GetBuff(TSubclassOf<UBuffLogicBase> BuffClass)
+{
+    for (int32 i = BuffList.Num() - 1; i >= 0; --i) {
+        if (BuffList[i]->GetClass()== BuffClass) {
+            return BuffList[i];
+        }
+    }
+    return nullptr;
+}
+
 void UBuffComponent::RemoveBuff(int32 Index, bool bReplaceMode)
 {
     if (BuffList.IsValidIndex(Index)==false) return;
- 
 
-    TryDestroyBuffView(BuffList[Index]);
+    auto Buff = BuffList[Index];
+    TryDestroyBuffView(Buff);
+    
+   if ( IsValid(Buff->FromRole))
+    Buff->FromRole->BuffComp->UnregisterActor(Buff->GetClass(),  Character);
    
+
     // 从数组中移除
     BuffList.RemoveAt(Index);
 
-    
-
+  
     // 事件分发 (假设你使用的是 UE 的 Delegate 或自定义事件系统)
     // 这里演示全局事件分发的写法
     //  if (UEventDispatcher* Dispatcher = UEventDispatcher::Get())
@@ -250,4 +271,38 @@ void UBuffComponent::BroadcastOnTakeDamage( FCombatResult& Result)
    
     // 执行清空：直接赋值一个默认构造的结构体
     TempCombatResult = FCombatResult();
+}
+
+ void UBuffComponent::RegisterActor(TSubclassOf<UBuffLogicBase> BuffClass, ACombatCharacter* Target)
+{
+    RegisteredActors.FindOrAdd(BuffClass).Members.Add(Target);
+}
+
+ void UBuffComponent::UnregisterActor(TSubclassOf<UBuffLogicBase> BuffClass, ACombatCharacter* Target)
+{
+    if (FBuffCharacterGroup* Group = RegisteredActors.Find(BuffClass))
+    {
+        Group->Members.Remove(Target);
+        // 如果该组空了，可以考虑清理掉 Key 节省内存
+        if (Group->Members.Num() == 0) { RegisteredActors.Remove(BuffClass); }
+    }
+}
+
+ TSet<ACombatCharacter*> UBuffComponent::GetActorsByBuff(TSubclassOf<UBuffLogicBase> BuffClass)
+{
+     auto rst= TSet< ACombatCharacter*>();
+    if (auto* Group = RegisteredActors.Find(BuffClass))
+    {
+        for (auto Actor : Group->Members)
+        {
+            if (IsValid(Actor))
+            {
+                rst.Add(Actor);
+            }
+            
+        }
+        
+    }
+    return rst;
+ 
 }
