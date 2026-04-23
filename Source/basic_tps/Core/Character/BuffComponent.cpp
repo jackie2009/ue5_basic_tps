@@ -295,7 +295,7 @@ void UBuffComponent::BroadcastOnTakeDamage( FCombatResult& Result)
     {
         for (auto Actor : Group->Members)
         {
-            if (IsValid(Actor))
+            if (IsValid(Actor)&&Actor->IsAlive())
             {
                 rst.Add(Actor);
             }

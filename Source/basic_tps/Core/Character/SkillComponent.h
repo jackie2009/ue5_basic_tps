@@ -62,7 +62,7 @@ public:
 	UPROPERTY(BlueprintReadWrite,Category = "Combat")
 	FComboTracking ComboTracking;
 	UFUNCTION(BlueprintCallable, Category = "Combat",meta=(ExpandBoolAsExecs="ReturnValue"))
-    bool  UseSkill(   int32 SkillID,int32 CurrentWeaponType,int32 SkillLevel=1);
+    bool  UseSkill(   int32 SkillID,int32 CurrentWeaponType,int32 SkillLevel=1,ACombatCharacter* TryToTarget=nullptr);
  
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	void  SpawnFirstMagicEffect();

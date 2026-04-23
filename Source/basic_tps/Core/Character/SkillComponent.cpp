@@ -35,7 +35,7 @@ void USkillComponent::BeginPlay()
 	
 }
 
-bool USkillComponent::UseSkill(int32 SkillID,int32 CurrentWeaponType, int32 SkillLevel)
+bool USkillComponent::UseSkill(int32 SkillID,int32 CurrentWeaponType, int32 SkillLevel,ACombatCharacter* TryToTarget)
 {
 	auto attacker=Cast<ACombatCharacter>(GetOwner());
 	
@@ -140,7 +140,7 @@ bool USkillComponent::UseSkill(int32 SkillID,int32 CurrentWeaponType, int32 Skil
 		
 		 
 		FirstSkillVfxContext.Instigator=attacker;
-		FirstSkillVfxContext.TargetActor=nullptr;
+		FirstSkillVfxContext.TargetActor=TryToTarget;
 		FirstSkillVfxContext.SkillBaseVo=skillVo;
 	 
 		FirstSkillVfxContext.SkillLogic= nullptr;
