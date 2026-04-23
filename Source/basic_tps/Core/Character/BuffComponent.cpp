@@ -26,18 +26,42 @@ void UBuffComponent::AddBuff(UBuffLogicBase *NewBuff) {
     if (NewBuff->Duration <=0)return;
     NewBuff->Owner=NewBuff->EffectRole;
     NewBuff->OwnerBuff=this;
-    // 1. 同组覆盖逻辑 (类似 Unity 里的 group 查找)
-    for (int32 i = BuffList.Num() - 1; i >= 0; --i) {
-        if (BuffList[i]->group == NewBuff->group) {
-            RemoveBuff(i);
-        }
-    }
+   
 
-    // 2. 初始化时间
+    // 1. 初始化时间
     auto StartTime = GetWorld()->GetTimeSeconds();
     NewBuff->NextEffectTime = StartTime + NewBuff->tick;
     NewBuff->DieTime = (NewBuff->Duration > 0) ? (StartTime + NewBuff->Duration) : MAX_FLT;
-     
+
+    // 2. 同组覆盖逻辑  
+    for (int32 i = BuffList.Num() - 1; i >= 0; --i) {
+        if (BuffList[i]->GetClass() == NewBuff->GetClass()) {
+            if (NewBuff->BuffAddMode== EBuffAddMode::Replace )
+            {
+                RemoveBuff(i);
+            }else
+            {
+                switch (NewBuff->BuffAddMode)
+                {
+                case EBuffAddMode::AddValue:
+                    BuffList[i]->Value+=NewBuff->Value;
+                    if (NewBuff->Duration > 0)BuffList[i]->DieTime= NewBuff->DieTime;
+                    break;
+                case EBuffAddMode::AddTime:
+                    BuffList[i]->DieTime+=NewBuff->Duration;
+                   
+                        break;
+                case EBuffAddMode::CustomAddFunc:
+                    BuffList[i]->CustomMergeBuff(NewBuff);
+                    break;
+                default:
+                    break;
+                }
+                CalBuffAttributes();
+                return;
+            }
+        }
+    }
    
 
     //创建特效
@@ -134,7 +158,12 @@ UBuffLogicBase* UBuffComponent::GetBuff(TSubclassOf<UBuffLogicBase> BuffClass)
     }
     return nullptr;
 }
-
+int32 UBuffComponent::GetBuffValue(TSubclassOf<UBuffLogicBase> BuffClass)
+{
+    auto Buff = GetBuff(BuffClass);
+    if (IsValid(Buff)) {return Buff->Value;}
+    return 0;
+}
 void UBuffComponent::RemoveBuff(int32 Index, bool bReplaceMode)
 {
     if (BuffList.IsValidIndex(Index)==false) return;

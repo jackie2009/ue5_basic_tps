@@ -27,17 +27,7 @@ struct FSkillChargeState {
 	FSkillChargeState(int32 InMax, float InCD, float InTime) 
 		: MaxCharges(InMax), RechargeDuration(InCD), LastRechargeStartTime(InTime) {}
 };
-USTRUCT(BlueprintType)
-struct FComboTracking 
-{
-	GENERATED_BODY() // 必须加这个，用来注入反射代码
-	UPROPERTY(BlueprintReadWrite)
-	TObjectPtr<ACombatCharacter> TargetCharacter;
-	UPROPERTY(BlueprintReadWrite)
-	int32 Count ;
-	UPROPERTY(BlueprintReadWrite)
-	float LastHitTime;
-};
+ 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class BASIC_TPS_API USkillComponent : public UActorComponent
 {
@@ -59,8 +49,7 @@ public:
 	 
 	FEffectContext   FirstSkillVfxContext;
 	TSubclassOf<AMagicEffect>  FirstSkillMagicEffectClass;
-	UPROPERTY(BlueprintReadWrite,Category = "Combat")
-	FComboTracking ComboTracking;
+	 
 	UFUNCTION(BlueprintCallable, Category = "Combat",meta=(ExpandBoolAsExecs="ReturnValue"))
     bool  UseSkill(   int32 SkillID,int32 CurrentWeaponType,int32 SkillLevel=1,ACombatCharacter* TryToTarget=nullptr);
  

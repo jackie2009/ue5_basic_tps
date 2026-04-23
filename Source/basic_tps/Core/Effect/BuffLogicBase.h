@@ -5,7 +5,10 @@
 #include "basic_tps/Core/Data/CombatTypes.h"
 
 #include "FVfxSpawnConfig.h"
- 
+#include "ToolContextInterfaces.h"
+#include "Algo/Replace.h"
+#include "basic_tps/Core/Character/BuffComponent.h"
+
 #include "BuffLogicBase.generated.h"
 
 
@@ -46,6 +49,7 @@ public:
 		 
 		 
 	}
+	
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<AActor> View;
 
@@ -71,7 +75,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	int32 Value;
-	 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EBuffAddMode BuffAddMode= EBuffAddMode::Replace;
+	
 	// 功能函数
 	int32 UseAmount(int32 Amount)
 	{
@@ -94,5 +100,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent ,meta=(ToolTip="对角色属性的修改"))
 	void ApplyAttributesModify();
 	
+	UFUNCTION(BlueprintImplementableEvent ,meta=(ToolTip="特殊同组合并buff处理"))
+	void CustomMergeBuff(UBuffLogicBase* NewBuff);
 	
 };

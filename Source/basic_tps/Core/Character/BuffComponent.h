@@ -14,6 +14,12 @@ struct FBuffCharacterGroup
 	UPROPERTY()
 	TSet<TObjectPtr<ACombatCharacter>> Members;
 };
+
+UENUM(BlueprintType)
+enum class EBuffAddMode : uint8
+{
+	Replace,AddValue,AddTime,CustomAddFunc
+};
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 
 class  BASIC_TPS_API UBuffComponent : public UCharacterComponent {
@@ -32,6 +38,8 @@ public:
 	void RemoveBuff(UBuffLogicBase *BuffLogic, bool bReplaceMode=false);
 	UFUNCTION(BlueprintCallable)
 	UBuffLogicBase* GetBuff(TSubclassOf<UBuffLogicBase> BuffClass);
+	UFUNCTION(BlueprintCallable)
+	int32  GetBuffValue(TSubclassOf<UBuffLogicBase> BuffClass);
 	void RemoveBuff(int32 Index, bool bReplaceMode=false);
 	
 	UFUNCTION(BlueprintCallable)
