@@ -171,9 +171,9 @@ void USkillComponent::SpawnFirstMagicEffect()
 	//GEngine->AddOnScreenDebugMessage(-1,10,FColor::Yellow,FString::Printf( TEXT("SpawnFirstMagicEffect")));
 	FirstSkillMagicEffect=nullptr;
 	if (FirstSkillVfxContext.SkillBaseVo==nullptr)return;
-	 if (FirstSkillVfxContext.SkillLogic!=nullptr)
+	 if (IsValid( FirstSkillVfxContext.SkillLogic))
 	 {
-	 	if (FirstSkillVfxContext.SkillLogic->Owner==nullptr)
+	 	if (!IsValid(FirstSkillVfxContext.SkillLogic->Owner))
 	 	{
 	 		FirstSkillVfxContext.SkillLogic=nullptr;
 	 		FirstSkillVfxContext.SkillBaseVo=nullptr;
