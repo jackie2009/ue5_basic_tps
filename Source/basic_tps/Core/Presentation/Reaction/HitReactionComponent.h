@@ -47,6 +47,7 @@ protected:
 
 	float TickTimeTotal=0;
 	bool bCleared = false;
+	bool bIsStunned=false;
 	
 	// 恢复移动（定时器回调）
  

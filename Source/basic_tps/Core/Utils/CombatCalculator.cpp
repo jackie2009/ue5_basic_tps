@@ -40,7 +40,7 @@ FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACom
     Result.SkillBaseHarm=SkillVo.Power.Num()>0?SkillVo.Power[0]:0;
     Result.WeightAfterFadeoff=WeightAfterFadeoff;
     // 设置 基础伤害 与创建buff 等具体逻辑蓝图执行
-    if (Result.Attacker&&EffectContext.SkillLogic!=nullptr)
+    if (Result.Attacker&&IsValid(EffectContext.SkillLogic))
     {
         EffectContext.SkillLogic->CombatResult= Result;
         EffectContext.SkillLogic->ExecuteOnDealSigleTarget(EffectContext);

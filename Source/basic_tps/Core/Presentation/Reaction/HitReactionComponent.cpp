@@ -8,6 +8,7 @@
 #include "BrainComponent.h"
 #include "basic_tps/Core/Character/CombatCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Navigation/PathFollowingComponent.h"
 
 
 // Sets default values for this component's properties
@@ -26,6 +27,7 @@ void UHitReactionComponent::ApplyHit(float powScale)
 	AddImpulse(FVector(2000*powScale,0,0));
 	TickTimeTotal=0;
 	bCleared=false;
+	bIsStunned=false;
 }
 
 // Called when the game starts
@@ -51,6 +53,7 @@ void UHitReactionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 		}
 		return;
 	}
+	 
 	
 	TickTimeTotal+=DeltaTime;
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
@@ -115,34 +118,45 @@ void UHitReactionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 
 	ACharacter* Character = Cast<ACharacter>(GetOwner());
 	if (!Character) return;
+	if (HitStunTime>0&&!bIsStunned)
+	{
+		bIsStunned=true;
+		Character->GetCharacterMovement()->SetMovementMode(MOVE_None);
+			  
+		auto& TimerManager = GetWorld()->GetTimerManager();
 
- 
- 	Character->GetCharacterMovement()->MaxWalkSpeed =50;
-		  
-	auto& TimerManager = GetWorld()->GetTimerManager();
-
-	TimerManager.ClearTimer(RecoverHandle);
-
-	TimerManager.SetTimer(
-		RecoverHandle,
-		this,
-		&UHitReactionComponent::RecoverMovement,
-		HitStunTime,
-		false
-	);
+		TimerManager.ClearTimer(RecoverHandle);
+		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red, TEXT("STOP_MOVE"));
+		TimerManager.SetTimer(
+			RecoverHandle,
+			this,
+			&UHitReactionComponent::RecoverMovement,
+			HitStunTime,
+			false
+		);
+	}
 }
 void UHitReactionComponent::RecoverMovement()
 {
+	 
 	ACharacter* Character = Cast<ACharacter>(GetOwner());
 	if (!Character) return;
-	Character->GetCharacterMovement()->MaxWalkSpeed =500;
-	 
+	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red, TEXT("RecoverMovement"));
+	// 恢复行走模式，CMC 会在这一帧重新接管坐标更新
+	Character->GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+    
+	// 如果 AI 没动，手动调用一次，给路径系统一个信号重新开始
+	if (AAIController* AIC = Cast<AAIController>(Character->GetController()))
+	{
+		// 这一步是为了让行为树或路径组件意识到“我已经可以移动了”
+		AIC->ReceiveMoveCompleted.Broadcast(FAIRequestID::AnyRequest, EPathFollowingResult::Success);
+	}
  
 }
 void UHitReactionComponent::ClearHit()
 {
 	bCleared=true;
-	UE_LOG(LogTemp, Display, TEXT("HitReactionComponent::ClearHit"));
+	 
 	TObjectPtr<USkeletalMeshComponent> HitAnimMesh=GetOwner()->FindComponentByClass<USkeletalMeshComponent>();
 	if (HitAnimMesh)
 	{
