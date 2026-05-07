@@ -48,7 +48,7 @@ public:
 	AMagicEffect*   FirstSkillMagicEffect;
 	 
 	FEffectContext   FirstSkillVfxContext;
-	TSubclassOf<AMagicEffect>  FirstSkillMagicEffectClass;
+ 
 	 
 	UFUNCTION(BlueprintCallable, Category = "Combat",meta=(ExpandBoolAsExecs="ReturnValue"))
     bool  UseSkill(   int32 SkillID,int32 CurrentWeaponType,int32 SkillLevel=1,ACombatCharacter* TryToTarget=nullptr);

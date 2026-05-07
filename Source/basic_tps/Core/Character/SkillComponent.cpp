@@ -144,7 +144,7 @@ bool USkillComponent::UseSkill(int32 SkillID,int32 CurrentWeaponType, int32 Skil
 		FirstSkillVfxContext.SkillBaseVo=skillVo;
 	 
 		FirstSkillVfxContext.SkillLogic= nullptr;
-		FirstSkillMagicEffectClass=SkillLogicData->MagicEffectClass;
+	 
 	  FirstSkillVfxContext.SkillLogic=  SkillLogicData;
 		if (SkillLogicData->SkillMontage)
 		{
@@ -180,8 +180,9 @@ void USkillComponent::SpawnFirstMagicEffect()
 	 		return;	
 	 	}
 	 	FirstSkillVfxContext.SkillLogic->ExecuteOnStart(FirstSkillVfxContext);
+	 	FirstSkillMagicEffect=AMagicEffect::SpawnMagicEffect(this,	FirstSkillVfxContext.SkillLogic->MagicEffectClass,FirstSkillVfxContext);
 	 }
-	FirstSkillMagicEffect=AMagicEffect::SpawnMagicEffect(this,FirstSkillMagicEffectClass,FirstSkillVfxContext);
+	
 	FirstSkillVfxContext.SkillBaseVo=nullptr;
 	FirstSkillVfxContext.SkillLogic=nullptr;
 }
