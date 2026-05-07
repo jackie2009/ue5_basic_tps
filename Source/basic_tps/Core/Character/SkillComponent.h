@@ -44,19 +44,16 @@ protected:
 
 	
 public:
-	 UPROPERTY(BlueprintReadOnly,Category = "Combat")
-	AMagicEffect*   FirstSkillMagicEffect;
 	 
-	FEffectContext   FirstSkillVfxContext;
  
-	 
+	UPROPERTY(BlueprintReadOnly,Category = "Combat")
+	TObjectPtr<USkillLogicBase> ActiveSkillLogic;
+	
+
+
 	UFUNCTION(BlueprintCallable, Category = "Combat",meta=(ExpandBoolAsExecs="ReturnValue"))
     bool  UseSkill(   int32 SkillID,int32 CurrentWeaponType,int32 SkillLevel=1,ACombatCharacter* TryToTarget=nullptr);
  
-	UFUNCTION(BlueprintCallable, Category = "Combat")
-	void  SpawnFirstMagicEffect();
-	UFUNCTION(BlueprintCallable, Category = "Combat")
-	void  SpawnFlyMagicEffect();
 
 
 	// 是否CD可用

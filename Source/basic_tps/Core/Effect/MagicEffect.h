@@ -25,8 +25,7 @@ public:
 		const UObject* WorldContextObject, const TSubclassOf<AMagicEffect> ClassToSpawn,
 		const FEffectContext& InContext,const FVector& location=FVector(0.f, 0.f, 0.f),const FQuat& rotation=FQuat(),const bool ForceUseParamsTransform=false);
 
-	UFUNCTION(BlueprintNativeEvent,BlueprintCallable, Category = "MagicEffect")
-	AMagicEffect* SpawnNextMagicEffect();
+ 
 
 	// 在 Actor 类内部
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config", meta = (ShowOnlyInnerProperties))

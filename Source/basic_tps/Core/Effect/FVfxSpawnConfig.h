@@ -35,8 +35,7 @@ UENUM(BlueprintType)
 enum class ECreateChildMode : uint8
 {
 	None     UMETA(DisplayName = "不创建新特效"),
-	Hit     UMETA(DisplayName = "碰撞时创建新特效"),
-	Notify       UMETA(DisplayName = "SpawnFlyVfxNotify时创建新特效")
+	Hit     UMETA(DisplayName = "碰撞时创建新特效")
 };
 
 

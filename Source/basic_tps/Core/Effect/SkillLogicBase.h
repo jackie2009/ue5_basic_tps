@@ -23,9 +23,14 @@ public:
 	TObjectPtr<ACombatCharacter> Owner;
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<USkillComponent> SkillComp;
-    
+	UPROPERTY(BlueprintReadOnly)
+	FEffectContext   InitEffectContext;
+	
+	TObjectPtr<AMagicEffect> ChargeMagicEffectInstance;
+	TObjectPtr<AMagicEffect>  ExecuteMagicEffectInstance;
+
 	UFUNCTION(BlueprintImplementableEvent ,meta=(ToolTip="技能被创建出来时 这时还没碰撞到目标"))
-	void ExecuteOnStart(const  FEffectContext& EffectContext);
+	void ExecuteOnStart();
 	
 	
 	UFUNCTION(BlueprintImplementableEvent ,meta=(ToolTip="开始处理每个目标对象"))
@@ -46,16 +51,22 @@ public:
 	//以下函数 不能在 start里调用 这时候还没 CombatResult
 	UFUNCTION(BlueprintCallable)
 	void SetSkillBaseHarm(int32 attackPoint);
-	void Init(ACombatCharacter* InOwner, USkillComponent* InSkillComp);
-
-
+	void Init(ACombatCharacter* InOwner, USkillComponent* InSkillComp,FEffectContext InInitEffectContext);
+	UFUNCTION(BlueprintCallable)
+	void SpawnChargeMagicEffect();
+	UFUNCTION(BlueprintCallable)
+	void SpawnExecuteMagicEffect();
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Visual")
 	TObjectPtr<UAnimMontage> SkillMontage;
 	
  
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Visual")
-	TSubclassOf<AMagicEffect> MagicEffectClass;
+ 
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Visual")
+	TSubclassOf<AMagicEffect> ChargeMagicEffect;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Visual")
+	TSubclassOf<AMagicEffect> ExecuteMagicEffect;
 	 
 	
 	

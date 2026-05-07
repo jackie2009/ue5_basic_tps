@@ -227,14 +227,7 @@ void AMagicEffect::InitializeEffect(FEffectContext InContext, USceneComponent* I
 }
 
  
-AMagicEffect* AMagicEffect::SpawnNextMagicEffect_Implementation()
-{
  
-	if (EffectConfig.ChildMode!=ECreateChildMode::Notify) return nullptr;
-	 
-	return SpawnMagicEffect(this,EffectConfig.NextEffect,MyContext);
-}
-
 
 void AMagicEffect::OnEffectOverlap(UPrimitiveComponent* OverlappedComponent, 
 						 AActor* OtherActor, 

@@ -21,7 +21,7 @@ USkillComponent::USkillComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
-	FirstSkillMagicEffect=nullptr;
+ 
 	// ...
 }
 
@@ -131,32 +131,17 @@ bool USkillComponent::UseSkill(int32 SkillID,int32 CurrentWeaponType, int32 Skil
 				// 此时 NewSkill 里的属性（如 MontageToPlay, EffectClass）已经是你在蓝图里预设好的了
 			}
 		}
-		SkillLogicData->Init(Cast<ACombatCharacter>( GetOwner()),this);
-		if (!IsValid(SkillLogicData))
-		{
-			UE_LOG(LogTemp, Error, TEXT("SkillVisualDataID [%s] 加载失败或无效！"), *skillVo->skillVisualDataID);
-		    return false;
-		}
+		FEffectContext	InitSkillVfxContext;
+		InitSkillVfxContext.Instigator=attacker;
+		InitSkillVfxContext.TargetActor=TryToTarget;
+		InitSkillVfxContext.SkillBaseVo=skillVo;
+		InitSkillVfxContext.SkillLogic=  SkillLogicData;
+		ActiveSkillLogic=SkillLogicData;
 		
+		ActiveSkillLogic->Init(Cast<ACombatCharacter>( GetOwner()),this,InitSkillVfxContext);
+		ActiveSkillLogic->ExecuteOnStart();
 		 
-		FirstSkillVfxContext.Instigator=attacker;
-		FirstSkillVfxContext.TargetActor=TryToTarget;
-		FirstSkillVfxContext.SkillBaseVo=skillVo;
-	 
-		FirstSkillVfxContext.SkillLogic= nullptr;
-	 
-	  FirstSkillVfxContext.SkillLogic=  SkillLogicData;
-		if (SkillLogicData->SkillMontage)
-		{
-			UAnimInstance* AnimInst = attacker->GetMesh()->GetAnimInstance();
-			AnimInst->Montage_Play(SkillLogicData->SkillMontage,1,EMontagePlayReturnType::MontageLength,0,false);
-		}else
-		{
-			 
-			 SpawnFirstMagicEffect();
-			 SpawnFlyMagicEffect();
-		}
-		 
+	
 	   return true;
 	
 	 
@@ -166,33 +151,9 @@ bool USkillComponent::UseSkill(int32 SkillID,int32 CurrentWeaponType, int32 Skil
 	
 }
 
-void USkillComponent::SpawnFirstMagicEffect()
-{
-	//GEngine->AddOnScreenDebugMessage(-1,10,FColor::Yellow,FString::Printf( TEXT("SpawnFirstMagicEffect")));
-	FirstSkillMagicEffect=nullptr;
-	if (FirstSkillVfxContext.SkillBaseVo==nullptr)return;
-	 if (IsValid( FirstSkillVfxContext.SkillLogic))
-	 {
-	 	if (!IsValid(FirstSkillVfxContext.SkillLogic->Owner))
-	 	{
-	 		FirstSkillVfxContext.SkillLogic=nullptr;
-	 		FirstSkillVfxContext.SkillBaseVo=nullptr;
-	 		return;	
-	 	}
-	 	FirstSkillVfxContext.SkillLogic->ExecuteOnStart(FirstSkillVfxContext);
-	 	FirstSkillMagicEffect=AMagicEffect::SpawnMagicEffect(this,	FirstSkillVfxContext.SkillLogic->MagicEffectClass,FirstSkillVfxContext);
-	 }
-	
-	FirstSkillVfxContext.SkillBaseVo=nullptr;
-	FirstSkillVfxContext.SkillLogic=nullptr;
-}
+ 
 
-void USkillComponent::SpawnFlyMagicEffect()
-{
-	if (FirstSkillMagicEffect==nullptr)return;
-	FirstSkillMagicEffect->SpawnNextMagicEffect();
-	FirstSkillMagicEffect=nullptr;
-}
+ 
 
 bool USkillComponent::IsSkillReady(int32 SkillID) const
 {
