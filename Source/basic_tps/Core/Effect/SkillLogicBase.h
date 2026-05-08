@@ -15,7 +15,13 @@ UCLASS(Blueprintable, Abstract, EditInlineNew, DefaultToInstanced)
 class USkillLogicBase : public UObject
 {
 	GENERATED_BODY()
-
+protected:
+	UFUNCTION(BlueprintImplementableEvent ,meta=(ToolTip="伤害公式计算前修正参数 比如 忽视目标防御"))
+	void PreDamageProcess();
+	UFUNCTION(BlueprintImplementableEvent ,meta=(ToolTip="伤害公式计算后修正结果 伤害抵扣"))
+	void AdjustFinalDamage();
+	UFUNCTION(BlueprintImplementableEvent ,meta=(ToolTip="扣除目标血量后做处理 比如吸血"))
+	void PostDamageProcess();
 public:
 	UPROPERTY(BlueprintReadOnly)
 	FCombatResult    CombatResult;
@@ -37,17 +43,10 @@ public:
  
 	void ExecuteOnDealSigleTarget(const  FEffectContext& EffectContext);
 	
-	UFUNCTION(BlueprintImplementableEvent ,meta=(ToolTip="伤害公式计算前修正参数 比如 忽视目标防御"))
-	void PreDamageProcess();
 	
-	
-	
-	UFUNCTION(BlueprintImplementableEvent ,meta=(ToolTip="伤害公式计算后修正结果 伤害抵扣"))
-	void AdjustFinalDamage();
-	
-	UFUNCTION(BlueprintImplementableEvent ,meta=(ToolTip="扣除目标血量后做处理 比如吸血"))
-	void PostDamageProcess();
-
+	void PreDamageProcess_Ref( FCombatResult& InOutResult);
+	void AdjustFinalDamage_Ref( FCombatResult& InOutResult);
+	void PostDamageProcess_Ref( FCombatResult& InOutResult);
 	//以下函数 不能在 start里调用 这时候还没 CombatResult
 	UFUNCTION(BlueprintCallable)
 	void SetSkillBaseHarm(int32 attackPoint);
@@ -56,6 +55,8 @@ public:
 	void SpawnChargeMagicEffect();
 	UFUNCTION(BlueprintCallable)
 	void SpawnExecuteMagicEffect();
+
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Visual")
 	TObjectPtr<UAnimMontage> SkillMontage;
 	

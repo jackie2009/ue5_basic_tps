@@ -63,9 +63,9 @@ FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACom
     // 设置   具体逻辑蓝图 前置伤害修正
     if (Result.Attacker&&EffectContext.SkillLogic!=nullptr)
     {
-        EffectContext.SkillLogic->CombatResult= Result;
-        EffectContext.SkillLogic->PreDamageProcess();
-        Result=EffectContext.SkillLogic->CombatResult;
+      
+        EffectContext.SkillLogic->PreDamageProcess_Ref(Result);
+ 
     
 
     }
@@ -81,10 +81,7 @@ FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACom
     // 设置   具体逻辑蓝图 伤害结果修正
     if (Result.Attacker&&EffectContext.SkillLogic!=nullptr)
     {
-        EffectContext.SkillLogic->CombatResult= Result;
-        EffectContext.SkillLogic->AdjustFinalDamage();
-        Result=EffectContext.SkillLogic->CombatResult;
-
+        EffectContext.SkillLogic->AdjustFinalDamage_Ref(Result);
     }
     
 
@@ -102,9 +99,7 @@ FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACom
     // 设置   具体逻辑蓝图 后置反馈与副作用
     if (Result.Attacker&&EffectContext.SkillLogic!=nullptr)
     {
-        EffectContext.SkillLogic->CombatResult= Result;
-        EffectContext.SkillLogic->PostDamageProcess();
-        Result=EffectContext.SkillLogic->CombatResult;
+            EffectContext.SkillLogic->PostDamageProcess_Ref(Result);
 
     }
     

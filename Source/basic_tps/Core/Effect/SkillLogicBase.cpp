@@ -44,7 +44,29 @@ void USkillLogicBase::SpawnExecuteMagicEffect()
 	}
 	ExecuteMagicEffectInstance= AMagicEffect::SpawnMagicEffect(Owner,	ExecuteMagicEffect,InitEffectContext,location,rotation);
 }
- 
- 
+void USkillLogicBase::PreDamageProcess_Ref(FCombatResult& InOutResult)
+{
+	// 这种赋值操作在 C++ 层面是内存拷贝（Memcpy）
+	this->CombatResult = InOutResult;
+	this->PreDamageProcess();
+	InOutResult = this->CombatResult;
+}
+
+void USkillLogicBase::AdjustFinalDamage_Ref(FCombatResult& InOutResult)
+{
+	// 这种赋值操作在 C++ 层面是内存拷贝（Memcpy）
+	this->CombatResult = InOutResult;
+	this->AdjustFinalDamage();
+	InOutResult = this->CombatResult;
+}
+
+void USkillLogicBase::PostDamageProcess_Ref(FCombatResult& InOutResult)
+{
+	// 这种赋值操作在 C++ 层面是内存拷贝（Memcpy）
+	this->CombatResult = InOutResult;
+	this->PostDamageProcess();
+	InOutResult = this->CombatResult;
+}
+
 
  
