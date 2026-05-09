@@ -131,6 +131,10 @@ bool USkillComponent::UseSkill(int32 SkillID,int32 CurrentWeaponType, int32 Skil
 				// 此时 NewSkill 里的属性（如 MontageToPlay, EffectClass）已经是你在蓝图里预设好的了
 			}
 		}
+		if (SkillLogicData==nullptr)
+		{
+			return false;
+		}
 		FEffectContext	InitSkillVfxContext;
 		InitSkillVfxContext.Instigator=attacker;
 		InitSkillVfxContext.TargetActor=TryToTarget;
