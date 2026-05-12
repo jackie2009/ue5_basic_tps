@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
- 
+#include "GameplayTagContainer.h"
 
 #include "FVfxSpawnConfig.h"
  
@@ -65,8 +65,8 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "MagicEffect")
 	void OnValidHit(ACombatCharacter *hitTarget);
 	//动画事件通知
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "MagicEffect" ,meta=(ToolTip="伤害公式计算前修正参数 比如 忽视目标防御"))
-	void OnSkillAnimNotify(const UAnimNotify* InAnimNotify);
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "MagicEffect" ,meta=(ToolTip="技能动画事件通知"))
+	void OnSkillAnimNotify(const   FGameplayTag tag);
 private:
  
 };

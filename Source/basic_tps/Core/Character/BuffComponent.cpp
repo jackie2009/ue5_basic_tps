@@ -251,7 +251,8 @@ void UBuffComponent::CalBuffAttributes()
        
         if (AI&&!bAIStoppedByBuff)
         {
-            AI->StopMovement(); 
+            AI->StopMovement();
+            if (AI->GetBrainComponent())
             AI->GetBrainComponent()->StopLogic("buff");
             Character->GetMesh()->GlobalAnimRateScale= 0.f;
         }
@@ -261,7 +262,7 @@ void UBuffComponent::CalBuffAttributes()
         if (AI&&bAIStoppedByBuff)
         {
            
-            AI->GetBrainComponent()->RestartLogic();
+           if (AI->GetBrainComponent())  AI->GetBrainComponent()->RestartLogic();
             Character->GetMesh()->GlobalAnimRateScale= 1.f;
             
         }
