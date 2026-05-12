@@ -8,7 +8,7 @@
  
 #include "MagicEffect.generated.h"
  
-
+ 
 UCLASS()
 class BASIC_TPS_API AMagicEffect : public AActor
 {
@@ -64,6 +64,9 @@ protected:
 	// 有效目标撞击之后 做连锁闪电类再次发射
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "MagicEffect")
 	void OnValidHit(ACombatCharacter *hitTarget);
+	//动画事件通知
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "MagicEffect" ,meta=(ToolTip="伤害公式计算前修正参数 比如 忽视目标防御"))
+	void OnSkillAnimNotify(const UAnimNotify* InAnimNotify);
 private:
  
 };

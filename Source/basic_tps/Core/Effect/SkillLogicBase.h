@@ -31,9 +31,11 @@ public:
 	TObjectPtr<USkillComponent> SkillComp;
 	UPROPERTY(BlueprintReadOnly)
 	FEffectContext   InitEffectContext;
+
+	UPROPERTY(BlueprintReadOnly)
+	TObjectPtr<AMagicEffect> 	MagicEffectEmitterInstance;
 	
-	TObjectPtr<AMagicEffect> ChargeMagicEffectInstance;
-	TObjectPtr<AMagicEffect>  ExecuteMagicEffectInstance;
+ 
 
 	UFUNCTION(BlueprintImplementableEvent ,meta=(ToolTip="技能被创建出来时 这时还没碰撞到目标"))
 	void ExecuteOnStart();
@@ -51,10 +53,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetSkillBaseHarm(int32 attackPoint);
 	void Init(ACombatCharacter* InOwner, USkillComponent* InSkillComp,FEffectContext InInitEffectContext);
-	UFUNCTION(BlueprintCallable)
-	void SpawnChargeMagicEffect();
-	UFUNCTION(BlueprintCallable)
-	void SpawnExecuteMagicEffect();
+ 
 
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Visual")
@@ -63,13 +62,11 @@ public:
  
  
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Visual")
-	TSubclassOf<AMagicEffect> ChargeMagicEffect;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Visual")
-	TSubclassOf<AMagicEffect> ExecuteMagicEffect;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Visual",meta=(ToolTip="特效发射器类型"))
+	TSubclassOf<AMagicEffect> MagicEffectEmitterClass;
 	 
-	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Visual",meta=(ToolTip="发射器需要的特效类型"))
+	TArray<TSubclassOf<AMagicEffect>> MagicEffectClassList;
 	
 
 	//衰减配置
