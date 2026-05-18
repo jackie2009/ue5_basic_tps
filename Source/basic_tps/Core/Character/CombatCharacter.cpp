@@ -5,6 +5,7 @@
 
 #include "BuffComponent.h"
 #include "CombatComponent.h"
+#include "CombatNetworkComponent.h"
 #include "SkillComponent.h"
 #include "basic_tps/Core/Data/CharacterDataComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -16,8 +17,13 @@ ACombatCharacter::ACombatCharacter()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	bReplicates = true;
 
-	 
+	CharacterDataComp = CreateDefaultSubobject<UCharacterDataComponent>(TEXT("CharacterDataComp"));
+	CombatComp = CreateDefaultSubobject<UCombatComponent>(TEXT("CombatComp"));
+	SkillComp = CreateDefaultSubobject<USkillComponent>(TEXT("SkillComp"));
+	BuffComp = CreateDefaultSubobject<UBuffComponent>(TEXT("BuffComp"));
+	NetworkComp = CreateDefaultSubobject<UCombatNetworkComponent>(TEXT("NetworkComp"));
 }
 
 // Called when the game starts or when spawned
@@ -30,17 +36,6 @@ void ACombatCharacter::BeginPlay()
 void ACombatCharacter::PreInitializeComponents()
 {
 	Super::PreInitializeComponents();
-	CharacterDataComp = NewObject<UCharacterDataComponent>(this);
-	CharacterDataComp->RegisterComponent();
-	
-	CombatComp = NewObject<UCombatComponent>(this);
-	CombatComp->RegisterComponent();
-
-	SkillComp = NewObject<USkillComponent>(this);
-	SkillComp->RegisterComponent();
-
-	BuffComp = NewObject<UBuffComponent>(this);
-	BuffComp->RegisterComponent();
 }
 
 void ACombatCharacter::PostInitializeComponents()

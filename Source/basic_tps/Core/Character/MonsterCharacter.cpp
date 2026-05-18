@@ -11,7 +11,7 @@
 // Sets default values
 AMonsterCharacter::AMonsterCharacter()
 {
-	 
+	MonsterDataComp=CreateDefaultSubobject<UMonsterDataComponent>(TEXT("MonsterDataComp"));
 }
 
 // Called when the game starts or when spawned
@@ -24,11 +24,6 @@ void AMonsterCharacter::BeginPlay()
 void AMonsterCharacter::PreInitializeComponents()
 {
 	Super::PreInitializeComponents();
-	if (MonsterBaseID>0)
-	{
-		MonsterDataComp=NewObject<UMonsterDataComponent>(this);
-		MonsterDataComp->RegisterComponent();
-	}
  
 }
 

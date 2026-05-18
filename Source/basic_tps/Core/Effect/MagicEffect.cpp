@@ -7,13 +7,14 @@
 
 #include "basic_tps/Core/Character/CombatCharacter.h"
 #include "basic_tps/Core/Character/CombatComponent.h"
+#include "basic_tps/Core/Character/SkillComponent.h"
 #include "basic_tps/Core/TableData/SkillBaseVo.h"
 #include "basic_tps/Core/Utils/CombatCameraUtils.h"
 #include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/PrimitiveComponent.h"
-
+#include "Net/UnrealNetwork.h"
 AMagicEffect::AMagicEffect()
 {
 	PrimaryActorTick.bCanEverTick = true;

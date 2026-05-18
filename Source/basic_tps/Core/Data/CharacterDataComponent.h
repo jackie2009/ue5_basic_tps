@@ -12,6 +12,7 @@ class BASIC_TPS_API UCharacterDataComponent : public UActorComponent
     GENERATED_BODY()
 public:
     UCharacterDataComponent();
+    virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
     UFUNCTION(BlueprintCallable,BlueprintPure, Category = "CharacterData")
     int32 GetCurrentHP();
     UFUNCTION(BlueprintCallable,BlueprintPure, Category = "CharacterData")
@@ -42,8 +43,14 @@ public:
    
    
 private:
-   
+    UFUNCTION()
+    void OnRep_Hp(int32 OldHp);
+    UFUNCTION()
+    void OnRep_Mp(int32 OldMp);
+
+    UPROPERTY(ReplicatedUsing=OnRep_Hp)
     int32 Hp = 100;
+    UPROPERTY(ReplicatedUsing=OnRep_Mp)
     int32 Mp = 100;
     
 public:

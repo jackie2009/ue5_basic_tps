@@ -17,7 +17,7 @@
 
 FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACombatCharacter* Defencer, const FEffectContext &  EffectContext)
 {
-    auto  & SkillVo= *EffectContext.SkillBaseVo;
+    auto  & SkillVo= *EffectContext.GetSkillBaseVo();
     //修改属性 测试
     float  WeightAfterFadeoff=1.0f;
     

@@ -18,6 +18,7 @@ UCombatComponent::UCombatComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
+	SetIsReplicatedByDefault(true);
 
 	// ...
 }
@@ -35,8 +36,9 @@ void UCombatComponent::BeginPlay()
 
 void UCombatComponent::TryHurtTarget(ACombatCharacter* Target, const FEffectContext &  EffectContext)
 {
+	if (!GetOwner()||!GetOwner()->HasAuthority()) return;
 	if (Target==nullptr) return;
-	auto skillBaseVoPtr=EffectContext.SkillBaseVo;
+	auto skillBaseVoPtr=EffectContext.GetSkillBaseVo();
 	if (skillBaseVoPtr==nullptr)return;
 	auto attacker=Cast<ACombatCharacter>(GetOwner());
 	 
@@ -56,6 +58,7 @@ void UCombatComponent::HandleHurt( int FinalDamage,ACombatCharacter * From)
 }
 void UCombatComponent::HandleHurt( FCombatResult& Result)
 {
+	if (!GetOwner()||!GetOwner()->HasAuthority()) return;
 	auto character=Cast<ACombatCharacter>(GetOwner());
 	if (character->IsAlive()==false)return;
 	if (Result.bIsMiss)

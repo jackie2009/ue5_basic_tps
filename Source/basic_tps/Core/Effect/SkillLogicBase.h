@@ -36,7 +36,8 @@ public:
 	TObjectPtr<AMagicEffect> 	MagicEffectEmitterInstance;
 	
  
-
+	UFUNCTION(BlueprintImplementableEvent ,meta=(ToolTip="Start之前 可以改InitEffectContext"))
+	void ExecuteOnInit();
 	UFUNCTION(BlueprintImplementableEvent ,meta=(ToolTip="技能被创建出来时 这时还没碰撞到目标"))
 	void ExecuteOnStart();
 	
@@ -130,5 +131,6 @@ public:
 		return Weight;
 	}
 	
+	 
  
 };

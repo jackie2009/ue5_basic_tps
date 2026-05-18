@@ -12,7 +12,9 @@
 #include "basic_tps/Core/NotifyState/CombatGameplayTags.h"
 #include "basic_tps/Core/TableData/SkillBaseVo.h"
 #include "basic_tps/Core/TableData/TableDataManagerSubsystem.h"
+#include "basic_tps/Core/Utils/CombatCameraUtils.h"
 #include "basic_tps/Core/Utils/CombatCalculator.h"
+#include "Net/UnrealNetwork.h"
 
 
 // Sets default values for this component's properties
@@ -21,6 +23,7 @@ USkillComponent::USkillComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
+	SetIsReplicatedByDefault(true);
  
 	// ...
 }
@@ -41,7 +44,12 @@ bool USkillComponent::UseSkill(int32 SkillID,int32 CurrentWeaponType, int32 Skil
 	
 	//动作限制状态检测
 	if (attacker==nullptr)return false;
-	
+	//玩家技能使用判断 在各自本地 ，其他人只广播 无逻辑的特效与动作
+	//怪物的技能判断 在房主 需要唯一性
+	if (!attacker->IsLocallyControlled())
+	{
+		return false; 
+	}
 	
 	// cd mp check
 	TArray<FSkillBaseVo*>* skillBaseVoPtr = UTableDataManagerSubsystem::Get()->SkillBaseMap.Find(SkillID);
@@ -138,7 +146,8 @@ bool USkillComponent::UseSkill(int32 SkillID,int32 CurrentWeaponType, int32 Skil
 		FEffectContext	InitSkillVfxContext;
 		InitSkillVfxContext.Instigator=attacker;
 		InitSkillVfxContext.TargetActor=TryToTarget;
-		InitSkillVfxContext.SkillBaseVo=skillVo;
+		InitSkillVfxContext.SkillID=skillVo->ID;
+		InitSkillVfxContext.SkillLevel=skillVo->level;
 		InitSkillVfxContext.SkillLogic=  SkillLogicData;
 		ActiveSkillLogic=SkillLogicData;
 		

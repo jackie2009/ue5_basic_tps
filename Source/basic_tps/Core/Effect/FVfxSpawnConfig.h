@@ -1,7 +1,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
- 
+#include "basic_tps/Core/TableData/SkillBaseVo.h"
+#include "basic_tps/Core/TableData/TableDataManagerSubsystem.h"
+
 
 #include "FVfxSpawnConfig.generated.h"
 class USkillLogicBase;
@@ -99,7 +101,7 @@ struct FEffectContext
 public:
  
 	// 结构体内部建议这样改
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MagicEffect")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly,NotReplicated, Category = "MagicEffect")
 	TSet<AActor*> IgnoreTargetSet;
 	 
 	//创建的第几代 用来计算分裂发射次数控制 与伤害衰减等
@@ -114,12 +116,29 @@ public:
 	ACombatCharacter * TargetActor;
 
 	// 3. 战斗快照（防止飞行过程中属性变了）
- 
-	FSkillBaseVo * SkillBaseVo;
-	
- 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MagicEffect")
+	int32 SkillID;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MagicEffect")
+	int32 SkillLevel;
+	FORCEINLINE FSkillBaseVo* GetSkillBaseVo() const
+	{
+		if (SkillID<=0||SkillLevel<0) return nullptr;
+		TArray<FSkillBaseVo*>* skillBaseVoPtr = UTableDataManagerSubsystem::Get()->SkillBaseMap.Find(SkillID);
+		if (skillBaseVoPtr==nullptr)return nullptr;
+
+		const int32 SkillLevelIndex = SkillLevel - 1;
+
+		if (!skillBaseVoPtr->IsValidIndex(SkillLevelIndex)) return nullptr;
+		auto skillVo=(*skillBaseVoPtr)[SkillLevelIndex];
+		return skillVo;
+	}
+
 	UPROPERTY(BlueprintReadOnly, Category = "MagicEffect")
 	TObjectPtr<USkillLogicBase> SkillLogic=nullptr;
 	float distanceToEffect;
-     
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MagicEffect")
+	FHitResult HitResult;
+	
+
 };

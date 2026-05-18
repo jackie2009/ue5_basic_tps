@@ -11,6 +11,7 @@ class UBuffComponent;
 class USkillComponent;
 class UCombatComponent;
 class UCharacterDataComponent;
+class UCombatNetworkComponent;
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnCharacterDeath, ACombatCharacter*);
 UCLASS()
 class BASIC_TPS_API ACombatCharacter : public ACharacter
@@ -47,6 +48,9 @@ public:
 
 	UPROPERTY( BlueprintReadOnly, Category = "Combat")
 	TObjectPtr<UBuffComponent> BuffComp = nullptr;
+
+	UPROPERTY( BlueprintReadOnly, Category = "Combat")
+	TObjectPtr<UCombatNetworkComponent> NetworkComp = nullptr;
 	
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	bool IsAlive() const;

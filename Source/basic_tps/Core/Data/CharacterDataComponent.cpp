@@ -3,16 +3,45 @@
 
 #include "CharacterDataComponent.h"
  
+#include "basic_tps/Core/Character/CombatCharacter.h"
 #include "Kismet/GameplayStatics.h"
+#include "Net/UnrealNetwork.h"
 
  
 UCharacterDataComponent::UCharacterDataComponent()
 {
  
 	PrimaryComponentTick.bCanEverTick = false;
+	SetIsReplicatedByDefault(true);
 	Attributes[AttributeEnum::HP]=1;
 	SetCurrentHP(Attributes[AttributeEnum::HP]);
  
+}
+
+void UCharacterDataComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(UCharacterDataComponent, Hp);
+	DOREPLIFETIME(UCharacterDataComponent, Mp);
+}
+
+void UCharacterDataComponent::OnRep_Hp(int32 OldHp)
+{
+	auto Character=Cast<ACombatCharacter>(GetOwner());
+	if (!Character)return;
+	if (Hp < OldHp)
+	{
+		Character->SelfOnHurt(OldHp - Hp, FVector::Zero());
+	}
+	if (OldHp > 0&&Hp <= 0)
+	{
+		Character->SelfOnDead();
+	}
+}
+
+void UCharacterDataComponent::OnRep_Mp(int32 OldMp)
+{
 }
 
 int32 UCharacterDataComponent::GetCurrentHP() 

@@ -11,7 +11,7 @@
 // Sets default values
 AHeroCharacter::AHeroCharacter()
 {
-	 
+	HeroDataComp= CreateDefaultSubobject<UHeroDataComponent>(TEXT("HeroDataComp"));
 }
 
 // Called when the game starts or when spawned
@@ -24,8 +24,6 @@ void AHeroCharacter::BeginPlay()
 void AHeroCharacter::PreInitializeComponents()
 {
 	Super::PreInitializeComponents();
-	HeroDataComp= NewObject<UHeroDataComponent>(this);
-	HeroDataComp->RegisterComponent();
  
 }
 

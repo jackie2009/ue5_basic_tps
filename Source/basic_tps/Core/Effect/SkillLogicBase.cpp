@@ -3,6 +3,7 @@
 #include "BuffLogicBase.h"
 #include "MagicEffect.h"
 #include "basic_tps/Core/Character/BuffComponent.h"
+#include "basic_tps/Core/Character/CombatNetworkComponent.h"
 #include "basic_tps/Core/Character/SkillComponent.h"
 
 void USkillLogicBase::SetSkillBaseHarm(int32 attackPoint)
@@ -15,6 +16,7 @@ void USkillLogicBase::Init(ACombatCharacter* InOwner, USkillComponent* InSkillCo
 	Owner=InOwner;
 	SkillComp=InSkillComp;
 	InitEffectContext=InInitEffectContext;
+	ExecuteOnInit();
 	MagicEffectEmitterInstance=nullptr;
 	if (MagicEffectEmitterClass!=nullptr)
 	{
@@ -23,8 +25,9 @@ void USkillLogicBase::Init(ACombatCharacter* InOwner, USkillComponent* InSkillCo
 	
 	if (SkillMontage)
 	{
-		UAnimInstance* AnimInst = Owner->GetMesh()->GetAnimInstance();
-		AnimInst->Montage_Play(SkillMontage,1,EMontagePlayReturnType::MontageLength,0,false);
+		//UAnimInstance* AnimInst = Owner->GetMesh()->GetAnimInstance();
+		//AnimInst->Montage_Play(SkillMontage,1,EMontagePlayReturnType::MontageLength,0,false);
+		Owner->NetworkComp->LocalAndCast_PlayMontage(SkillMontage);
 	} 
 		 
 }
