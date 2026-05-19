@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CharacterComponent.h"
 #include "Components/ActorComponent.h"
 #include "CombatComponent.generated.h"
 
@@ -10,7 +11,7 @@ struct FEffectContext;
 struct FCombatResult;
 class ACombatCharacter;
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class BASIC_TPS_API UCombatComponent : public UActorComponent
+class BASIC_TPS_API UCombatComponent : public UCharacterComponent
 {
 	GENERATED_BODY()
 
@@ -33,7 +34,7 @@ public:
 	// 处理受击逻辑 (整合之前讨论的 FCombatResult)
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	void HandleHurt( int FinalDamage,ACombatCharacter * From=nullptr);
-	void HandleHurt( FCombatResult& Result);
+	void HandleHurt(const FCombatResult& Result);
 
 	// 仇恨管理
 	void AddAggro(ACombatCharacter* Target, int32 Amount);

@@ -7,6 +7,7 @@
 
 #include "basic_tps/Core/Character/CombatCharacter.h"
 #include "basic_tps/Core/Character/CombatComponent.h"
+#include "basic_tps/Core/Character/CombatNetworkComponent.h"
 #include "basic_tps/Core/Character/SkillComponent.h"
 #include "basic_tps/Core/TableData/SkillBaseVo.h"
 #include "basic_tps/Core/Utils/CombatCameraUtils.h"
@@ -283,21 +284,22 @@ void   AMagicEffect::ProcessImpact(AActor* OtherActor, UPrimitiveComponent* Othe
 		// 获取敌人碰撞体上距离我（子弹/火球）中心最近的点
 		OtherComp->GetClosestPointOnCollision(GetActorLocation(), ImpactPoint, HitResult.BoneName);
 	
-	
-		auto effect=SpawnMagicEffect(this,EffectConfig.NextEffect,MyContext, ImpactPoint,UKismetMathLibrary::MakeRotFromX(HitResult.ImpactNormal).Quaternion());
-	}
+		if (IsValid(MyContext.Instigator))
+		{
+			 MyContext.Instigator->NetworkComp->LocalAndCast_SpawnMagicEffect(EffectConfig.NextEffect,MyContext, ImpactPoint,UKismetMathLibrary::MakeRotFromX(HitResult.ImpactNormal).Quaternion(),false);
+		}
+		}
 	OnValidHit(targetActor);
 }
 void AMagicEffect::OnFlySphereHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	if (MyContext.Instigator==nullptr)return;
+	if (!IsValid(MyContext.Instigator))return;
  
 		
 	 if (IsValid(MainCollision)) MainCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	 SetLifeSpan(0.3f);
 
+     MyContext.Instigator->NetworkComp->LocalAndCast_SpawnMagicEffect(EffectConfig.NextEffect,MyContext, Hit.ImpactPoint,UKismetMathLibrary::MakeRotFromX(Hit.ImpactNormal).Quaternion(),true);
  
-	auto effect=SpawnMagicEffect(this,EffectConfig.NextEffect,MyContext, Hit.ImpactPoint,UKismetMathLibrary::MakeRotFromX(Hit.ImpactNormal).Quaternion());
-	
 }

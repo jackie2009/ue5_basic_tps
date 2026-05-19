@@ -10,6 +10,7 @@
 #include "NiagaraComponent.h"
 #include "basic_tps/Core/Character/BuffComponent.h"
 #include "basic_tps/Core/Character/CombatComponent.h"
+#include "basic_tps/Core/Character/CombatNetworkComponent.h"
 #include "basic_tps/Core/Character/SkillComponent.h"
 #include "basic_tps/Core/Effect/BuffLogicBase.h"
 #include "basic_tps/Core/Effect/SkillLogicBase.h"
@@ -201,9 +202,10 @@ void UCombatCalculator::AdjustFinalDamage(FCombatResult& Result)
 
 void UCombatCalculator::CommitActualDamage( FCombatResult& Result)
 {
-    if (Result.Victim)
+    if (IsValid(Result.Victim)&&IsValid(Result.Attacker))
     {
-        Result.Victim->CombatComp->HandleHurt(Result);
+       // Result.Victim->CombatComp->HandleHurt(Result);
+        Result.Attacker->NetworkComp->LocalAndCast_HandleHurt(Result);
     }
     
 }

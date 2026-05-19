@@ -5,6 +5,7 @@
 
 #include "BuffComponent.h"
 #include "CombatCharacter.h"
+#include "CombatNetworkComponent.h"
 #include "basic_tps/Core/Data/CharacterDataComponent.h"
 #include "basic_tps/Core/Effect/BuffLogicBase.h"
 #include "basic_tps/Core/Effect/FVfxSpawnConfig.h"
@@ -36,13 +37,15 @@ void UCombatComponent::BeginPlay()
 
 void UCombatComponent::TryHurtTarget(ACombatCharacter* Target, const FEffectContext &  EffectContext)
 {
-	if (!GetOwner()||!GetOwner()->HasAuthority()) return;
+	 
+	//攻击者 本地计算伤害 ，做带预测广播
+	if (!Character->IsLocallyControlled()) return;
 	if (Target==nullptr) return;
 	auto skillBaseVoPtr=EffectContext.GetSkillBaseVo();
 	if (skillBaseVoPtr==nullptr)return;
-	auto attacker=Cast<ACombatCharacter>(GetOwner());
+ 
 	 
-	auto rst=UCombatCalculator::DamagePipeline(attacker,Target,EffectContext);
+	auto rst=UCombatCalculator::DamagePipeline(Character,Target,EffectContext);
  
 	Target->BuffComp->BroadcastOnTakeDamage(rst);
 	  
@@ -53,14 +56,14 @@ void UCombatComponent::HandleHurt( int FinalDamage,ACombatCharacter * From)
 	FCombatResult Result;
 	Result.FinalDamage=FinalDamage;
 	Result.Attacker=From;
-	Result.Victim=Cast<ACombatCharacter>(GetOwner());
+	Result.Victim=Character;
 	HandleHurt(Result);
 }
-void UCombatComponent::HandleHurt( FCombatResult& Result)
+void UCombatComponent::HandleHurt(const FCombatResult& Result)
 {
-	if (!GetOwner()||!GetOwner()->HasAuthority()) return;
-	auto character=Cast<ACombatCharacter>(GetOwner());
-	if (character->IsAlive()==false)return;
+	 
+	 
+	if (Character->IsAlive()==false)return;
 	if (Result.bIsMiss)
 	{
 		
@@ -82,25 +85,31 @@ void UCombatComponent::HandleHurt( FCombatResult& Result)
 	}
 	if (Result.FinalDamage>0)
 	{
-		Result.FinalDamage=FMath::Min(Result.FinalDamage,character->CharacterDataComp->GetCurrentHP());
-	   character->SelfOnHurt(Result.FinalDamage, FVector::Zero());
+		//Result.FinalDamage=FMath::Min(Result.FinalDamage,Character->CharacterDataComp->GetCurrentHP());
+	   Character->SelfOnHurt(Result.FinalDamage, FVector::Zero());
 	}
 	// 通知蓝图显示伤害数字、播受击动画
 	
 	
 
 	//   增加仇恨
-	if (Result.Attacker&&Result.FinalDamage>0)
+	if (Result.Attacker->HasAuthority())
 	{
-		AddAggro(Result.Attacker, FMath::Max(1, Result.FinalDamage));
+		if (Result.Attacker&&Result.FinalDamage>0)
+		{
+			AddAggro(Result.Attacker, FMath::Max(1, Result.FinalDamage));
+		}
 	}
 	// 1. 调用属性组件扣血
-	character->CharacterDataComp->CostCurrentHP(Result.FinalDamage);
-	 
-	if (character->IsAlive()==false)
-	{
-		character->SelfOnDead();
-	}
+	Character->CharacterDataComp->CostCurrentHP(Result.FinalDamage);
+
+ 
+		if (Character->IsAlive()==false)
+		{
+			Result.Attacker->NetworkComp->CastByServer_HandleDead(Character);
+			//Character->SelfOnDead();
+		}
+ 
 	 
 	// 3. 触发受击反馈 (声音、特效、动画)
 	// 这里建议通过派发事件或调用接口处理，保持组件纯粹
@@ -109,7 +118,7 @@ void UCombatComponent::HandleHurt( FCombatResult& Result)
 void UCombatComponent::AddAggro(ACombatCharacter* Target, int32 Amount)
 {
  
-	if (!Cast<ACombatCharacter>(GetOwner())->IsAlive())return;
+	if (!Character->IsAlive())return;
 	if (!Target) return;
     
 	int32& CurrentAggro = AggroTargets.FindOrAdd(Target);
@@ -119,19 +128,19 @@ void UCombatComponent::AddAggro(ACombatCharacter* Target, int32 Amount)
 // 在你的技能执行类或角色类中
 USceneComponent* UCombatComponent::GetEffectAttachSource(FName SocketName)
 {
-	auto character = Cast<ACombatCharacter>(GetOwner());
+ 
 	// 1. 先在角色自身的 Mesh 上找
-	if (character->GetMesh()->DoesSocketExist(SocketName))
+	if (Character->GetMesh()->DoesSocketExist(SocketName))
 	{
-		return character->GetMesh();
+		return Character->GetMesh();
 	}
 
 
-	if (character->CurrentWeaponMesh && character->CurrentWeaponMesh->DoesSocketExist(SocketName))
+	if (Character->CurrentWeaponMesh && Character->CurrentWeaponMesh->DoesSocketExist(SocketName))
 	{
-		return character->CurrentWeaponMesh;
+		return Character->CurrentWeaponMesh;
 	}
 
 
-	return character->GetMesh();
+	return Character->GetMesh();
 }

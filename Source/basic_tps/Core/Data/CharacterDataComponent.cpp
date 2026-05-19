@@ -28,20 +28,22 @@ void UCharacterDataComponent::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 
 void UCharacterDataComponent::OnRep_Hp(int32 OldHp)
 {
-	auto Character=Cast<ACombatCharacter>(GetOwner());
-	if (!Character)return;
-	if (Hp < OldHp)
-	{
-		Character->SelfOnHurt(OldHp - Hp, FVector::Zero());
-	}
-	if (OldHp > 0&&Hp <= 0)
-	{
-		Character->SelfOnDead();
-	}
+	 
+	// auto Character=Cast<ACombatCharacter>(GetOwner());
+	// if (!Character)return;
+	// if (Hp < OldHp)
+	// {
+	// 	Character->SelfOnHurt(OldHp - Hp, FVector::Zero());
+	// }
+	// if (OldHp > 0&&Hp <= 0)
+	// {
+	// 	Character->SelfOnDead();
+	// }
 }
 
 void UCharacterDataComponent::OnRep_Mp(int32 OldMp)
 {
+	 
 }
 
 int32 UCharacterDataComponent::GetCurrentHP() 
