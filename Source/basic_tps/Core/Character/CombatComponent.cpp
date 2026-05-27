@@ -93,7 +93,7 @@ void UCombatComponent::HandleHurt(const FCombatResult& Result)
 	
 
 	//   增加仇恨
-	if (Result.Attacker->HasAuthority())
+	if (IsValid(Result.Attacker)&& Result.Attacker->HasAuthority())
 	{
 		if (Result.Attacker&&Result.FinalDamage>0)
 		{
@@ -104,7 +104,7 @@ void UCombatComponent::HandleHurt(const FCombatResult& Result)
 	Character->CharacterDataComp->CostCurrentHP(Result.FinalDamage);
 
  
-		if (Character->IsAlive()==false)
+		if (IsValid(Result.Attacker)&&Character->IsAlive()==false)
 		{
 			Result.Attacker->NetworkComp->CastByServer_HandleDead(Character);
 			//Character->SelfOnDead();
