@@ -64,13 +64,16 @@ FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACom
     // 设置   具体逻辑蓝图 前置伤害修正
     if (Result.Attacker&&EffectContext.SkillLogic!=nullptr)
     {
-      
         EffectContext.SkillLogic->PreDamageProcess_Ref(Result);
- 
-    
-
     }
-    
+    if (Result.Attacker)
+    {
+      Result.Attacker->BuffComp->PreDamageProcess(Result);
+    }
+    if (Result.Victim)
+    {
+        Result.Victim->BuffComp->PreDamageProcess(Result);
+    }
     // 阶段 III：核心核心公式解算 (Mathematical Evaluation)
     // 执行：WoW 除法公式、减法保底、等级压制修正
     // 输出：FinalDamage
@@ -84,7 +87,14 @@ FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACom
     {
         EffectContext.SkillLogic->AdjustFinalDamage_Ref(Result);
     }
-    
+    if (Result.Attacker)
+    {
+        Result.Attacker->BuffComp->AdjustFinalDamage(Result);
+    }
+    if (Result.Victim)
+    {
+        Result.Victim->BuffComp->AdjustFinalDamage(Result);
+    }
 
 
    Result.FinalDamage=FMath::RoundToInt32(Result.FinalDamage* WeightAfterFadeoff);
@@ -102,6 +112,14 @@ FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACom
     {
             EffectContext.SkillLogic->PostDamageProcess_Ref(Result);
 
+    }
+    if (Result.Attacker)
+    {
+        Result.Attacker->BuffComp->PostDamageProcess(Result);
+    }
+    if (Result.Victim)
+    {
+        Result.Victim->BuffComp->PostDamageProcess(Result);
     }
     
     return Result;

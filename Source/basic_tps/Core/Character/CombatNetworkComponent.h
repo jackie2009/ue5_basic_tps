@@ -27,7 +27,8 @@ public:
 	void CastByServer_HandleDead( ACombatCharacter* Target);
 	UFUNCTION(BlueprintCallable, Category = "CombatNetwork")
 	UBuffLogicBase* LocalAndCast_AddBuff(TSubclassOf<UBuffLogicBase> ClassOfBuff, ACombatCharacter* InEffectRole,ACombatCharacter* InFromRole,float InDuration,int InValue);
-	
+	UFUNCTION(BlueprintCallable, Category = "CombatNetwork")
+	void LocalAndCast_RemoveBuff( ACombatCharacter* InEffectRole,UBuffLogicBase* Buff,bool ReplaceMode);
 protected:
 	// 2. Server RPC
 	UFUNCTION(Server, Reliable)
@@ -38,6 +39,9 @@ protected:
 	void Server_HandleHurt(const FCombatResult& Result);
 	UFUNCTION(Server, Reliable)
 	void Server_AddBuff(TSubclassOf<UBuffLogicBase> ClassOfBuff, ACombatCharacter* InEffectRole,ACombatCharacter* InFromRole,float InDuration,int InValue);
+	UFUNCTION(Server, Reliable)
+	void Server_RemoveBuff(ACombatCharacter* InEffectRole,TSubclassOf<UBuffLogicBase> ClassOfBuff,bool ReplaceMode);
+	
 	// 3. Multicast RPC
 	UFUNCTION(NetMulticast, Unreliable)
 	void Multicast_PlayMontage(UAnimMontage* SkillMontage);
@@ -50,6 +54,9 @@ protected:
 	void Multicast_HandleDead( ACombatCharacter* Target);
 	UFUNCTION(NetMulticast, Reliable)
 	void Multicast_AddBuff(TSubclassOf<UBuffLogicBase> ClassOfBuff, ACombatCharacter* InEffectRole,ACombatCharacter* InFromRole,float InDuration,int InValue);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_RemoveBuff(ACombatCharacter* InEffectRole,TSubclassOf<UBuffLogicBase> ClassOfBuff,bool ReplaceMode);
 private:
 	// 内部通用播放逻辑
 	void Internal_PlayMontage(UAnimMontage* SkillMontage);
@@ -58,5 +65,5 @@ private:
 	class UAnimInstance* GetOwnerAnimInstance() const;
 	//内部接受广播后真正执行的本地操作
 	UBuffLogicBase* ExecuteLocal_AddBuff(TSubclassOf<UBuffLogicBase> ClassOfBuff, ACombatCharacter* InEffectRole,ACombatCharacter* InFromRole,float InDuration,int InValue);
-	
+	void  ExecuteLocal_RemoveBuff(ACombatCharacter* InEffectRole,TSubclassOf<UBuffLogicBase> ClassOfBuff,bool ReplaceMode);
 };

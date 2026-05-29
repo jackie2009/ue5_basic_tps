@@ -149,6 +149,15 @@ void UBuffComponent::RemoveBuff(UBuffLogicBase *BuffLogic, bool bReplaceMode)
    
 }
 
+void UBuffComponent::RemoveBuffByClass(TSubclassOf<UBuffLogicBase> BuffClass, bool bReplaceMode)
+{
+   auto buff= GetBuff(BuffClass);
+    if (buff)
+    {
+        RemoveBuff(buff,bReplaceMode);
+    }
+}
+
 UBuffLogicBase* UBuffComponent::GetBuff(TSubclassOf<UBuffLogicBase> BuffClass)
 {
     for (int32 i = BuffList.Num() - 1; i >= 0; --i) {
@@ -303,7 +312,38 @@ void UBuffComponent::BroadcastOnTakeDamage( FCombatResult& Result)
     TempCombatResult = FCombatResult();
 }
 
- void UBuffComponent::RegisterActor(TSubclassOf<UBuffLogicBase> BuffClass, ACombatCharacter* Target)
+void UBuffComponent::PreDamageProcess( FCombatResult& InResult)
+{
+    for (int32 i = BuffList.Num() - 1; i >= 0; --i) {
+         if ( BuffList[i]->bModifyDamageProcess)
+         {
+             InResult=BuffList[i]->PreDamageProcess(InResult);
+         }
+    }
+
+}
+
+void UBuffComponent::AdjustFinalDamage( FCombatResult& InResult)
+{
+    for (int32 i = BuffList.Num() - 1; i >= 0; --i) {
+        if ( BuffList[i]->bModifyDamageProcess)
+        {
+            InResult=BuffList[i]->AdjustFinalDamage(InResult);
+        }
+    }
+}
+
+void UBuffComponent::PostDamageProcess( FCombatResult& InResult)
+{
+    for (int32 i = BuffList.Num() - 1; i >= 0; --i) {
+        if ( BuffList[i]->bModifyDamageProcess)
+        {
+            InResult=BuffList[i]->PostDamageProcess(InResult);
+        }
+    }
+}
+
+void UBuffComponent::RegisterActor(TSubclassOf<UBuffLogicBase> BuffClass, ACombatCharacter* Target)
 {
     RegisteredActors.FindOrAdd(BuffClass).Members.Add(Target);
 }

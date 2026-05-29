@@ -37,6 +37,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void RemoveBuff(UBuffLogicBase *BuffLogic, bool bReplaceMode=false);
 	UFUNCTION(BlueprintCallable)
+	void RemoveBuffByClass(TSubclassOf<UBuffLogicBase> BuffClass, bool bReplaceMode=false);
+	UFUNCTION(BlueprintCallable)
 	UBuffLogicBase* GetBuff(TSubclassOf<UBuffLogicBase> BuffClass);
 	UFUNCTION(BlueprintCallable)
 	int32  GetBuffValue(TSubclassOf<UBuffLogicBase> BuffClass);
@@ -51,7 +53,13 @@ public:
 	bool bIsMovementAllowed=true;
 	UPROPERTY(BlueprintReadWrite)
 	bool bIsAttackAllowed=true;
-	
+
+
+
+	//修改伤害流水线
+	void PreDamageProcess( FCombatResult& InResult);
+	void AdjustFinalDamage( FCombatResult& InResult);
+	void PostDamageProcess( FCombatResult& InResult);
 
 protected:
 	virtual void BeginPlay() override;

@@ -108,6 +108,25 @@ UBuffLogicBase* UCombatNetworkComponent::LocalAndCast_AddBuff(TSubclassOf<UBuffL
 	}
 	return rst;
 }
+
+void  UCombatNetworkComponent::LocalAndCast_RemoveBuff(ACombatCharacter* InEffectRole, UBuffLogicBase* Buff,
+	bool ReplaceMode)
+{
+	if (!Character->IsLocallyControlled())return ;
+	 ExecuteLocal_RemoveBuff( InEffectRole, Buff->GetClass(), ReplaceMode);
+
+	if (Character->HasAuthority())
+	{
+		Multicast_RemoveBuff( InEffectRole, Buff->GetClass(), ReplaceMode);
+	}
+	else
+	{
+		Server_RemoveBuff( InEffectRole, Buff->GetClass(), ReplaceMode);
+	}
+ 
+}
+
+
 /////////////////////////////// server /////////////////////////////////////////
 void UCombatNetworkComponent::Server_PlayMontage_Implementation(UAnimMontage* SkillMontage)
 {
@@ -128,6 +147,13 @@ void UCombatNetworkComponent::Server_AddBuff_Implementation(TSubclassOf<UBuffLog
 {
 		Multicast_AddBuff(ClassOfBuff, InEffectRole, InFromRole, InDuration, InValue);
 }
+
+void UCombatNetworkComponent::Server_RemoveBuff_Implementation(ACombatCharacter* InEffectRole, TSubclassOf<UBuffLogicBase> ClassOfBuff,
+	bool ReplaceMode)
+{
+	Multicast_RemoveBuff(InEffectRole, ClassOfBuff, ReplaceMode);
+}
+
 //////////////////////////////////// multi cast //////////////////////////////
 
 void UCombatNetworkComponent::Multicast_PlayMontage_Implementation(UAnimMontage* SkillMontage)
@@ -184,6 +210,15 @@ void UCombatNetworkComponent::Multicast_AddBuff_Implementation(TSubclassOf<UBuff
  
 }
 
+void UCombatNetworkComponent::Multicast_RemoveBuff_Implementation(ACombatCharacter* InEffectRole, TSubclassOf<UBuffLogicBase> ClassOfBuff, bool ReplaceMode)
+{
+	// 旁观者才执行播放，防止发起者重复播放
+	if (Character->IsLocallyControlled())
+	{
+		return; 
+	}
+	ExecuteLocal_RemoveBuff( InEffectRole,ClassOfBuff,ReplaceMode);
+}
 
 //////////////////////////////////////execute////////////////////////////////////
 void UCombatNetworkComponent::Internal_PlayMontage(UAnimMontage* SkillMontage)
@@ -222,6 +257,13 @@ UBuffLogicBase* UCombatNetworkComponent::ExecuteLocal_AddBuff(TSubclassOf<UBuffL
 		return NewBuff;
 	}
 	return nullptr;
+}
+
+void UCombatNetworkComponent::ExecuteLocal_RemoveBuff(ACombatCharacter* InEffectRole, TSubclassOf<UBuffLogicBase> ClassOfBuff,
+	bool ReplaceMode)
+{
+	if (!InEffectRole) return ;
+	InEffectRole->BuffComp->RemoveBuffByClass(ClassOfBuff,ReplaceMode);
 }
 
  

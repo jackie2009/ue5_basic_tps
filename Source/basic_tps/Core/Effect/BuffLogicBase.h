@@ -7,7 +7,7 @@
 #include "FVfxSpawnConfig.h"
 #include "Algo/Replace.h"
 #include "basic_tps/Core/Character/BuffComponent.h"
-
+#include "basic_tps/Core/Character/CombatNetworkComponent.h"
 #include "BuffLogicBase.generated.h"
 
 
@@ -76,11 +76,14 @@ public:
 	int32 Value;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EBuffAddMode BuffAddMode= EBuffAddMode::Replace;
-	
+
+	UFUNCTION(BlueprintCallable)
 	// 功能函数
 	int32 UseAmount(int32 Amount)
 	{
 		Value -= Amount;
+		Value=FMath::Max(0,Value);
+		 
 		return Value;
 	}
 
@@ -101,5 +104,31 @@ public:
 	
 	UFUNCTION(BlueprintImplementableEvent ,meta=(ToolTip="特殊同组合并buff处理"))
 	void CustomMergeBuff(UBuffLogicBase* NewBuff);
+
+
+
+	//buff系统的这3个函数用法 与技能系统形式不同 是因为这里找到了更好的模式 但还需要观察段时间
+	UPROPERTY(EditAnywhere,meta=(ToolTip="是否修改伤害流水线计算"))
+	bool  bModifyDamageProcess;//分组，同组替换
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable ,meta=(ToolTip="伤害公式计算前修正参数 比如 忽视目标防御"))
+	FCombatResult PreDamageProcess(const FCombatResult& InResult);
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable  ,meta=(ToolTip="伤害公式计算后修正结果 伤害抵扣"))
+	FCombatResult AdjustFinalDamage(const FCombatResult& InResult);
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable ,meta=(ToolTip="扣除目标血量后做处理 比如吸血"))
+	FCombatResult PostDamageProcess(const FCombatResult& InResult);
 	
 };
+
+inline FCombatResult UBuffLogicBase::PreDamageProcess_Implementation(const FCombatResult& InResult)
+{
+	return InResult;
+}
+inline FCombatResult UBuffLogicBase::AdjustFinalDamage_Implementation(const FCombatResult& InResult)
+{
+	return InResult;
+}
+
+inline FCombatResult UBuffLogicBase::PostDamageProcess_Implementation(const FCombatResult& InResult)
+{
+	return InResult;
+}
