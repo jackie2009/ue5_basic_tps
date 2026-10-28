@@ -303,6 +303,36 @@ void UBuffComponent::BroadcastOnTakeDamage( FCombatResult& Result)
     TempCombatResult = FCombatResult();
 }
 
+void UBuffComponent::ProcessDamageHooks(FCombatResult& InResult,
+    FCombatResult (UBuffLogicBase::*Hook)(const FCombatResult&))
+{
+    // A shield may remove itself or another buff. New buffs participate next phase.
+    const TArray<TObjectPtr<UBuffLogicBase>> Snapshot = BuffList;
+    for (int32 Index = Snapshot.Num() - 1; Index >= 0; --Index)
+    {
+        UBuffLogicBase* Buff = Snapshot[Index];
+        if (IsValid(Buff) && BuffList.Contains(Buff) && Buff->bModifyDamageProcess)
+        {
+            InResult = (Buff->*Hook)(InResult);
+        }
+    }
+}
+
+void UBuffComponent::PreDamageProcess(FCombatResult& InResult)
+{
+    ProcessDamageHooks(InResult, &UBuffLogicBase::PreDamageProcess);
+}
+
+void UBuffComponent::AdjustFinalDamage(FCombatResult& InResult)
+{
+    ProcessDamageHooks(InResult, &UBuffLogicBase::AdjustFinalDamage);
+}
+
+void UBuffComponent::PostDamageProcess(FCombatResult& InResult)
+{
+    ProcessDamageHooks(InResult, &UBuffLogicBase::PostDamageProcess);
+}
+
  void UBuffComponent::RegisterActor(TSubclassOf<UBuffLogicBase> BuffClass, ACombatCharacter* Target)
 {
     RegisteredActors.FindOrAdd(BuffClass).Members.Add(Target);

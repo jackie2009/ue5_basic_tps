@@ -46,6 +46,10 @@ public:
 	void RemoveAllBuffs();
 	
 	void BroadcastOnTakeDamage(FCombatResult& Result);
+
+	void PreDamageProcess(FCombatResult& InResult);
+	void AdjustFinalDamage(FCombatResult& InResult);
+	void PostDamageProcess(FCombatResult& InResult);
 	
 	UPROPERTY(BlueprintReadWrite)
 	bool bIsMovementAllowed=true;
@@ -63,6 +67,9 @@ protected:
 
 	bool bAIStoppedByBuff;
 private:
+	void ProcessDamageHooks(FCombatResult& InResult,
+		FCombatResult (UBuffLogicBase::*Hook)(const FCombatResult&));
+
 	UPROPERTY()
 	TArray<TObjectPtr<UBuffLogicBase>> BuffList;
 

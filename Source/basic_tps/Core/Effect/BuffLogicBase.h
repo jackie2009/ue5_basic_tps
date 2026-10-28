@@ -101,5 +101,31 @@ public:
 	
 	UFUNCTION(BlueprintImplementableEvent ,meta=(ToolTip="特殊同组合并buff处理"))
 	void CustomMergeBuff(UBuffLogicBase* NewBuff);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Damage")
+	bool bModifyDamageProcess = false;
+
+	// Each hook returns the next result in the pipeline; the default is a no-op.
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Damage")
+	FCombatResult PreDamageProcess(const FCombatResult& InResult);
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Damage")
+	FCombatResult AdjustFinalDamage(const FCombatResult& InResult);
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Damage")
+	FCombatResult PostDamageProcess(const FCombatResult& InResult);
 	
 };
+
+inline FCombatResult UBuffLogicBase::PreDamageProcess_Implementation(const FCombatResult& InResult)
+{
+	return InResult;
+}
+
+inline FCombatResult UBuffLogicBase::AdjustFinalDamage_Implementation(const FCombatResult& InResult)
+{
+	return InResult;
+}
+
+inline FCombatResult UBuffLogicBase::PostDamageProcess_Implementation(const FCombatResult& InResult)
+{
+	return InResult;
+}
