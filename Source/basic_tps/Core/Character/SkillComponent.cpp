@@ -6,6 +6,7 @@
 #include "CombatCharacter.h"
 #include "CombatComponent.h"
 #include "HeroCharacter.h"
+#include "basic_tps/Core/Targeting/CombatTargetingComponent.h"
 #include "basic_tps/Core/Data/CharacterDataComponent.h"
 #include "basic_tps/Core/Effect/MagicEffect.h"
 #include "basic_tps/Core/Effect/SkillLogicBase.h"
@@ -97,6 +98,12 @@ bool USkillComponent::UseSkill(int32 SkillID, int32 CurrentWeaponType, int32 Ski
     FEffectContext InitSkillVfxContext{};
     InitSkillVfxContext.Instigator = Attacker;
     InitSkillVfxContext.TargetActor = TryToTarget;
+    // TargetType uses the DATA TABLE convention: 0 enemy, 1 self, 2 friendly.
+    // Capture once. Explicit AI/Blueprint targets still take precedence.
+    if (!TryToTarget && SkillVo->TargetType == 0 && Attacker->TargetingComp)
+    {
+        InitSkillVfxContext.TargetActor = Cast<ACombatCharacter>(Attacker->TargetingComp->GetActionTarget());
+    }
     InitSkillVfxContext.SkillBaseVo = SkillVo;
     InitSkillVfxContext.SkillLogic = SkillLogicData;
     ActiveSkillLogic = SkillLogicData;

@@ -11,6 +11,8 @@ class UBuffComponent;
 class USkillComponent;
 class UCombatComponent;
 class UCharacterDataComponent;
+class UCombatTargetingComponent;
+class UCharacterTargetableComponent;
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnCharacterDeath, ACombatCharacter*);
 UCLASS()
 class BASIC_TPS_API ACombatCharacter : public ACharacter
@@ -33,6 +35,10 @@ protected:
 
 public:
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Combat|Targeting")
+	TObjectPtr<UCombatTargetingComponent> TargetingComp;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Combat|Targeting")
+	TObjectPtr<UCharacterTargetableComponent> TargetableComp;
 
 		
 

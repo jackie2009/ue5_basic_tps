@@ -24,6 +24,7 @@ void AMonsterCharacter::BeginPlay()
 void AMonsterCharacter::PreInitializeComponents()
 {
 	Super::PreInitializeComponents();
+	CharacterDataComp->Faction = ECombatFaction::Monster;
 	if (MonsterBaseID>0)
 	{
 		MonsterDataComp=NewObject<UMonsterDataComponent>(this);

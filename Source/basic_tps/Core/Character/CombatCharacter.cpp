@@ -6,6 +6,8 @@
 #include "BuffComponent.h"
 #include "CombatComponent.h"
 #include "SkillComponent.h"
+#include "basic_tps/Core/Targeting/CombatTargetingComponent.h"
+#include "basic_tps/Core/Targeting/CharacterTargetableComponent.h"
 #include "basic_tps/Core/Data/CharacterDataComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -16,6 +18,8 @@ ACombatCharacter::ACombatCharacter()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	TargetingComp = CreateDefaultSubobject<UCombatTargetingComponent>(TEXT("CombatTargeting"));
+	TargetableComp = CreateDefaultSubobject<UCharacterTargetableComponent>(TEXT("CombatTargetable"));
 
 	 
 }
@@ -57,6 +61,8 @@ void ACombatCharacter::SelfOnHurt(float Damage, FVector HitLocation)
 
 void ACombatCharacter::SelfOnDead()
 {
+	TargetableComp->SetTargetable(false);
+	TargetingComp->SetSelectedTarget(nullptr);
 	// 延迟到下一帧执行真正的碰撞关闭
 	GetWorldTimerManager().SetTimerForNextTick(this, &ACombatCharacter::ExecutePhysicsDisabled);
 	

@@ -10,6 +10,7 @@
 #include "HeroCharacter.generated.h"
 class USkillVisualDataAsset;
 class UHeroDataComponent;
+class UTargetOutlineComponent;
  class USkillLogicBase;
 
 UCLASS()
@@ -20,6 +21,8 @@ class BASIC_TPS_API AHeroCharacter : public ACombatCharacter
 public:
 	// Sets default values for this character's properties
 	AHeroCharacter();
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Combat|Targeting")
+	TObjectPtr<UTargetOutlineComponent> TargetOutlineComp;
  
 protected:
 	// Called when the game starts or when spawned
