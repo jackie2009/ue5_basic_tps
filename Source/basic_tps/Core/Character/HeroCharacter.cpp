@@ -13,8 +13,8 @@
 // Sets default values
 AHeroCharacter::AHeroCharacter()
 {
-	TargetingComp->bAutoSelect = true;
 	TargetOutlineComp = CreateDefaultSubobject<UTargetOutlineComponent>(TEXT("TargetOutline"));
+	TargetOutlineComp->bShowOutline = false;
 	TargetOutlineComp->AddTickPrerequisiteComponent(TargetingComp);
 }
 

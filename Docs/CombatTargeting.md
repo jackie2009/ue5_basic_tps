@@ -23,7 +23,7 @@
 
 目标资格是扩展 Seam；人物适配器是知道 `CharacterDataComponent` 的唯一选目标 Adapter。机关、训练假人等对象可添加普通 `CombatTargetableComponent` 并覆盖两个 BlueprintNativeEvent，不必继承 Hero 或修改选择器。普通目标默认只排除自身、隐藏、销毁及禁用对象，业务方必须按需收紧资格。
 
-角色的两个逻辑组件通过 `CreateDefaultSubobject` 创建在 `ACombatCharacter`。Hero 另外创建描边组件并默认开启 `bAutoSelect`；敌人默认关闭自动选目标，由 AI 显式调用 `SetSelectedTarget`。新组件无网络复制，选择是每个控制者的本地状态。
+角色的两个逻辑组件通过 `CreateDefaultSubobject` 创建在 `ACombatCharacter`。Hero 默认关闭自动选目标和描边，可在角色蓝图的 `CombatTargeting` 和 `TargetOutline` 组件上分别开启 `Auto Select` 和 `Show Outline`。AI 可显式调用 `SetSelectedTarget`。这些组件无网络复制，选择是每个控制者的本地状态。
 
 ## 自动切换规则
 
