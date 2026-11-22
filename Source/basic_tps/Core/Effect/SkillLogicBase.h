@@ -8,6 +8,7 @@
 #include "SkillLogicBase.generated.h"
 
 
+class UAnimMontage;
 class UBuffLogicBase;
 struct FEffectContext;
  
@@ -16,6 +17,10 @@ class USkillLogicBase : public UObject
 {
 	GENERATED_BODY()
 protected:
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Visual",
+		meta = (BlueprintProtected, ToolTip = "技能启动时选择一次蒙太奇，默认返回 SkillMontage。返回空值则跳过播放。"))
+	UAnimMontage* SelectSkillMontage();
+
 	UFUNCTION(BlueprintImplementableEvent ,meta=(ToolTip="伤害公式计算前修正参数 比如 忽视目标防御"))
 	void PreDamageProcess();
 	UFUNCTION(BlueprintImplementableEvent ,meta=(ToolTip="伤害公式计算后修正结果 伤害抵扣"))

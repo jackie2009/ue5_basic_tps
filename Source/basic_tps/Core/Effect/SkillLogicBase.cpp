@@ -1,5 +1,7 @@
 #include "SkillLogicBase.h"
 
+#include "Animation/AnimInstance.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "BuffLogicBase.h"
 #include "MagicEffect.h"
 #include "basic_tps/Core/Character/BuffComponent.h"
@@ -21,12 +23,22 @@ void USkillLogicBase::Init(ACombatCharacter* InOwner, USkillComponent* InSkillCo
 		MagicEffectEmitterInstance= AMagicEffect::SpawnMagicEffect(Owner,MagicEffectEmitterClass,InitEffectContext);
 	}
 	
-	if (SkillMontage)
+	UAnimMontage* Montage = SelectSkillMontage();
+	if (!Montage)
 	{
-		UAnimInstance* AnimInst = Owner->GetMesh()->GetAnimInstance();
-		AnimInst->Montage_Play(SkillMontage,1,EMontagePlayReturnType::MontageLength,0,false);
-	} 
-		 
+		return;
+	}
+
+	USkeletalMeshComponent* Mesh = Owner->GetMesh();
+	if (UAnimInstance* AnimInst = Mesh ? Mesh->GetAnimInstance() : nullptr)
+	{
+		AnimInst->Montage_Play(Montage, 1.0f, EMontagePlayReturnType::MontageLength, 0.0f, false);
+	}
+}
+
+UAnimMontage* USkillLogicBase::SelectSkillMontage_Implementation()
+{
+	return SkillMontage.Get();
 }
 
  
