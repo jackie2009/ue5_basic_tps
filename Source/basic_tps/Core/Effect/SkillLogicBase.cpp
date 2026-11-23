@@ -32,7 +32,7 @@ void USkillLogicBase::Init(ACombatCharacter* InOwner, USkillComponent* InSkillCo
 	USkeletalMeshComponent* Mesh = Owner->GetMesh();
 	if (UAnimInstance* AnimInst = Mesh ? Mesh->GetAnimInstance() : nullptr)
 	{
-		AnimInst->Montage_Play(Montage, 1.0f, EMontagePlayReturnType::MontageLength, 0.0f, false);
+		AnimInst->Montage_Play(Montage, 1.0f, EMontagePlayReturnType::MontageLength, 0.0f, true);
 	}
 }
 
