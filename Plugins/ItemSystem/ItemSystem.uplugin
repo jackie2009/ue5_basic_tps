@@ -1,0 +1,15 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "0.1",
+	"FriendlyName": "Item System",
+	"Description": "道具 / 装备 / 背包系统（从 Unity dark_knight 迁移），与战斗系统解耦。",
+	"Category": "Gameplay",
+	"CreatedBy": "basic_tps",
+	"CanContainContent": true,
+	"EnabledByDefault": true,
+	"Modules": [
+		{ "Name": "ItemSystem", "Type": "Runtime", "LoadingPhase": "Default" },
+		{ "Name": "ItemSystemUI", "Type": "Runtime", "LoadingPhase": "Default" }
+	]
+}

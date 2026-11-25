@@ -44,6 +44,10 @@
 		{
 			"Name": "MotionWarping",
 			"Enabled": true
+		},
+		{
+			"Name": "ItemSystem",
+			"Enabled": true
 		}
 	]
 }
