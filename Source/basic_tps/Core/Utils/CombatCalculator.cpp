@@ -10,6 +10,7 @@
 #include "NiagaraComponent.h"
 #include "basic_tps/Core/Character/BuffComponent.h"
 #include "basic_tps/Core/Character/CombatComponent.h"
+#include "basic_tps/Core/Character/HeroCharacter.h"
 #include "basic_tps/Core/Character/SkillComponent.h"
 #include "basic_tps/Core/Effect/BuffLogicBase.h"
 #include "basic_tps/Core/Effect/SkillLogicBase.h"
@@ -109,8 +110,21 @@ FCombatResult UCombatCalculator::DamagePipeline(ACombatCharacter* Attacker, ACom
     // 阶段 V：伤害应用与分流 (Damage Application)
     // 执行：实际扣除 HP
     // 输出：ActualDamage (真正扣掉的血量)
+    const bool bVictimAliveBeforeHit = IsValid(Result.Victim) && Result.Victim->IsAlive();
     CommitActualDamage(Result);
     
+    // 英雄普通攻击有效命中存活目标时，积累 0.2 怒气
+    if (bVictimAliveBeforeHit && !Result.bIsMiss && Result.FinalDamage > 0 && Result.Victim != Result.Attacker)
+    {
+        if (AHeroCharacter* HeroAttacker = Cast<AHeroCharacter>(Result.Attacker))
+        {
+            if (HeroAttacker->bGainRageOnlyOnHit && HeroAttacker->IsNormalAttackSkill(Result.SkillVo))
+            {
+                HeroAttacker->OnNormalAttackAccumulateRage();
+            }
+        }
+    }
+
     //阶段 VI：后置反馈与副作用 根据最终伤害 攻击者吸血等 (Post-Process & Feedback)
     PostDamageProcess(Result);
     // 设置   具体逻辑蓝图 后置反馈与副作用
@@ -211,6 +225,19 @@ void UCombatCalculator::AdjustFinalDamage(FCombatResult& Result)
     {
          Result.FinalDamage =  Result.FinalDamage * 25 / 100;
        
+    }
+
+    // 5. 英雄体力区域攻击收益修正（疲劳区约七成，普通区 100%，活力区额外攻击奖励）
+    if (Result.FinalDamage > 0)
+    {
+        if (AHeroCharacter* HeroAttacker = Cast<AHeroCharacter>(Result.Attacker))
+        {
+            const float StaminaDamageMultiplier = HeroAttacker->GetCurrentAttackDamageMultiplier();
+            if (!FMath::IsNearlyEqual(StaminaDamageMultiplier, 1.0f))
+            {
+                Result.FinalDamage = FMath::Max(1, FMath::RoundToInt32(Result.FinalDamage * StaminaDamageMultiplier));
+            }
+        }
     }
 
      

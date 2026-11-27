@@ -10,7 +10,10 @@ public class basic_tps : ModuleRules
 	
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore","Niagara","GameplayTags","AIModule",
 			"GameplayTasks",
-			"NavigationSystem" });
+			"NavigationSystem",
+			"UMG",
+			"Slate",
+			"SlateCore" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] { "AIModule" });
 

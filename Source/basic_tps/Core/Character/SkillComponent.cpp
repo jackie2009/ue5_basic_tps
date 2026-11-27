@@ -50,7 +50,31 @@ bool USkillComponent::UseSkill(int32 SkillID, int32 CurrentWeaponType, int32 Ski
     if (SkillVo->CD > 0 && Attacker->CharacterDataComp->ActionTags.HasTag(FCombatTags::State_LockSkill)) return false;
 
     auto* HeroAttacker = Cast<AHeroCharacter>(Attacker);
-    if (HeroAttacker && HeroAttacker->CharacterDataComp->GetCurrentMP() < SkillVo->Spell) return false;
+    const bool bIsOffensiveSkill = SkillVo->EffectType > 0;
+    int32 HeroStaminaCost = SkillVo->Spell;
+    int32 HeroRageCost = 0;
+    if (HeroAttacker)
+    {
+        // 无力区禁止发起攻击
+        if (bIsOffensiveSkill && !HeroAttacker->CanHeroAttack())
+        {
+            return false;
+        }
+        // 怒气判定：现有技能默认消耗 1 点怒气，普攻为 0
+        HeroRageCost = HeroAttacker->GetSkillRageCost(SkillID, SkillVo);
+        if (HeroRageCost > 0 && !HeroAttacker->HasEnoughRage(HeroRageCost))
+        {
+            return false;
+        }
+        if (HeroStaminaCost <= 0 && bIsOffensiveSkill)
+        {
+            HeroStaminaCost = HeroAttacker->DefaultAttackStaminaCost;
+        }
+        if (!bIsOffensiveSkill && HeroStaminaCost > 0 && HeroAttacker->CharacterDataComp->GetCurrentMP() < HeroStaminaCost)
+        {
+            return false;
+        }
+    }
 
     // Resolve and validate the logic before committing mana or a charge.
     if (SkillVo->skillVisualDataID.IsEmpty()) return false;
@@ -78,7 +102,27 @@ bool USkillComponent::UseSkill(int32 SkillID, int32 CurrentWeaponType, int32 Ski
     }
     if (!IsValid(SkillLogicData)) return false;
 
-    if (HeroAttacker && !HeroAttacker->CharacterDataComp->CostCurrentMP(SkillVo->Spell)) return false;
+    if (HeroAttacker)
+    {
+        if (HeroRageCost > 0 && !HeroAttacker->ConsumeRage(HeroRageCost))
+        {
+            return false;
+        }
+        if (bIsOffensiveSkill)
+        {
+            // 记录攻击出手瞬间的体力区域，供本次攻击命中时的伤害倍率结算
+            HeroAttacker->CaptureAttackStaminaZoneSnapshot();
+        }
+        if (HeroStaminaCost > 0 && !HeroAttacker->ConsumeStamina(HeroStaminaCost, !bIsOffensiveSkill))
+        {
+            return false;
+        }
+        // 若配置为普攻出手即积累怒气，在此增加 0.2（默认仅在有效命中时于 PostDamageProcess 积累）
+        if (!HeroAttacker->bGainRageOnlyOnHit && HeroAttacker->IsNormalAttackSkill(SkillVo))
+        {
+            HeroAttacker->OnNormalAttackAccumulateRage();
+        }
+    }
 
     FSkillChargeState& State = SkillChargeStateMap.FindOrAdd(SkillID);
     State.MaxCharges = FMath::Max(1, SkillVo->MaxCharges);

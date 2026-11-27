@@ -5,75 +5,100 @@
 
 #include "CharacterDataComponent.h"
 #include "basic_tps/Core/Character/CombatCharacter.h"
+#include "basic_tps/Core/Character/HeroCharacter.h"
 #include "basic_tps/Core/TableData/TableDataManagerSubsystem.h"
 #include "Kismet/GameplayStatics.h"
 
- 
+
 UHeroDataComponent::UHeroDataComponent()
 {
- 
 	PrimaryComponentTick.bCanEverTick = false;
-
-
-	 
- 
 }
 
 void UHeroDataComponent::BeginPlay()
 {
 	Super::BeginPlay();
-    UpdateLevel(1);
+	UpdateLevel(1);
 	auto* BaseDataComp = GetOwner() ? GetOwner()->FindComponentByClass<UCharacterDataComponent>() : nullptr;
-    
-	 
-	if ( BaseDataComp)
+	auto* Hero = Cast<AHeroCharacter>(GetOwner());
+
+	if (BaseDataComp)
 	{
 		BaseDataComp->SetCurrentHP(BaseDataComp->Attributes[AttributeEnum::HP]);
-		BaseDataComp->SetCurrentMP(BaseDataComp->Attributes[AttributeEnum::MP]);
+		if (Hero)
+		{
+			Hero->SyncStaminaZoneConfig();
+			// 英雄以普通区满体力进入战斗（活力区需通过药水或增益激活）
+			BaseDataComp->SetCurrentMP(Hero->GetNormalStaminaCap());
+		}
+		else
+		{
+			BaseDataComp->SetCurrentMP(BaseDataComp->Attributes[AttributeEnum::MP]);
+		}
 	}
-	
- }
+}
 
 void UHeroDataComponent::UpdateLevel(int32 level)
 {
 	// 传入 this，函数会自动判断当前环境是否能拿 Subsystem
 	auto* TableManager = UTableDataManagerSubsystem::Get();
-    
+
 	if (!TableManager) return; // 如果在构造函数或非法时机调用，这里会直接拦截
- 
-	if (auto dataPtr=TableManager->RoleLevelBaseMap.Find(Job*1000+level))
+
+	if (auto dataPtr = TableManager->RoleLevelBaseMap.Find(Job * 1000 + level))
 	{
-		levelBaseVo=*dataPtr;
-		 GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Green,  FString::Printf(TEXT("UHeroDataComponent%d"),levelBaseVo->Exp));
+		levelBaseVo = *dataPtr;
 	}
 	CalBaseAttributes();
 }
-  void UHeroDataComponent::CalBaseAttributes()
+
+void UHeroDataComponent::CalBaseAttributes()
 {
-	// 1. 数据源校验（原本的判空保留，这是对的）
+	// 1. 数据源校验
 	if (!levelBaseVo) return;
-	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Green,   TEXT("UHeroDataComponent_1"));
-	// 2. 缓存 Owner 上的组件。现实工程中，如果这个函数调用频繁，建议把 baseDataComp 变成成员变量并在 BeginPlay 缓存
 	auto* BaseDataComp = GetOwner() ? GetOwner()->FindComponentByClass<UCharacterDataComponent>() : nullptr;
-    
-	// 3. 必须对目标组件进行有效性检查，防止在某些极端生命周期下崩溃
+
+	// 2. 必须对目标组件进行有效性检查，防止在某些极端生命周期下崩溃
 	if (!BaseDataComp) return;
-	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Green,   TEXT("UHeroDataComponent_2"));
-	// 4. 重置数据：UE 原生数组或 TArray 建议用更直观的方式
-	// 假设 Attributes 是 int32 Attributes[AttributeEnum::MAX] 
+
+	// 3. 重置数据
 	FMemory::Memzero(BaseDataComp->Attributes, sizeof(BaseDataComp->Attributes));
 
-	// 5. 核心逻辑：同步属性
-	// 使用 FMath::Min 这种防御性写法，是主流工程中最常见的“妥协”：
-	// 即便 levelBaseVo 的配置表配错了，多配或少配了，程序也不会因为数组越界而 Crash。
-	const int32 CopyCount = FMath::Min((int32)AttributeEnum::MAX, levelBaseVo->Attributes.Num());
+	// 4. 同步属性
+	const int32 CopyCount = FMath::Min((int32)AttributeEnum::MAX - 1, levelBaseVo->Attributes.Num());
 
 	for (int32 i = 0; i < CopyCount; ++i)
 	{
-		BaseDataComp->Attributes[i+1] = levelBaseVo->Attributes[i];
+		BaseDataComp->Attributes[i + 1] = levelBaseVo->Attributes[i];
 	}
-	 
-	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Green,   TEXT("UHeroDataComponent_3"));
-}
-  
 
+	// 5. 英雄能量(MP)作为体力使用，总上限由英雄四段体力区域数组总和决定
+	if (AHeroCharacter* Hero = Cast<AHeroCharacter>(GetOwner()))
+	{
+		Hero->SyncStaminaZoneConfig();
+	}
+}
+
+int32 UHeroDataComponent::GetStaminaZoneCapacity(EStaminaZone Zone) const
+{
+	const AHeroCharacter* Hero = Cast<AHeroCharacter>(GetOwner());
+	return Hero ? Hero->GetStaminaZoneCapacity(Zone) : 0;
+}
+
+EStaminaZone UHeroDataComponent::GetCurrentStaminaZone() const
+{
+	const AHeroCharacter* Hero = Cast<AHeroCharacter>(GetOwner());
+	return Hero ? Hero->GetCurrentStaminaZone() : EStaminaZone::Normal;
+}
+
+int32 UHeroDataComponent::GetNormalStaminaCap() const
+{
+	const AHeroCharacter* Hero = Cast<AHeroCharacter>(GetOwner());
+	return Hero ? Hero->GetNormalStaminaCap() : 0;
+}
+
+int32 UHeroDataComponent::GetTotalStaminaMax() const
+{
+	const AHeroCharacter* Hero = Cast<AHeroCharacter>(GetOwner());
+	return Hero ? Hero->GetTotalStaminaMax() : 0;
+}
