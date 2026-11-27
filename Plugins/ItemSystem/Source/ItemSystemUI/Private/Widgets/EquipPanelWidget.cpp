@@ -54,10 +54,11 @@ void UEquipPanelWidget::RefreshStats()
 {
 	if (!StatsText) return;
 	const FEquipmentStatSummary S = UEquipmentStatsLibrary::Summarize(Equipment);
-	StatsText->SetText(FText::FromString(FString::Printf(
-		TEXT("防御 %d    格挡 %d\n单手武器 %d-%d\n长柄武器 %d-%d\n远程武器 %d-%d"),
-		S.Defence, S.Block,
+	FString Text = FString::Printf(
+		TEXT("防御 %d    格挡 %d    生命+%d    暴击+%d\n单手武器 %d-%d\n长柄武器 %d-%d\n远程武器 %d-%d"),
+		S.Defence, S.Block, S.BonusHpMax, S.Critical,
 		S.OneHandAttack.X, S.OneHandAttack.Y,
 		S.PolearmAttack.X, S.PolearmAttack.Y,
-		S.RangedAttack.X, S.RangedAttack.Y)));
+		S.RangedAttack.X, S.RangedAttack.Y);
+	StatsText->SetText(FText::FromString(Text));
 }

@@ -1,0 +1,160 @@
+{
+  "QualityColors": [
+    "FFFFFF",
+    "4497B8",
+    "DFB43D",
+    "EE7B47",
+    "76BF89"
+  ],
+  "QualityNames": [
+    "普通",
+    "魔法",
+    "稀有",
+    "暗金",
+    "套装"
+  ],
+  "MF": {
+    "MagicK": 0,
+    "RareK": 600,
+    "UniqueK": 250
+  },
+  "QualityPresets": {
+    "Normal": {
+      "NormalWeight": 75.0,
+      "MagicWeight": 20.0,
+      "RareWeight": 4.5,
+      "UniqueWeight": 0.5
+    },
+    "Elite": {
+      "NormalWeight": 40.0,
+      "MagicWeight": 40.0,
+      "RareWeight": 17.0,
+      "UniqueWeight": 3.0
+    },
+    "Champion": {
+      "NormalWeight": 20.0,
+      "MagicWeight": 45.0,
+      "RareWeight": 28.0,
+      "UniqueWeight": 7.0
+    },
+    "Boss": {
+      "NormalWeight": 0.0,
+      "MagicWeight": 35.0,
+      "RareWeight": 45.0,
+      "UniqueWeight": 20.0
+    }
+  },
+  "Pools": {
+    "Pool_DynamicWeapons": {
+      "NoDropWeight": 0,
+      "Entries": [
+        {
+          "Type": "DynamicEquip",
+          "Weight": 100,
+          "Slots": [7, 9, 10],
+          "LevelMinOffset": -8,
+          "LevelMaxOffset": 3
+        }
+      ]
+    },
+    "Pool_DynamicArmor": {
+      "NoDropWeight": 0,
+      "Entries": [
+        {
+          "Type": "DynamicEquip",
+          "Weight": 100,
+          "Slots": [1, 2, 3, 4, 11, 12],
+          "LevelMinOffset": -8,
+          "LevelMaxOffset": 3
+        }
+      ]
+    },
+    "Pool_DynamicJewelry": {
+      "NoDropWeight": 0,
+      "Entries": [
+        {
+          "Type": "DynamicEquip",
+          "Weight": 100,
+          "Slots": [5, 8],
+          "LevelMinOffset": -10,
+          "LevelMaxOffset": 5
+        }
+      ]
+    },
+    "Pool_CommonEquip": {
+      "NoDropWeight": 0,
+      "Entries": [
+        {
+          "Type": "SubPool",
+          "Weight": 42,
+          "SubPoolId": "Pool_DynamicWeapons"
+        },
+        {
+          "Type": "SubPool",
+          "Weight": 46,
+          "SubPoolId": "Pool_DynamicArmor"
+        },
+        {
+          "Type": "SubPool",
+          "Weight": 12,
+          "SubPoolId": "Pool_DynamicJewelry"
+        }
+      ]
+    },
+    "Pool_CommonMob": {
+      "NoDropWeight": 60,
+      "Entries": [
+        {
+          "Type": "SubPool",
+          "Weight": 25,
+          "SubPoolId": "Pool_CommonEquip"
+        },
+        {
+          "Type": "Gold",
+          "Weight": 15,
+          "GoldScaleMin": 0.8,
+          "GoldScaleMax": 1.3
+        }
+      ]
+    },
+    "Pool_GoblinExclusive": {
+      "NoDropWeight": 75,
+      "Entries": [
+        {
+          "Type": "FixedItem",
+          "Weight": 25,
+          "ItemID": 2020,
+          "ForcedQuality": -1
+        }
+      ]
+    },
+    "Pool_SpiderQueenExclusive": {
+      "NoDropWeight": 70,
+      "Entries": [
+        {
+          "Type": "FixedItem",
+          "Weight": 30,
+          "ItemID": 32006,
+          "ForcedQuality": 3
+        }
+      ]
+    },
+    "Pool_SkeletonKingExclusive": {
+      "NoDropWeight": 65,
+      "Entries": [
+        {
+          "Type": "FixedItem",
+          "Weight": 25,
+          "ItemID": 32009,
+          "ForcedQuality": 3
+        },
+        {
+          "Type": "FixedItem",
+          "Weight": 10,
+          "ItemID": 50503,
+          "ForcedQuality": 2
+        }
+      ]
+    }
+  }
+}

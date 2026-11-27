@@ -26,7 +26,12 @@ public:
 
 protected:
 	virtual void NativeConstruct() override;
+	virtual void NativeDestruct() override;
 	void Apply();
+	void RefreshTitle();
+
+	UFUNCTION()
+	void HandleGoldChanged(int32 NewGold, int32 Delta);
 
 	UPROPERTY(Transient)
 	TObjectPtr<UInventoryGridComponent> Bag;

@@ -13,7 +13,8 @@ public class basic_tps : ModuleRules
 			"NavigationSystem",
 			"UMG",
 			"Slate",
-			"SlateCore" });
+			"SlateCore",
+			"ItemSystem" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] { "AIModule" });
 

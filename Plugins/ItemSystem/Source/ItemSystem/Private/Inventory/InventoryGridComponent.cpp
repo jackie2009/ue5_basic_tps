@@ -52,6 +52,14 @@ int32 UInventoryGridComponent::AddItem(const FItemInstance& Item)
 	return Anchor;
 }
 
+void UInventoryGridComponent::AddGold(int32 Amount)
+{
+	if (Amount == 0) return;
+	Gold = FMath::Max(0, Gold + Amount);
+	OnGoldChanged.Broadcast(Gold, Amount);
+	OnInventoryChanged.Broadcast();
+}
+
 bool UInventoryGridComponent::FindItemAtCell(int32 Cell, FItemInstance& OutItem, int32& OutAnchor) const
 {
 	OutAnchor = -1;

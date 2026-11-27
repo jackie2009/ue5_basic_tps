@@ -8,6 +8,7 @@
 class UItemDatabaseSubsystem;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInventoryChanged);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnGoldChanged, int32, NewGold, int32, Delta);
 
 USTRUCT(BlueprintType)
 struct ITEMSYSTEM_API FInventoryEntry
@@ -43,6 +44,15 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "Inventory")
 	FOnInventoryChanged OnInventoryChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "Inventory")
+	FOnGoldChanged OnGoldChanged;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory")
+	int32 Gold = 0;
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	void AddGold(int32 Amount);
 
 	/** 放到第一个能放下的位置；返回锚点，-1 = 背包满 */
 	UFUNCTION(BlueprintCallable, Category = "Inventory")

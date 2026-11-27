@@ -78,19 +78,13 @@ void UInventoryScreenWidget::HandleHoveredChanged(const FItemInstance& Item)
 	const FItemBaseRow* Row = (DB && Item.IsValid()) ? DB->Find(Item.BaseID) : nullptr;
 	if (!Row)
 	{
-		ItemInfoText->SetText(FText::FromString(TEXT("左键：拿起 / 放下 / 交换    右键：快速穿戴 / 卸下    I / Esc：关闭")));
+		ItemInfoText->SetColorAndOpacity(FSlateColor(FLinearColor(0.85f, 0.85f, 0.85f, 1.f)));
+		ItemInfoText->SetText(FText::FromString(TEXT("左键：拿起 / 放下 / 交换    右键：快速穿戴 / 卸下    F：拾取地面掉落    I / Esc：关闭")));
 		return;
 	}
 
-	const FText SlotName = Row->EquipType == static_cast<int32>(EEquipSlot::Finger1)
-		? FText::FromString(TEXT("戒指"))
-		: StaticEnum<EEquipSlot>()->GetDisplayNameTextByValue(Row->EquipType);
-	FString Info = FString::Printf(TEXT("%s    Lv.%d    %s"), *Row->Name, Row->Level, *SlotName.ToString());
-	if (Row->Ac > 0) Info += FString::Printf(TEXT("    防御 %d"), Row->Ac);
-	if (Row->Dc2 > 0) Info += FString::Printf(TEXT("    攻击 %d-%d"), Row->Dc, Row->Dc2);
-	if (Row->Block > 0) Info += FString::Printf(TEXT("    格挡 %d"), Row->Block);
-	Info += FString::Printf(TEXT("    占格 %dx%d"), Row->GetCellSize().X, Row->GetCellSize().Y);
-	ItemInfoText->SetText(FText::FromString(Info));
+	ItemInfoText->SetColorAndOpacity(FSlateColor(UItemDatabaseSubsystem::GetQualityColor(Item.Quality)));
+	ItemInfoText->SetText(FText::FromString(DB->FormatItemTooltip(Item)));
 }
 
 void UInventoryScreenWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)

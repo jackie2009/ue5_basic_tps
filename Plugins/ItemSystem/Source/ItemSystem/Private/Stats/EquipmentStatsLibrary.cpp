@@ -12,13 +12,26 @@ FEquipmentStatSummary UEquipmentStatsLibrary::Summarize(const UEquipmentComponen
 	const TArray<FItemInstance>& Slots = Equipment->GetAllSlots();
 	for (int32 i = 0; i < Slots.Num(); ++i)
 	{
-		const FItemBaseRow* Row = Slots[i].IsValid() ? DB->Find(Slots[i].BaseID) : nullptr;
+		const FItemInstance& Item = Slots[i];
+		const FItemBaseRow* Row = Item.IsValid() ? DB->Find(Item.BaseID) : nullptr;
 		if (!Row) continue;
-		S.Defence += Row->Ac;
-		S.Block += Row->Block;
+
+		const int32 DefPct = Item.GetDynamicAttr(Row->EquipType, static_cast<int32>(EItemAffixAttr::DefencePercent));
+		const int32 DefFlat = Item.GetDynamicAttr(Row->EquipType, static_cast<int32>(EItemAffixAttr::Defence));
+		S.Defence += FMath::RoundToInt(Row->Ac * (1.0f + DefPct / 100.0f)) + DefFlat;
+
+		const int32 BlockPct = Item.GetDynamicAttr(Row->EquipType, static_cast<int32>(EItemAffixAttr::BlockPercent));
+		const int32 BlockFlat = Item.GetDynamicAttr(Row->EquipType, static_cast<int32>(EItemAffixAttr::Block));
+		S.Block += FMath::RoundToInt(Row->Block * (1.0f + BlockPct / 100.0f)) + BlockFlat;
+
+		S.BonusHpMax += Item.GetDynamicAttr(Row->EquipType, static_cast<int32>(EItemAffixAttr::HpMax));
+		S.Critical += Item.GetDynamicAttr(Row->EquipType, static_cast<int32>(EItemAffixAttr::Critical));
+
 		if (!Row->IsWeapon())
 		{
-			S.BaseAttack += FIntPoint(Row->Dc, Row->Dc2);
+			const int32 AtkLow = Item.GetDynamicAttr(Row->EquipType, static_cast<int32>(EItemAffixAttr::AttackLow));
+			const int32 AtkHigh = Item.GetDynamicAttr(Row->EquipType, static_cast<int32>(EItemAffixAttr::AttackHigh));
+			S.BaseAttack += FIntPoint(Row->Dc + AtkLow, Row->Dc2 + AtkHigh);
 		}
 	}
 
@@ -26,7 +39,14 @@ FEquipmentStatSummary UEquipmentStatsLibrary::Summarize(const UEquipmentComponen
 	{
 		const FItemInstance Item = Equipment->GetItem(Slot);
 		const FItemBaseRow* Row = Item.IsValid() ? DB->Find(Item.BaseID) : nullptr;
-		return Row ? FIntPoint(Row->Dc, Row->Dc2) + S.BaseAttack : FIntPoint::ZeroValue;
+		if (!Row) return FIntPoint::ZeroValue;
+
+		const int32 AtkPct = Item.GetDynamicAttr(Row->EquipType, static_cast<int32>(EItemAffixAttr::AttackPercent));
+		const int32 AtkLow = Item.GetDynamicAttr(Row->EquipType, static_cast<int32>(EItemAffixAttr::AttackLow));
+		const int32 AtkHigh = Item.GetDynamicAttr(Row->EquipType, static_cast<int32>(EItemAffixAttr::AttackHigh));
+		const int32 ScaledLow = FMath::RoundToInt((Row->Dc + AtkLow) * (1.0f + AtkPct / 100.0f));
+		const int32 ScaledHigh = FMath::RoundToInt((Row->Dc2 + AtkHigh) * (1.0f + AtkPct / 100.0f));
+		return FIntPoint(ScaledLow, ScaledHigh) + S.BaseAttack;
 	};
 	S.OneHandAttack = WeaponAttack(EEquipSlot::MainHand);
 	S.PolearmAttack = WeaponAttack(EEquipSlot::MainHand2);

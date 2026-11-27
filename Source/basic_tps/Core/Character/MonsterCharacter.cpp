@@ -5,13 +5,14 @@
 
 #include "basic_tps/Core/Data/CharacterDataComponent.h"
 #include "basic_tps/Core/Data/MonsterDataComponent.h"
+#include "basic_tps/Core/Loot/LootDropComponent.h"
  
 
 
 // Sets default values
 AMonsterCharacter::AMonsterCharacter()
 {
-	 
+	LootDropComp = CreateDefaultSubobject<ULootDropComponent>(TEXT("LootDropComp"));
 }
 
 // Called when the game starts or when spawned

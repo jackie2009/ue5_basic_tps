@@ -9,6 +9,7 @@
 
 #include "MonsterCharacter.generated.h"
 class UMonsterDataComponent;
+class ULootDropComponent;
  
 
 UCLASS()
@@ -21,6 +22,10 @@ public:
 	AMonsterCharacter();
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	int32 MonsterBaseID=0;
+
+	/** 怪物掉落组件：打开怪物蓝图在右侧 Loot 分类下直接选 LootProfileId 或加必掉项即可 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Loot")
+	TObjectPtr<ULootDropComponent> LootDropComp = nullptr;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

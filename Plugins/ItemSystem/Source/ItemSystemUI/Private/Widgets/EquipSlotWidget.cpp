@@ -73,6 +73,15 @@ void UEquipSlotWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime
 	{
 		Color = HoverColor;
 	}
+	else if (Equipment)
+	{
+		const FItemInstance Equipped = Equipment->GetItem(EquipSlot);
+		if (Equipped.IsValid() && Equipped.Quality > 0)
+		{
+			Color = UItemDatabaseSubsystem::GetQualityColor(Equipped.Quality);
+			Color.A = 0.35f;
+		}
+	}
 	Frame->SetBrushColor(Color);
 }
 

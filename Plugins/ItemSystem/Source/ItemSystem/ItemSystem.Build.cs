@@ -8,7 +8,7 @@ public class ItemSystem : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine" });
-		PrivateDependencyModuleNames.AddRange(new string[] { "Projects" });
+		PrivateDependencyModuleNames.AddRange(new string[] { "Projects", "Json", "JsonUtilities" });
 
 		// These files are read directly at runtime, so they must remain outside the pak.
 		foreach (string DirectoryName in new[] { "Data", "Icons" })

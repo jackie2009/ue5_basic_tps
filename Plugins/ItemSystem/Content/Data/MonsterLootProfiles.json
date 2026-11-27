@@ -1,0 +1,154 @@
+{
+  "Profiles": {
+    "Default_Normal": {
+      "Tier": "Normal",
+      "GoldChance": 0.65,
+      "GoldScaleMin": 0.8,
+      "GoldScaleMax": 1.25,
+      "RollGroups": [
+        {
+          "PoolId": "Pool_CommonMob",
+          "RollCountMin": 1,
+          "RollCountMax": 1,
+          "bAllowDuplicate": true
+        }
+      ]
+    },
+    "Default_Elite": {
+      "Tier": "Elite",
+      "GoldChance": 0.9,
+      "GoldScaleMin": 1.0,
+      "GoldScaleMax": 1.4,
+      "RollGroups": [
+        {
+          "PoolId": "Pool_CommonEquip",
+          "RollCountMin": 1,
+          "RollCountMax": 2,
+          "bAllowDuplicate": true
+        },
+        {
+          "PoolId": "Pool_CommonMob",
+          "RollCountMin": 1,
+          "RollCountMax": 1,
+          "bAllowDuplicate": true
+        }
+      ]
+    },
+    "Default_Champion": {
+      "Tier": "Champion",
+      "GoldChance": 1.0,
+      "GoldScaleMin": 1.1,
+      "GoldScaleMax": 1.6,
+      "RollGroups": [
+        {
+          "PoolId": "Pool_CommonEquip",
+          "RollCountMin": 2,
+          "RollCountMax": 3,
+          "bAllowDuplicate": false
+        }
+      ]
+    },
+    "Default_Boss": {
+      "Tier": "Boss",
+      "GoldChance": 1.0,
+      "GoldScaleMin": 1.2,
+      "GoldScaleMax": 1.8,
+      "RollGroups": [
+        {
+          "PoolId": "Pool_CommonEquip",
+          "RollCountMin": 4,
+          "RollCountMax": 5,
+          "bAllowDuplicate": false
+        }
+      ]
+    },
+    "Mob_Goblin": {
+      "Tier": "Normal",
+      "GoldChance": 0.7,
+      "GoldScaleMin": 0.8,
+      "GoldScaleMax": 1.3,
+      "RollGroups": [
+        {
+          "PoolId": "Pool_CommonMob",
+          "RollCountMin": 1,
+          "RollCountMax": 1,
+          "bAllowDuplicate": true
+        },
+        {
+          "PoolId": "Pool_GoblinExclusive",
+          "RollCountMin": 1,
+          "RollCountMax": 1,
+          "bAllowDuplicate": true
+        }
+      ]
+    },
+    "Boss_SpiderQueen": {
+      "Tier": "Boss",
+      "GoldChance": 1.0,
+      "GoldScaleMin": 1.2,
+      "GoldScaleMax": 1.6,
+      "GuaranteedDrops": [
+        {
+          "ItemID": 32006,
+          "ForcedQuality": 3,
+          "Count": 1,
+          "bFirstKillOnly": true
+        }
+      ],
+      "RollGroups": [
+        {
+          "PoolId": "Pool_CommonEquip",
+          "RollCountMin": 3,
+          "RollCountMax": 5,
+          "bAllowDuplicate": false
+        },
+        {
+          "PoolId": "Pool_SpiderQueenExclusive",
+          "RollCountMin": 1,
+          "RollCountMax": 1,
+          "bAllowDuplicate": true
+        }
+      ]
+    },
+    "Boss_SkeletonKing": {
+      "Tier": "Boss",
+      "GoldChance": 1.0,
+      "GoldScaleMin": 1.3,
+      "GoldScaleMax": 1.8,
+      "UniqueWeightMultiplier": 1.5,
+      "GuaranteedDrops": [
+        {
+          "ItemID": 32009,
+          "ForcedQuality": 3,
+          "Count": 1,
+          "bFirstKillOnly": true
+        }
+      ],
+      "RollGroups": [
+        {
+          "PoolId": "Pool_CommonEquip",
+          "RollCountMin": 4,
+          "RollCountMax": 6,
+          "bAllowDuplicate": false
+        },
+        {
+          "PoolId": "Pool_SkeletonKingExclusive",
+          "RollCountMin": 1,
+          "RollCountMax": 1,
+          "bAllowDuplicate": true
+        }
+      ]
+    }
+  },
+  "DropIdMap": {
+    "5": "Default_Champion",
+    "6": "Default_Champion",
+    "11": "Mob_Goblin",
+    "12": "Mob_Goblin",
+    "13": "Mob_Goblin",
+    "14": "Mob_Goblin",
+    "25": "Boss_SpiderQueen",
+    "35": "Default_Champion",
+    "38": "Boss_SkeletonKing"
+  }
+}

@@ -183,18 +183,15 @@ void UItemSystemUISubsystem::SeedTestItems(UInventoryGridComponent* Bag, UEquipm
 	for (int32 ID : DB->GetOrderedIDs())
 	{
 		const FItemBaseRow* Row = DB->Find(ID);
-		const FItemInstance Item = DB->CreateInstance(ID);
-		if (!Row || !Item.IsValid()) continue;
+		if (!Row || Row->EquipType <= 0 || EquippedTypes.Contains(Row->EquipType)) continue;
 
-		if (Row->EquipType > 0 && !EquippedTypes.Contains(Row->EquipType))
+		const FItemInstance Item = DB->CreateInstance(ID);
+		if (!Item.IsValid()) continue;
+
+		FItemInstance Replaced;
+		if (Equipment->Equip(Item, Equipment->ResolveSlot(Item), Replaced))
 		{
-			FItemInstance Replaced;
-			if (Equipment->Equip(Item, Equipment->ResolveSlot(Item), Replaced))
-			{
-				EquippedTypes.Add(Row->EquipType);
-				continue;
-			}
+			EquippedTypes.Add(Row->EquipType);
 		}
-		Bag->AddItem(Item);
 	}
 }

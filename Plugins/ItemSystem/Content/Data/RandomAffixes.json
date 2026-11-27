@@ -1,0 +1,7265 @@
+{
+  "AttackPercentAffixMaxLevel": 42,
+  "Affixes": [
+    {
+      "ID": 12001,
+      "Name": "生命",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "巨鲸之",
+      "LastName": "生命的",
+      "MinValues": [
+        8,
+        13,
+        20,
+        28,
+        37,
+        47,
+        57,
+        67,
+        77
+      ],
+      "MaxValues": [
+        16,
+        25,
+        39,
+        55,
+        73,
+        94,
+        115,
+        136,
+        157
+      ]
+    },
+    {
+      "ID": 12003,
+      "Name": "最小攻击力",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "豺狼之",
+      "LastName": "力量的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 12004,
+      "Name": "最大攻击力",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "雄狮之",
+      "LastName": "英勇的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 12005,
+      "Name": "防御力",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "野猪之",
+      "LastName": "结实的",
+      "MinValues": [
+        1,
+        3,
+        5,
+        7,
+        10,
+        13,
+        16,
+        19,
+        22
+      ],
+      "MaxValues": [
+        2,
+        5,
+        9,
+        13,
+        19,
+        26,
+        33,
+        40,
+        47
+      ]
+    },
+    {
+      "ID": 12007,
+      "Name": "暴击",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "渡鸦之",
+      "LastName": "精准的",
+      "MinValues": [
+        1,
+        2,
+        2,
+        3,
+        4,
+        6,
+        8,
+        10,
+        12
+      ],
+      "MaxValues": [
+        2,
+        3,
+        4,
+        6,
+        8,
+        11,
+        14,
+        17,
+        20
+      ]
+    },
+    {
+      "ID": 12008,
+      "Name": "格挡",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "雄鹿之",
+      "LastName": "抵抗的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "MaxValues": [
+        2,
+        2,
+        4,
+        5,
+        8,
+        10,
+        12,
+        14,
+        16
+      ]
+    },
+    {
+      "ID": 12009,
+      "Name": "熟练",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "甲虫之",
+      "LastName": "熟练的",
+      "MinValues": [
+        1,
+        1,
+        1,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        1,
+        2,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 12010,
+      "Name": "单手武器伤害",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "刺猬之",
+      "LastName": "劈砍的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 12011,
+      "Name": "长柄武器伤害",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "花豹之",
+      "LastName": "突刺的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 12012,
+      "Name": "远程武器伤害",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "老鹰之",
+      "LastName": "远射的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 12013,
+      "Name": "剧毒抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "MaxValues": [
+        2,
+        2,
+        3,
+        4,
+        5,
+        7,
+        9,
+        11,
+        13
+      ]
+    },
+    {
+      "ID": 12023,
+      "Name": "火焰抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "MaxValues": [
+        2,
+        2,
+        3,
+        4,
+        5,
+        7,
+        9,
+        11,
+        13
+      ]
+    },
+    {
+      "ID": 12024,
+      "Name": "寒冰抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "MaxValues": [
+        2,
+        2,
+        3,
+        4,
+        5,
+        7,
+        9,
+        11,
+        13
+      ]
+    },
+    {
+      "ID": 12014,
+      "Name": "毒素",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "瘟疫之",
+      "LastName": "腐败的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 12015,
+      "Name": "火焰",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "火山之",
+      "LastName": "燃烧的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 12016,
+      "Name": "寒冰",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "寒霜之",
+      "LastName": "冰冷的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 12017,
+      "Name": "获得更多金币",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "宝藏之",
+      "LastName": "贪婪的",
+      "MinValues": [
+        2,
+        2,
+        4,
+        6,
+        8,
+        12,
+        16,
+        20,
+        24
+      ],
+      "MaxValues": [
+        3,
+        4,
+        7,
+        11,
+        16,
+        23,
+        30,
+        37,
+        44
+      ]
+    },
+    {
+      "ID": 12018,
+      "Name": "穿刺",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "黄蜂之",
+      "LastName": "尖锐的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 12019,
+      "Name": "击晕",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "犀牛之",
+      "LastName": "致残的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 12020,
+      "Name": "攻击强化",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "蟒蛇之",
+      "LastName": "压制的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 12021,
+      "Name": "防御强化",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "巨熊之",
+      "LastName": "无畏的",
+      "MinValues": [
+        3,
+        4,
+        7,
+        10,
+        15,
+        22,
+        29,
+        36,
+        43
+      ],
+      "MaxValues": [
+        5,
+        8,
+        13,
+        20,
+        30,
+        43,
+        56,
+        69,
+        82
+      ]
+    },
+    {
+      "ID": 12022,
+      "Name": "格挡强化",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "麋鹿之",
+      "LastName": "不屈的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 1001,
+      "Name": "生命",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "巨鲸之",
+      "LastName": "生命的",
+      "MinValues": [
+        8,
+        13,
+        20,
+        28,
+        37,
+        47,
+        57,
+        67,
+        77
+      ],
+      "MaxValues": [
+        16,
+        25,
+        39,
+        55,
+        73,
+        94,
+        115,
+        136,
+        157
+      ]
+    },
+    {
+      "ID": 1003,
+      "Name": "最小攻击力",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "豺狼之",
+      "LastName": "力量的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 1004,
+      "Name": "最大攻击力",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "雄狮之",
+      "LastName": "英勇的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 1005,
+      "Name": "防御力",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "野猪之",
+      "LastName": "结实的",
+      "MinValues": [
+        1,
+        3,
+        5,
+        7,
+        10,
+        13,
+        16,
+        19,
+        22
+      ],
+      "MaxValues": [
+        2,
+        5,
+        9,
+        13,
+        19,
+        26,
+        33,
+        40,
+        47
+      ]
+    },
+    {
+      "ID": 1007,
+      "Name": "暴击",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "渡鸦之",
+      "LastName": "精准的",
+      "MinValues": [
+        1,
+        2,
+        2,
+        3,
+        4,
+        6,
+        8,
+        10,
+        12
+      ],
+      "MaxValues": [
+        2,
+        3,
+        4,
+        6,
+        8,
+        11,
+        14,
+        17,
+        20
+      ]
+    },
+    {
+      "ID": 1008,
+      "Name": "格挡",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "雄鹿之",
+      "LastName": "抵抗的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "MaxValues": [
+        2,
+        2,
+        4,
+        5,
+        8,
+        10,
+        12,
+        14,
+        16
+      ]
+    },
+    {
+      "ID": 1009,
+      "Name": "熟练",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "甲虫之",
+      "LastName": "熟练的",
+      "MinValues": [
+        1,
+        1,
+        1,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        1,
+        2,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 1010,
+      "Name": "单手武器伤害",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "刺猬之",
+      "LastName": "劈砍的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 1011,
+      "Name": "长柄武器伤害",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "花豹之",
+      "LastName": "突刺的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 1012,
+      "Name": "远程武器伤害",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "老鹰之",
+      "LastName": "远射的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 1013,
+      "Name": "剧毒抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "MaxValues": [
+        2,
+        2,
+        3,
+        4,
+        5,
+        7,
+        9,
+        11,
+        13
+      ]
+    },
+    {
+      "ID": 1023,
+      "Name": "火焰抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "MaxValues": [
+        2,
+        2,
+        3,
+        4,
+        5,
+        7,
+        9,
+        11,
+        13
+      ]
+    },
+    {
+      "ID": 1024,
+      "Name": "寒冰抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "MaxValues": [
+        2,
+        2,
+        3,
+        4,
+        5,
+        7,
+        9,
+        11,
+        13
+      ]
+    },
+    {
+      "ID": 1014,
+      "Name": "毒素",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "瘟疫之",
+      "LastName": "腐败的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 1015,
+      "Name": "火焰",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "火山之",
+      "LastName": "燃烧的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 1016,
+      "Name": "寒冰",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "寒霜之",
+      "LastName": "冰冷的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 1017,
+      "Name": "获得更多金币",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "宝藏之",
+      "LastName": "贪婪的",
+      "MinValues": [
+        2,
+        2,
+        4,
+        6,
+        8,
+        12,
+        16,
+        20,
+        24
+      ],
+      "MaxValues": [
+        3,
+        4,
+        7,
+        11,
+        16,
+        23,
+        30,
+        37,
+        44
+      ]
+    },
+    {
+      "ID": 1018,
+      "Name": "穿刺",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "黄蜂之",
+      "LastName": "尖锐的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 1019,
+      "Name": "击晕",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "犀牛之",
+      "LastName": "致残的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 1020,
+      "Name": "攻击强化",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "蟒蛇之",
+      "LastName": "压制的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 1021,
+      "Name": "防御强化",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "巨熊之",
+      "LastName": "无畏的",
+      "MinValues": [
+        3,
+        4,
+        7,
+        10,
+        15,
+        22,
+        29,
+        36,
+        43
+      ],
+      "MaxValues": [
+        5,
+        8,
+        13,
+        20,
+        30,
+        43,
+        56,
+        69,
+        82
+      ]
+    },
+    {
+      "ID": 1022,
+      "Name": "格挡强化",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "麋鹿之",
+      "LastName": "不屈的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 2001,
+      "Name": "生命",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "巨鲸之",
+      "LastName": "生命的",
+      "MinValues": [
+        6,
+        10,
+        15,
+        21,
+        28,
+        35,
+        42,
+        49,
+        56
+      ],
+      "MaxValues": [
+        12,
+        19,
+        29,
+        41,
+        55,
+        70,
+        85,
+        100,
+        115
+      ]
+    },
+    {
+      "ID": 2003,
+      "Name": "最小攻击力",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "豺狼之",
+      "LastName": "力量的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 2004,
+      "Name": "最大攻击力",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "雄狮之",
+      "LastName": "英勇的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 2005,
+      "Name": "防御力",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "野猪之",
+      "LastName": "结实的",
+      "MinValues": [
+        2,
+        3,
+        6,
+        10,
+        14,
+        18,
+        22,
+        26,
+        30
+      ],
+      "MaxValues": [
+        2,
+        6,
+        12,
+        19,
+        27,
+        36,
+        45,
+        54,
+        63
+      ]
+    },
+    {
+      "ID": 2007,
+      "Name": "暴击",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "渡鸦之",
+      "LastName": "精准的",
+      "MinValues": [
+        1,
+        2,
+        2,
+        3,
+        4,
+        6,
+        8,
+        10,
+        12
+      ],
+      "MaxValues": [
+        2,
+        3,
+        4,
+        6,
+        8,
+        11,
+        14,
+        17,
+        20
+      ]
+    },
+    {
+      "ID": 2008,
+      "Name": "格挡",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "雄鹿之",
+      "LastName": "抵抗的",
+      "MinValues": [
+        1,
+        1,
+        1,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        1,
+        2,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 2009,
+      "Name": "熟练",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "甲虫之",
+      "LastName": "熟练的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "MaxValues": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ]
+    },
+    {
+      "ID": 2010,
+      "Name": "单手武器伤害",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "刺猬之",
+      "LastName": "劈砍的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 2011,
+      "Name": "长柄武器伤害",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "花豹之",
+      "LastName": "突刺的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 2012,
+      "Name": "远程武器伤害",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "老鹰之",
+      "LastName": "远射的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 2013,
+      "Name": "剧毒抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        3,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "MaxValues": [
+        2,
+        2,
+        4,
+        5,
+        6,
+        8,
+        10,
+        12,
+        14
+      ]
+    },
+    {
+      "ID": 2023,
+      "Name": "火焰抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        3,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "MaxValues": [
+        2,
+        2,
+        4,
+        5,
+        6,
+        8,
+        10,
+        12,
+        14
+      ]
+    },
+    {
+      "ID": 2024,
+      "Name": "寒冰抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        3,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "MaxValues": [
+        2,
+        2,
+        4,
+        5,
+        6,
+        8,
+        10,
+        12,
+        14
+      ]
+    },
+    {
+      "ID": 2014,
+      "Name": "毒素",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "瘟疫之",
+      "LastName": "腐败的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 2015,
+      "Name": "火焰",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "火山之",
+      "LastName": "燃烧的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 2016,
+      "Name": "寒冰",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "寒霜之",
+      "LastName": "冰冷的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 2017,
+      "Name": "获得更多金币",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "宝藏之",
+      "LastName": "贪婪的",
+      "MinValues": [
+        1,
+        2,
+        2,
+        4,
+        5,
+        7,
+        9,
+        11,
+        13
+      ],
+      "MaxValues": [
+        2,
+        3,
+        4,
+        7,
+        10,
+        14,
+        18,
+        22,
+        26
+      ]
+    },
+    {
+      "ID": 2018,
+      "Name": "穿刺",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "黄蜂之",
+      "LastName": "尖锐的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 2019,
+      "Name": "击晕",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "犀牛之",
+      "LastName": "致残的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 2020,
+      "Name": "攻击强化",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "蟒蛇之",
+      "LastName": "压制的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 2021,
+      "Name": "防御强化",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "巨熊之",
+      "LastName": "无畏的",
+      "MinValues": [
+        4,
+        6,
+        9,
+        14,
+        21,
+        30,
+        39,
+        48,
+        57
+      ],
+      "MaxValues": [
+        7,
+        11,
+        18,
+        28,
+        42,
+        60,
+        78,
+        96,
+        114
+      ]
+    },
+    {
+      "ID": 2022,
+      "Name": "格挡强化",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "麋鹿之",
+      "LastName": "不屈的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 3001,
+      "Name": "生命",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "巨鲸之",
+      "LastName": "生命的",
+      "MinValues": [
+        3,
+        5,
+        8,
+        11,
+        14,
+        18,
+        22,
+        26,
+        30
+      ],
+      "MaxValues": [
+        6,
+        10,
+        15,
+        21,
+        28,
+        35,
+        42,
+        49,
+        56
+      ]
+    },
+    {
+      "ID": 3003,
+      "Name": "最小攻击力",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "豺狼之",
+      "LastName": "力量的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 3004,
+      "Name": "最大攻击力",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "雄狮之",
+      "LastName": "英勇的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 3005,
+      "Name": "防御力",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "野猪之",
+      "LastName": "结实的",
+      "MinValues": [
+        1,
+        2,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "MaxValues": [
+        1,
+        2,
+        4,
+        6,
+        8,
+        11,
+        14,
+        17,
+        20
+      ]
+    },
+    {
+      "ID": 3007,
+      "Name": "暴击",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "渡鸦之",
+      "LastName": "精准的",
+      "MinValues": [
+        1,
+        1,
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "MaxValues": [
+        1,
+        2,
+        2,
+        3,
+        4,
+        6,
+        8,
+        10,
+        12
+      ]
+    },
+    {
+      "ID": 3008,
+      "Name": "格挡",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "雄鹿之",
+      "LastName": "抵抗的",
+      "MinValues": [
+        1,
+        1,
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "MaxValues": [
+        1,
+        2,
+        2,
+        3,
+        4,
+        6,
+        8,
+        10,
+        12
+      ]
+    },
+    {
+      "ID": 3009,
+      "Name": "熟练",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "甲虫之",
+      "LastName": "熟练的",
+      "MinValues": [
+        1,
+        1,
+        1,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        1,
+        2,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 3010,
+      "Name": "单手武器伤害",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "刺猬之",
+      "LastName": "劈砍的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 3011,
+      "Name": "长柄武器伤害",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "花豹之",
+      "LastName": "突刺的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 3012,
+      "Name": "远程武器伤害",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "老鹰之",
+      "LastName": "远射的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 3013,
+      "Name": "剧毒抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "MaxValues": [
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ]
+    },
+    {
+      "ID": 3023,
+      "Name": "火焰抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "MaxValues": [
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ]
+    },
+    {
+      "ID": 3024,
+      "Name": "寒冰抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "MaxValues": [
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ]
+    },
+    {
+      "ID": 3014,
+      "Name": "毒素",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "瘟疫之",
+      "LastName": "腐败的",
+      "MinValues": [
+        1,
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "MaxValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ]
+    },
+    {
+      "ID": 3015,
+      "Name": "火焰",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "火山之",
+      "LastName": "燃烧的",
+      "MinValues": [
+        1,
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "MaxValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ]
+    },
+    {
+      "ID": 3016,
+      "Name": "寒冰",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "寒霜之",
+      "LastName": "冰冷的",
+      "MinValues": [
+        1,
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "MaxValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ]
+    },
+    {
+      "ID": 3017,
+      "Name": "获得更多金币",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "宝藏之",
+      "LastName": "贪婪的",
+      "MinValues": [
+        1,
+        2,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "MaxValues": [
+        2,
+        3,
+        4,
+        6,
+        9,
+        12,
+        15,
+        18,
+        21
+      ]
+    },
+    {
+      "ID": 3018,
+      "Name": "穿刺",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "黄蜂之",
+      "LastName": "尖锐的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 3019,
+      "Name": "击晕",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "犀牛之",
+      "LastName": "致残的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 3020,
+      "Name": "攻击强化",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "蟒蛇之",
+      "LastName": "压制的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 3021,
+      "Name": "防御强化",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "巨熊之",
+      "LastName": "无畏的",
+      "MinValues": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        9,
+        12,
+        15,
+        18
+      ],
+      "MaxValues": [
+        2,
+        3,
+        5,
+        8,
+        12,
+        17,
+        22,
+        27,
+        32
+      ]
+    },
+    {
+      "ID": 3022,
+      "Name": "格挡强化",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "麋鹿之",
+      "LastName": "不屈的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 4001,
+      "Name": "生命",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "巨鲸之",
+      "LastName": "生命的",
+      "MinValues": [
+        3,
+        5,
+        8,
+        11,
+        14,
+        18,
+        22,
+        26,
+        30
+      ],
+      "MaxValues": [
+        6,
+        10,
+        15,
+        21,
+        28,
+        35,
+        42,
+        49,
+        56
+      ]
+    },
+    {
+      "ID": 4003,
+      "Name": "最小攻击力",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "豺狼之",
+      "LastName": "力量的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 4004,
+      "Name": "最大攻击力",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "雄狮之",
+      "LastName": "英勇的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 4005,
+      "Name": "防御力",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "野猪之",
+      "LastName": "结实的",
+      "MinValues": [
+        1,
+        2,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "MaxValues": [
+        1,
+        2,
+        4,
+        6,
+        8,
+        11,
+        14,
+        17,
+        20
+      ]
+    },
+    {
+      "ID": 4007,
+      "Name": "暴击",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "渡鸦之",
+      "LastName": "精准的",
+      "MinValues": [
+        1,
+        1,
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "MaxValues": [
+        1,
+        2,
+        2,
+        3,
+        4,
+        6,
+        8,
+        10,
+        12
+      ]
+    },
+    {
+      "ID": 4008,
+      "Name": "格挡",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "雄鹿之",
+      "LastName": "抵抗的",
+      "MinValues": [
+        1,
+        1,
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "MaxValues": [
+        1,
+        2,
+        2,
+        3,
+        4,
+        6,
+        8,
+        10,
+        12
+      ]
+    },
+    {
+      "ID": 4009,
+      "Name": "熟练",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "甲虫之",
+      "LastName": "熟练的",
+      "MinValues": [
+        1,
+        1,
+        1,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        1,
+        2,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 4010,
+      "Name": "单手武器伤害",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "刺猬之",
+      "LastName": "劈砍的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 4011,
+      "Name": "长柄武器伤害",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "花豹之",
+      "LastName": "突刺的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 4012,
+      "Name": "远程武器伤害",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "老鹰之",
+      "LastName": "远射的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 4013,
+      "Name": "剧毒抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "MaxValues": [
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ]
+    },
+    {
+      "ID": 4023,
+      "Name": "火焰抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "MaxValues": [
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ]
+    },
+    {
+      "ID": 4024,
+      "Name": "寒冰抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "MaxValues": [
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ]
+    },
+    {
+      "ID": 4014,
+      "Name": "毒素",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "瘟疫之",
+      "LastName": "腐败的",
+      "MinValues": [
+        1,
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "MaxValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ]
+    },
+    {
+      "ID": 4015,
+      "Name": "火焰",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "火山之",
+      "LastName": "燃烧的",
+      "MinValues": [
+        1,
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "MaxValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ]
+    },
+    {
+      "ID": 4016,
+      "Name": "寒冰",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "寒霜之",
+      "LastName": "冰冷的",
+      "MinValues": [
+        1,
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "MaxValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ]
+    },
+    {
+      "ID": 4017,
+      "Name": "获得更多金币",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "宝藏之",
+      "LastName": "贪婪的",
+      "MinValues": [
+        1,
+        2,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "MaxValues": [
+        2,
+        3,
+        4,
+        6,
+        9,
+        12,
+        15,
+        18,
+        21
+      ]
+    },
+    {
+      "ID": 4018,
+      "Name": "穿刺",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "黄蜂之",
+      "LastName": "尖锐的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 4019,
+      "Name": "击晕",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "犀牛之",
+      "LastName": "致残的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 4020,
+      "Name": "攻击强化",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "蟒蛇之",
+      "LastName": "压制的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 4021,
+      "Name": "防御强化",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "巨熊之",
+      "LastName": "无畏的",
+      "MinValues": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        9,
+        12,
+        15,
+        18
+      ],
+      "MaxValues": [
+        2,
+        3,
+        5,
+        8,
+        12,
+        17,
+        22,
+        27,
+        32
+      ]
+    },
+    {
+      "ID": 4022,
+      "Name": "格挡强化",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "麋鹿之",
+      "LastName": "不屈的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 11001,
+      "Name": "生命",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "巨鲸之",
+      "LastName": "生命的",
+      "MinValues": [
+        5,
+        8,
+        12,
+        17,
+        23,
+        30,
+        37,
+        44,
+        51
+      ],
+      "MaxValues": [
+        10,
+        16,
+        24,
+        34,
+        46,
+        59,
+        72,
+        85,
+        98
+      ]
+    },
+    {
+      "ID": 11003,
+      "Name": "最小攻击力",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "豺狼之",
+      "LastName": "力量的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 11004,
+      "Name": "最大攻击力",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "雄狮之",
+      "LastName": "英勇的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 11005,
+      "Name": "防御力",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "野猪之",
+      "LastName": "结实的",
+      "MinValues": [
+        1,
+        2,
+        4,
+        6,
+        8,
+        11,
+        14,
+        17,
+        20
+      ],
+      "MaxValues": [
+        2,
+        4,
+        7,
+        11,
+        16,
+        21,
+        26,
+        31,
+        36
+      ]
+    },
+    {
+      "ID": 11007,
+      "Name": "暴击",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "渡鸦之",
+      "LastName": "精准的",
+      "MinValues": [
+        1,
+        2,
+        2,
+        3,
+        4,
+        6,
+        8,
+        10,
+        12
+      ],
+      "MaxValues": [
+        2,
+        3,
+        4,
+        6,
+        8,
+        11,
+        14,
+        17,
+        20
+      ]
+    },
+    {
+      "ID": 11008,
+      "Name": "格挡",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "雄鹿之",
+      "LastName": "抵抗的",
+      "MinValues": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "MaxValues": [
+        2,
+        3,
+        5,
+        8,
+        11,
+        15,
+        19,
+        23,
+        27
+      ]
+    },
+    {
+      "ID": 11009,
+      "Name": "熟练",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "甲虫之",
+      "LastName": "熟练的",
+      "MinValues": [
+        1,
+        1,
+        1,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        1,
+        2,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 11010,
+      "Name": "单手武器伤害",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "刺猬之",
+      "LastName": "劈砍的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 11011,
+      "Name": "长柄武器伤害",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "花豹之",
+      "LastName": "突刺的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 11012,
+      "Name": "远程武器伤害",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "老鹰之",
+      "LastName": "远射的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 11013,
+      "Name": "剧毒抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        3,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "MaxValues": [
+        2,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ]
+    },
+    {
+      "ID": 11023,
+      "Name": "火焰抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        3,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "MaxValues": [
+        2,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ]
+    },
+    {
+      "ID": 11024,
+      "Name": "寒冰抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        3,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "MaxValues": [
+        2,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ]
+    },
+    {
+      "ID": 11014,
+      "Name": "毒素",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "瘟疫之",
+      "LastName": "腐败的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 11015,
+      "Name": "火焰",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "火山之",
+      "LastName": "燃烧的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 11016,
+      "Name": "寒冰",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "寒霜之",
+      "LastName": "冰冷的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 11017,
+      "Name": "获得更多金币",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "宝藏之",
+      "LastName": "贪婪的",
+      "MinValues": [
+        2,
+        3,
+        5,
+        8,
+        12,
+        17,
+        22,
+        27,
+        32
+      ],
+      "MaxValues": [
+        4,
+        6,
+        10,
+        16,
+        24,
+        34,
+        44,
+        54,
+        64
+      ]
+    },
+    {
+      "ID": 11018,
+      "Name": "穿刺",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "黄蜂之",
+      "LastName": "尖锐的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 11019,
+      "Name": "击晕",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "犀牛之",
+      "LastName": "致残的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 11020,
+      "Name": "攻击强化",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "蟒蛇之",
+      "LastName": "压制的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 11021,
+      "Name": "防御强化",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "巨熊之",
+      "LastName": "无畏的",
+      "MinValues": [
+        2,
+        3,
+        5,
+        8,
+        12,
+        17,
+        22,
+        27,
+        32
+      ],
+      "MaxValues": [
+        4,
+        6,
+        10,
+        16,
+        24,
+        34,
+        44,
+        54,
+        64
+      ]
+    },
+    {
+      "ID": 11022,
+      "Name": "格挡强化",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "麋鹿之",
+      "LastName": "不屈的",
+      "MinValues": [
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45,
+        50
+      ],
+      "MaxValues": [
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ]
+    },
+    {
+      "ID": 5001,
+      "Name": "生命",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "巨鲸之",
+      "LastName": "生命的",
+      "MinValues": [
+        8,
+        12,
+        18,
+        26,
+        35,
+        44,
+        53,
+        62,
+        71
+      ],
+      "MaxValues": [
+        15,
+        24,
+        36,
+        51,
+        69,
+        88,
+        107,
+        126,
+        145
+      ]
+    },
+    {
+      "ID": 5003,
+      "Name": "最小攻击力",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "豺狼之",
+      "LastName": "力量的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        4,
+        5,
+        7,
+        9,
+        11,
+        13
+      ],
+      "MaxValues": [
+        1,
+        2,
+        4,
+        7,
+        10,
+        14,
+        18,
+        22,
+        26
+      ]
+    },
+    {
+      "ID": 5004,
+      "Name": "最大攻击力",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "雄狮之",
+      "LastName": "英勇的",
+      "MinValues": [
+        1,
+        2,
+        5,
+        8,
+        11,
+        15,
+        19,
+        23,
+        27
+      ],
+      "MaxValues": [
+        1,
+        4,
+        9,
+        15,
+        22,
+        30,
+        38,
+        46,
+        54
+      ]
+    },
+    {
+      "ID": 5005,
+      "Name": "防御力",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "野猪之",
+      "LastName": "结实的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 5007,
+      "Name": "暴击",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "渡鸦之",
+      "LastName": "精准的",
+      "MinValues": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        9,
+        11,
+        13
+      ],
+      "MaxValues": [
+        2,
+        3,
+        5,
+        7,
+        9,
+        13,
+        17,
+        21,
+        25
+      ]
+    },
+    {
+      "ID": 5008,
+      "Name": "格挡",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "雄鹿之",
+      "LastName": "抵抗的",
+      "MinValues": [
+        1,
+        1,
+        1,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        1,
+        2,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 5009,
+      "Name": "熟练",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "甲虫之",
+      "LastName": "熟练的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "MaxValues": [
+        1,
+        2,
+        3,
+        5,
+        7,
+        9,
+        11,
+        13,
+        15
+      ]
+    },
+    {
+      "ID": 5010,
+      "Name": "单手武器伤害",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "刺猬之",
+      "LastName": "劈砍的",
+      "MinValues": [
+        1,
+        2,
+        4,
+        7,
+        10,
+        14,
+        18,
+        22,
+        26
+      ],
+      "MaxValues": [
+        1,
+        4,
+        8,
+        13,
+        20,
+        27,
+        34,
+        41,
+        48
+      ]
+    },
+    {
+      "ID": 5011,
+      "Name": "长柄武器伤害",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "花豹之",
+      "LastName": "突刺的",
+      "MinValues": [
+        1,
+        2,
+        4,
+        7,
+        10,
+        14,
+        18,
+        22,
+        26
+      ],
+      "MaxValues": [
+        1,
+        4,
+        8,
+        13,
+        20,
+        27,
+        34,
+        41,
+        48
+      ]
+    },
+    {
+      "ID": 5012,
+      "Name": "远程武器伤害",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "老鹰之",
+      "LastName": "远射的",
+      "MinValues": [
+        1,
+        2,
+        4,
+        7,
+        10,
+        14,
+        18,
+        22,
+        26
+      ],
+      "MaxValues": [
+        1,
+        4,
+        8,
+        13,
+        20,
+        27,
+        34,
+        41,
+        48
+      ]
+    },
+    {
+      "ID": 5013,
+      "Name": "剧毒抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 5023,
+      "Name": "火焰抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 5024,
+      "Name": "寒冰抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 5014,
+      "Name": "毒素",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "瘟疫之",
+      "LastName": "腐败的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "MaxValues": [
+        2,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        9,
+        10
+      ]
+    },
+    {
+      "ID": 5015,
+      "Name": "火焰",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "火山之",
+      "LastName": "燃烧的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "MaxValues": [
+        2,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        9,
+        10
+      ]
+    },
+    {
+      "ID": 5016,
+      "Name": "寒冰",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "寒霜之",
+      "LastName": "冰冷的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "MaxValues": [
+        2,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        9,
+        10
+      ]
+    },
+    {
+      "ID": 5017,
+      "Name": "获得更多金币",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "宝藏之",
+      "LastName": "贪婪的",
+      "MinValues": [
+        1,
+        2,
+        2,
+        4,
+        5,
+        7,
+        9,
+        11,
+        13
+      ],
+      "MaxValues": [
+        2,
+        3,
+        4,
+        7,
+        10,
+        14,
+        18,
+        22,
+        26
+      ]
+    },
+    {
+      "ID": 5018,
+      "Name": "穿刺",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "黄蜂之",
+      "LastName": "尖锐的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "MaxValues": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ]
+    },
+    {
+      "ID": 5019,
+      "Name": "击晕",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "犀牛之",
+      "LastName": "致残的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "MaxValues": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ]
+    },
+    {
+      "ID": 5020,
+      "Name": "攻击强化",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "蟒蛇之",
+      "LastName": "压制的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 5021,
+      "Name": "防御强化",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "巨熊之",
+      "LastName": "无畏的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 5022,
+      "Name": "格挡强化",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "麋鹿之",
+      "LastName": "不屈的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 8001,
+      "Name": "生命",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "巨鲸之",
+      "LastName": "生命的",
+      "MinValues": [
+        10,
+        16,
+        24,
+        34,
+        46,
+        59,
+        72,
+        85,
+        98
+      ],
+      "MaxValues": [
+        20,
+        31,
+        48,
+        68,
+        91,
+        117,
+        143,
+        169,
+        195
+      ]
+    },
+    {
+      "ID": 8003,
+      "Name": "最小攻击力",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "豺狼之",
+      "LastName": "力量的",
+      "MinValues": [
+        1,
+        2,
+        3,
+        5,
+        7,
+        9,
+        11,
+        13,
+        15
+      ],
+      "MaxValues": [
+        1,
+        3,
+        5,
+        9,
+        13,
+        18,
+        23,
+        28,
+        33
+      ]
+    },
+    {
+      "ID": 8004,
+      "Name": "最大攻击力",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "雄狮之",
+      "LastName": "英勇的",
+      "MinValues": [
+        1,
+        3,
+        6,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35
+      ],
+      "MaxValues": [
+        2,
+        6,
+        12,
+        20,
+        29,
+        40,
+        51,
+        62,
+        73
+      ]
+    },
+    {
+      "ID": 8005,
+      "Name": "防御力",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "野猪之",
+      "LastName": "结实的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 8007,
+      "Name": "暴击",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "渡鸦之",
+      "LastName": "精准的",
+      "MinValues": [
+        2,
+        3,
+        5,
+        7,
+        10,
+        14,
+        18,
+        22,
+        26
+      ],
+      "MaxValues": [
+        4,
+        6,
+        9,
+        14,
+        20,
+        27,
+        34,
+        41,
+        48
+      ]
+    },
+    {
+      "ID": 8008,
+      "Name": "格挡",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "雄鹿之",
+      "LastName": "抵抗的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "MaxValues": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        9,
+        11,
+        13
+      ]
+    },
+    {
+      "ID": 8009,
+      "Name": "熟练",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "甲虫之",
+      "LastName": "熟练的",
+      "MinValues": [
+        1,
+        2,
+        3,
+        5,
+        8,
+        10,
+        12,
+        14,
+        16
+      ],
+      "MaxValues": [
+        2,
+        4,
+        6,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35
+      ]
+    },
+    {
+      "ID": 8010,
+      "Name": "单手武器伤害",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "刺猬之",
+      "LastName": "劈砍的",
+      "MinValues": [
+        1,
+        3,
+        5,
+        9,
+        13,
+        18,
+        23,
+        28,
+        33
+      ],
+      "MaxValues": [
+        1,
+        5,
+        10,
+        18,
+        26,
+        36,
+        46,
+        56,
+        66
+      ]
+    },
+    {
+      "ID": 8011,
+      "Name": "长柄武器伤害",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "花豹之",
+      "LastName": "突刺的",
+      "MinValues": [
+        1,
+        3,
+        5,
+        9,
+        13,
+        18,
+        23,
+        28,
+        33
+      ],
+      "MaxValues": [
+        1,
+        5,
+        10,
+        18,
+        26,
+        36,
+        46,
+        56,
+        66
+      ]
+    },
+    {
+      "ID": 8012,
+      "Name": "远程武器伤害",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "老鹰之",
+      "LastName": "远射的",
+      "MinValues": [
+        1,
+        3,
+        5,
+        9,
+        13,
+        18,
+        23,
+        28,
+        33
+      ],
+      "MaxValues": [
+        1,
+        5,
+        10,
+        18,
+        26,
+        36,
+        46,
+        56,
+        66
+      ]
+    },
+    {
+      "ID": 8013,
+      "Name": "剧毒抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "MaxValues": [
+        2,
+        3,
+        5,
+        7,
+        9,
+        12,
+        15,
+        18,
+        21
+      ]
+    },
+    {
+      "ID": 8023,
+      "Name": "火焰抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "MaxValues": [
+        2,
+        3,
+        5,
+        7,
+        9,
+        12,
+        15,
+        18,
+        21
+      ]
+    },
+    {
+      "ID": 8024,
+      "Name": "寒冰抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "MaxValues": [
+        2,
+        3,
+        5,
+        7,
+        9,
+        12,
+        15,
+        18,
+        21
+      ]
+    },
+    {
+      "ID": 8014,
+      "Name": "毒素",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "瘟疫之",
+      "LastName": "腐败的",
+      "MinValues": [
+        2,
+        2,
+        4,
+        5,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "MaxValues": [
+        3,
+        4,
+        7,
+        9,
+        12,
+        15,
+        18,
+        21,
+        24
+      ]
+    },
+    {
+      "ID": 8015,
+      "Name": "火焰",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "火山之",
+      "LastName": "燃烧的",
+      "MinValues": [
+        2,
+        2,
+        4,
+        5,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "MaxValues": [
+        3,
+        4,
+        7,
+        9,
+        12,
+        15,
+        18,
+        21,
+        24
+      ]
+    },
+    {
+      "ID": 8016,
+      "Name": "寒冰",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "寒霜之",
+      "LastName": "冰冷的",
+      "MinValues": [
+        2,
+        2,
+        4,
+        5,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "MaxValues": [
+        3,
+        4,
+        7,
+        9,
+        12,
+        15,
+        18,
+        21,
+        24
+      ]
+    },
+    {
+      "ID": 8017,
+      "Name": "获得更多金币",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "宝藏之",
+      "LastName": "贪婪的",
+      "MinValues": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "MaxValues": [
+        2,
+        3,
+        5,
+        8,
+        11,
+        16,
+        21,
+        26,
+        31
+      ]
+    },
+    {
+      "ID": 8018,
+      "Name": "穿刺",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "黄蜂之",
+      "LastName": "尖锐的",
+      "MinValues": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "MaxValues": [
+        2,
+        3,
+        5,
+        8,
+        11,
+        15,
+        19,
+        23,
+        27
+      ]
+    },
+    {
+      "ID": 8019,
+      "Name": "击晕",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "犀牛之",
+      "LastName": "致残的",
+      "MinValues": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "MaxValues": [
+        2,
+        3,
+        5,
+        8,
+        11,
+        15,
+        19,
+        23,
+        27
+      ]
+    },
+    {
+      "ID": 8020,
+      "Name": "攻击强化",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "蟒蛇之",
+      "LastName": "压制的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 8021,
+      "Name": "防御强化",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "巨熊之",
+      "LastName": "无畏的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 8022,
+      "Name": "格挡强化",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "麋鹿之",
+      "LastName": "不屈的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 7001,
+      "Name": "生命",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "巨鲸之",
+      "LastName": "生命的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 7003,
+      "Name": "最小攻击力",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "豺狼之",
+      "LastName": "力量的",
+      "MinValues": [
+        1,
+        3,
+        7,
+        11,
+        16,
+        23,
+        30,
+        37,
+        44
+      ],
+      "MaxValues": [
+        1,
+        6,
+        13,
+        22,
+        32,
+        45,
+        58,
+        71,
+        84
+      ]
+    },
+    {
+      "ID": 7004,
+      "Name": "最大攻击力",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "雄狮之",
+      "LastName": "英勇的",
+      "MinValues": [
+        2,
+        7,
+        15,
+        25,
+        36,
+        50,
+        64,
+        78,
+        92
+      ],
+      "MaxValues": [
+        3,
+        13,
+        29,
+        49,
+        72,
+        99,
+        126,
+        153,
+        180
+      ]
+    },
+    {
+      "ID": 7005,
+      "Name": "防御力",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "野猪之",
+      "LastName": "结实的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 7007,
+      "Name": "暴击",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "渡鸦之",
+      "LastName": "精准的",
+      "MinValues": [
+        3,
+        5,
+        7,
+        11,
+        15,
+        21,
+        27,
+        33,
+        39
+      ],
+      "MaxValues": [
+        6,
+        9,
+        14,
+        21,
+        30,
+        41,
+        52,
+        63,
+        74
+      ]
+    },
+    {
+      "ID": 7008,
+      "Name": "格挡",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "雄鹿之",
+      "LastName": "抵抗的",
+      "MinValues": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "MaxValues": [
+        2,
+        3,
+        5,
+        8,
+        11,
+        15,
+        19,
+        23,
+        27
+      ]
+    },
+    {
+      "ID": 7009,
+      "Name": "熟练",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "甲虫之",
+      "LastName": "熟练的",
+      "MinValues": [
+        2,
+        3,
+        5,
+        8,
+        11,
+        15,
+        19,
+        23,
+        27
+      ],
+      "MaxValues": [
+        3,
+        6,
+        9,
+        15,
+        22,
+        30,
+        38,
+        46,
+        54
+      ]
+    },
+    {
+      "ID": 7010,
+      "Name": "单手武器伤害",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "刺猬之",
+      "LastName": "劈砍的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 7011,
+      "Name": "长柄武器伤害",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "花豹之",
+      "LastName": "突刺的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 7012,
+      "Name": "远程武器伤害",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "老鹰之",
+      "LastName": "远射的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 7013,
+      "Name": "剧毒抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 7023,
+      "Name": "火焰抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 7024,
+      "Name": "寒冰抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 7014,
+      "Name": "毒素",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "瘟疫之",
+      "LastName": "腐败的",
+      "MinValues": [
+        2,
+        3,
+        5,
+        7,
+        9,
+        12,
+        15,
+        18,
+        21
+      ],
+      "MaxValues": [
+        4,
+        6,
+        10,
+        14,
+        18,
+        23,
+        28,
+        33,
+        38
+      ]
+    },
+    {
+      "ID": 7015,
+      "Name": "火焰",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "火山之",
+      "LastName": "燃烧的",
+      "MinValues": [
+        2,
+        3,
+        5,
+        7,
+        9,
+        12,
+        15,
+        18,
+        21
+      ],
+      "MaxValues": [
+        4,
+        6,
+        10,
+        14,
+        18,
+        23,
+        28,
+        33,
+        38
+      ]
+    },
+    {
+      "ID": 7016,
+      "Name": "寒冰",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "寒霜之",
+      "LastName": "冰冷的",
+      "MinValues": [
+        2,
+        3,
+        5,
+        7,
+        9,
+        12,
+        15,
+        18,
+        21
+      ],
+      "MaxValues": [
+        4,
+        6,
+        10,
+        14,
+        18,
+        23,
+        28,
+        33,
+        38
+      ]
+    },
+    {
+      "ID": 7017,
+      "Name": "获得更多金币",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "宝藏之",
+      "LastName": "贪婪的",
+      "MinValues": [
+        2,
+        3,
+        5,
+        8,
+        12,
+        17,
+        22,
+        27,
+        32
+      ],
+      "MaxValues": [
+        4,
+        6,
+        10,
+        16,
+        24,
+        34,
+        44,
+        54,
+        64
+      ]
+    },
+    {
+      "ID": 7018,
+      "Name": "穿刺",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "黄蜂之",
+      "LastName": "尖锐的",
+      "MinValues": [
+        3,
+        5,
+        8,
+        12,
+        17,
+        23,
+        29,
+        35,
+        41
+      ],
+      "MaxValues": [
+        6,
+        9,
+        15,
+        23,
+        33,
+        45,
+        57,
+        69,
+        81
+      ]
+    },
+    {
+      "ID": 7019,
+      "Name": "击晕",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "犀牛之",
+      "LastName": "致残的",
+      "MinValues": [
+        3,
+        5,
+        8,
+        12,
+        17,
+        23,
+        29,
+        35,
+        41
+      ],
+      "MaxValues": [
+        6,
+        9,
+        15,
+        23,
+        33,
+        45,
+        57,
+        69,
+        81
+      ]
+    },
+    {
+      "ID": 7020,
+      "Name": "攻击强化",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "蟒蛇之",
+      "LastName": "压制的",
+      "MinValues": [
+        10,
+        15,
+        25,
+        40,
+        60,
+        85,
+        110,
+        135,
+        160
+      ],
+      "MaxValues": [
+        20,
+        30,
+        50,
+        80,
+        120,
+        170,
+        220,
+        270,
+        320
+      ]
+    },
+    {
+      "ID": 7021,
+      "Name": "防御强化",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "巨熊之",
+      "LastName": "无畏的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 7022,
+      "Name": "格挡强化",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "麋鹿之",
+      "LastName": "不屈的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 9001,
+      "Name": "生命",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "巨鲸之",
+      "LastName": "生命的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 9003,
+      "Name": "最小攻击力",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "豺狼之",
+      "LastName": "力量的",
+      "MinValues": [
+        1,
+        4,
+        8,
+        14,
+        20,
+        28,
+        36,
+        44,
+        52
+      ],
+      "MaxValues": [
+        2,
+        7,
+        16,
+        27,
+        40,
+        56,
+        72,
+        88,
+        104
+      ]
+    },
+    {
+      "ID": 9004,
+      "Name": "最大攻击力",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "雄狮之",
+      "LastName": "英勇的",
+      "MinValues": [
+        2,
+        9,
+        18,
+        31,
+        45,
+        62,
+        79,
+        96,
+        113
+      ],
+      "MaxValues": [
+        4,
+        17,
+        36,
+        61,
+        90,
+        124,
+        158,
+        192,
+        226
+      ]
+    },
+    {
+      "ID": 9005,
+      "Name": "防御力",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "野猪之",
+      "LastName": "结实的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 9007,
+      "Name": "暴击",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "渡鸦之",
+      "LastName": "精准的",
+      "MinValues": [
+        3,
+        5,
+        7,
+        11,
+        15,
+        21,
+        27,
+        33,
+        39
+      ],
+      "MaxValues": [
+        6,
+        9,
+        14,
+        21,
+        30,
+        41,
+        52,
+        63,
+        74
+      ]
+    },
+    {
+      "ID": 9008,
+      "Name": "格挡",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "雄鹿之",
+      "LastName": "抵抗的",
+      "MinValues": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "MaxValues": [
+        2,
+        3,
+        5,
+        8,
+        11,
+        15,
+        19,
+        23,
+        27
+      ]
+    },
+    {
+      "ID": 9009,
+      "Name": "熟练",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "甲虫之",
+      "LastName": "熟练的",
+      "MinValues": [
+        2,
+        3,
+        5,
+        8,
+        11,
+        15,
+        19,
+        23,
+        27
+      ],
+      "MaxValues": [
+        3,
+        6,
+        9,
+        15,
+        22,
+        30,
+        38,
+        46,
+        54
+      ]
+    },
+    {
+      "ID": 9010,
+      "Name": "单手武器伤害",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "刺猬之",
+      "LastName": "劈砍的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 9011,
+      "Name": "长柄武器伤害",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "花豹之",
+      "LastName": "突刺的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 9012,
+      "Name": "远程武器伤害",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "老鹰之",
+      "LastName": "远射的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 9013,
+      "Name": "剧毒抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 9023,
+      "Name": "火焰抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 9024,
+      "Name": "寒冰抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 9014,
+      "Name": "毒素",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "瘟疫之",
+      "LastName": "腐败的",
+      "MinValues": [
+        2,
+        3,
+        5,
+        7,
+        9,
+        12,
+        15,
+        18,
+        21
+      ],
+      "MaxValues": [
+        4,
+        6,
+        10,
+        14,
+        18,
+        23,
+        28,
+        33,
+        38
+      ]
+    },
+    {
+      "ID": 9015,
+      "Name": "火焰",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "火山之",
+      "LastName": "燃烧的",
+      "MinValues": [
+        2,
+        3,
+        5,
+        7,
+        9,
+        12,
+        15,
+        18,
+        21
+      ],
+      "MaxValues": [
+        4,
+        6,
+        10,
+        14,
+        18,
+        23,
+        28,
+        33,
+        38
+      ]
+    },
+    {
+      "ID": 9016,
+      "Name": "寒冰",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "寒霜之",
+      "LastName": "冰冷的",
+      "MinValues": [
+        2,
+        3,
+        5,
+        7,
+        9,
+        12,
+        15,
+        18,
+        21
+      ],
+      "MaxValues": [
+        4,
+        6,
+        10,
+        14,
+        18,
+        23,
+        28,
+        33,
+        38
+      ]
+    },
+    {
+      "ID": 9017,
+      "Name": "获得更多金币",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "宝藏之",
+      "LastName": "贪婪的",
+      "MinValues": [
+        2,
+        3,
+        5,
+        8,
+        12,
+        17,
+        22,
+        27,
+        32
+      ],
+      "MaxValues": [
+        4,
+        6,
+        10,
+        16,
+        24,
+        34,
+        44,
+        54,
+        64
+      ]
+    },
+    {
+      "ID": 9018,
+      "Name": "穿刺",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "黄蜂之",
+      "LastName": "尖锐的",
+      "MinValues": [
+        3,
+        5,
+        8,
+        12,
+        17,
+        23,
+        29,
+        35,
+        41
+      ],
+      "MaxValues": [
+        6,
+        9,
+        15,
+        23,
+        33,
+        45,
+        57,
+        69,
+        81
+      ]
+    },
+    {
+      "ID": 9019,
+      "Name": "击晕",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "犀牛之",
+      "LastName": "致残的",
+      "MinValues": [
+        3,
+        5,
+        8,
+        12,
+        17,
+        23,
+        29,
+        35,
+        41
+      ],
+      "MaxValues": [
+        6,
+        9,
+        15,
+        23,
+        33,
+        45,
+        57,
+        69,
+        81
+      ]
+    },
+    {
+      "ID": 9020,
+      "Name": "攻击强化",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "蟒蛇之",
+      "LastName": "压制的",
+      "MinValues": [
+        10,
+        15,
+        25,
+        40,
+        60,
+        85,
+        110,
+        135,
+        160
+      ],
+      "MaxValues": [
+        20,
+        30,
+        50,
+        80,
+        120,
+        170,
+        220,
+        270,
+        320
+      ]
+    },
+    {
+      "ID": 9021,
+      "Name": "防御强化",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "巨熊之",
+      "LastName": "无畏的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 9022,
+      "Name": "格挡强化",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "麋鹿之",
+      "LastName": "不屈的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 10001,
+      "Name": "生命",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "巨鲸之",
+      "LastName": "生命的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 10003,
+      "Name": "最小攻击力",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "豺狼之",
+      "LastName": "力量的",
+      "MinValues": [
+        1,
+        3,
+        5,
+        9,
+        12,
+        17,
+        22,
+        27,
+        32
+      ],
+      "MaxValues": [
+        1,
+        5,
+        10,
+        17,
+        24,
+        34,
+        44,
+        54,
+        64
+      ]
+    },
+    {
+      "ID": 10004,
+      "Name": "最大攻击力",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "雄狮之",
+      "LastName": "英勇的",
+      "MinValues": [
+        2,
+        5,
+        11,
+        19,
+        27,
+        38,
+        49,
+        60,
+        71
+      ],
+      "MaxValues": [
+        3,
+        10,
+        22,
+        37,
+        54,
+        75,
+        96,
+        117,
+        138
+      ]
+    },
+    {
+      "ID": 10005,
+      "Name": "防御力",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "野猪之",
+      "LastName": "结实的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 10007,
+      "Name": "暴击",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "渡鸦之",
+      "LastName": "精准的",
+      "MinValues": [
+        3,
+        5,
+        7,
+        11,
+        15,
+        21,
+        27,
+        33,
+        39
+      ],
+      "MaxValues": [
+        6,
+        9,
+        14,
+        21,
+        30,
+        41,
+        52,
+        63,
+        74
+      ]
+    },
+    {
+      "ID": 10008,
+      "Name": "格挡",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "雄鹿之",
+      "LastName": "抵抗的",
+      "MinValues": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "MaxValues": [
+        2,
+        3,
+        5,
+        8,
+        11,
+        15,
+        19,
+        23,
+        27
+      ]
+    },
+    {
+      "ID": 10009,
+      "Name": "熟练",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "甲虫之",
+      "LastName": "熟练的",
+      "MinValues": [
+        2,
+        3,
+        5,
+        8,
+        11,
+        15,
+        19,
+        23,
+        27
+      ],
+      "MaxValues": [
+        3,
+        6,
+        9,
+        15,
+        22,
+        30,
+        38,
+        46,
+        54
+      ]
+    },
+    {
+      "ID": 10010,
+      "Name": "单手武器伤害",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "刺猬之",
+      "LastName": "劈砍的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 10011,
+      "Name": "长柄武器伤害",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "花豹之",
+      "LastName": "突刺的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 10012,
+      "Name": "远程武器伤害",
+      "bEnable": false,
+      "bPercentData": false,
+      "PreName": "老鹰之",
+      "LastName": "远射的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 10013,
+      "Name": "剧毒抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 10023,
+      "Name": "火焰抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 10024,
+      "Name": "寒冰抗性",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "光明之",
+      "LastName": "净化的",
+      "MinValues": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "MaxValues": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "ID": 10014,
+      "Name": "毒素",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "瘟疫之",
+      "LastName": "腐败的",
+      "MinValues": [
+        2,
+        3,
+        5,
+        7,
+        9,
+        12,
+        15,
+        18,
+        21
+      ],
+      "MaxValues": [
+        4,
+        6,
+        10,
+        14,
+        18,
+        23,
+        28,
+        33,
+        38
+      ]
+    },
+    {
+      "ID": 10015,
+      "Name": "火焰",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "火山之",
+      "LastName": "燃烧的",
+      "MinValues": [
+        2,
+        3,
+        5,
+        7,
+        9,
+        12,
+        15,
+        18,
+        21
+      ],
+      "MaxValues": [
+        4,
+        6,
+        10,
+        14,
+        18,
+        23,
+        28,
+        33,
+        38
+      ]
+    },
+    {
+      "ID": 10016,
+      "Name": "寒冰",
+      "bEnable": true,
+      "bPercentData": false,
+      "PreName": "寒霜之",
+      "LastName": "冰冷的",
+      "MinValues": [
+        2,
+        3,
+        5,
+        7,
+        9,
+        12,
+        15,
+        18,
+        21
+      ],
+      "MaxValues": [
+        4,
+        6,
+        10,
+        14,
+        18,
+        23,
+        28,
+        33,
+        38
+      ]
+    },
+    {
+      "ID": 10017,
+      "Name": "获得更多金币",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "宝藏之",
+      "LastName": "贪婪的",
+      "MinValues": [
+        2,
+        3,
+        5,
+        8,
+        12,
+        17,
+        22,
+        27,
+        32
+      ],
+      "MaxValues": [
+        4,
+        6,
+        10,
+        16,
+        24,
+        34,
+        44,
+        54,
+        64
+      ]
+    },
+    {
+      "ID": 10018,
+      "Name": "穿刺",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "黄蜂之",
+      "LastName": "尖锐的",
+      "MinValues": [
+        3,
+        5,
+        8,
+        12,
+        17,
+        23,
+        29,
+        35,
+        41
+      ],
+      "MaxValues": [
+        6,
+        9,
+        15,
+        23,
+        33,
+        45,
+        57,
+        69,
+        81
+      ]
+    },
+    {
+      "ID": 10019,
+      "Name": "击晕",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "犀牛之",
+      "LastName": "致残的",
+      "MinValues": [
+        3,
+        5,
+        8,
+        12,
+        17,
+        23,
+        29,
+        35,
+        41
+      ],
+      "MaxValues": [
+        6,
+        9,
+        15,
+        23,
+        33,
+        45,
+        57,
+        69,
+        81
+      ]
+    },
+    {
+      "ID": 10020,
+      "Name": "攻击强化",
+      "bEnable": true,
+      "bPercentData": true,
+      "PreName": "蟒蛇之",
+      "LastName": "压制的",
+      "MinValues": [
+        10,
+        15,
+        25,
+        40,
+        60,
+        85,
+        110,
+        135,
+        160
+      ],
+      "MaxValues": [
+        20,
+        30,
+        50,
+        80,
+        120,
+        170,
+        220,
+        270,
+        320
+      ]
+    },
+    {
+      "ID": 10021,
+      "Name": "防御强化",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "巨熊之",
+      "LastName": "无畏的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "ID": 10022,
+      "Name": "格挡强化",
+      "bEnable": false,
+      "bPercentData": true,
+      "PreName": "麋鹿之",
+      "LastName": "不屈的",
+      "MinValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MaxValues": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}
